@@ -1,7 +1,26 @@
-.DS_Store
-Thumbs.db
-db.json
-*.log
+# Jekyll
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+_site/
+
+# Node / Hexo legacy
 node_modules/
 public/
 .deploy*/
+db.json
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.iml
+
+# Ruby
+vendor/bundle/
+vendor/cache/
+vendor/gems/
+vendor/ruby/
