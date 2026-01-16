@@ -127,6 +127,7 @@ exclude:
   - themes/
   - .idea/
   - .gitignore
+  - docs/Claude-Obsidian-Guide/Templates/
 
 # Build settings
 timezone: Asia/Seoul
