@@ -29,6 +29,9 @@ jobs:
           ruby-version: '3.3'
           bundler-cache: true
 
+      - name: Remove symbolic links that don't exist in CI
+        run: rm -rf docs/Claude-Obsidian-Guide
+
       - name: Build site
         run: bundle exec jekyll build
         env:
