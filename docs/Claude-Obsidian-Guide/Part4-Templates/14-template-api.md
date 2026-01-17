@@ -1,10 +1,6 @@
 ---
 title: "API 설계 템플릿"
-tags: [guide, claude-obsidian, 백엔드, template-api]
-part: "Part 4: 템플릿 활용"
-created: 2026-01-10
 parent: "Part 4: 템플릿 활용"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 4
 ---
 
@@ -32,7 +28,6 @@ API 명세서는 프론트엔드 개발자와 백엔드 개발자 간의 커뮤�
 ```markdown
 ---
 title: "{{API명}}"
-tags: [api, {{service}}, {{version}}]
 version: "{{version}}"
 baseUrl: "{{baseUrl}}"
 ---
@@ -402,7 +397,6 @@ DELETE /users/{id}
 ```markdown
 ---
 title: "사용자 API"
-tags: [api, user-service]
 version: "1.0.0"
 baseUrl: "https://api.example.com"
 ---

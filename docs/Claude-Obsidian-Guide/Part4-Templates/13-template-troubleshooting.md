@@ -1,10 +1,6 @@
 ---
 title: "트러블슈팅 템플릿"
-tags: [guide, claude-obsidian, 백엔드, template-troubleshooting]
-part: "Part 4: 템플릿 활용"
-created: 2026-01-10
 parent: "Part 4: 템플릿 활용"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 3
 ---
 
@@ -32,9 +28,7 @@ nav_order: 3
 ```markdown
 ---
 title: "{{title}}"
-tags: [troubleshooting, {{technology}}, {{error_type}}]
 created: {{date}}
-status: {{status}}  # open, investigating, resolved
 environment: {{environment}}  # dev, staging, production
 ---
 
@@ -290,8 +284,7 @@ Claude:
 
 Claude:
 업데이트 완료:
-- status: investigating → resolved
-- 해결 방법 섹션에 최종 코드 추가
+- - 해결 방법 섹션에 최종 코드 추가
 - 재발 방지 계획 추가
 ```
 
@@ -341,12 +334,8 @@ MOC 업데이트:
 ```markdown
 ---
 title: "Redis Connection Timeout"
-tags: [troubleshooting, redis, timeout]
-created: 2026-01-10
 parent: "Part 4: 템플릿 활용"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 3
-status: resolved
 environment: production
 ---
 
@@ -527,7 +516,6 @@ because the return value of "java.util.Map.get(Object)" is null
 
 ```markdown
 ---
-tags: [troubleshooting, redis, timeout, connection]
 ---
 
 # 기술: redis

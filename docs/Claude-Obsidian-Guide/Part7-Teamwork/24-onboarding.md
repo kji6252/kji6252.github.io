@@ -1,10 +1,6 @@
 ---
 title: "온보딩 문서 자동화"
-tags: [guide, claude-obsidian, 백엔드, onboarding]
-part: "Part 7: 팀 협업"
-created: 2026-01-10
 parent: "Part 7: 팀 협업"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 2
 ---
 
@@ -50,7 +46,6 @@ Claude:
 ```markdown
 ---
 title: "{{팀}} 온보딩 가이드"
-tags: [onboarding, {{team}}]
 ---
 
 # {{팀}} 온보딩 가이드

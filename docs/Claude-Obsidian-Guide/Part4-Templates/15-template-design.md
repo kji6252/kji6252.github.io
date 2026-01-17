@@ -1,10 +1,6 @@
 ---
 title: "시스템 설계 템플릿"
-tags: [guide, claude-obsidian, 백엔드, template-design]
-part: "Part 4: 템플릿 활용"
-created: 2026-01-10
 parent: "Part 4: 템플릿 활용"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 5
 ---
 
@@ -32,7 +28,6 @@ nav_order: 5
 ```markdown
 ---
 title: "{{시스템명}} 설계"
-tags: [architecture, design, {{project}}]
 version: "{{version}}"
 created: {{date}}
 author: {{author}}
@@ -424,8 +419,7 @@ ERD와 함께 각 테이블의 설명을 포함합니다:
 
 **인덱스**
 - idx_user_id: user_id
-- idx_status: status
-- idx_created_at: created_at
+- idx_- idx_created_at: created_at
 ```
 
 ---
@@ -547,11 +541,8 @@ Redis도 쓰고.
 ```markdown
 ---
 title: "이커머스 시스템 설계"
-tags: [architecture, design, ecommerce]
 version: "1.0.0"
-created: 2026-01-10
 parent: "Part 4: 템플릿 활용"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 5
 author: 백엔드팀
 ---

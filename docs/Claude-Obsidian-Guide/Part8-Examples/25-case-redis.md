@@ -1,10 +1,6 @@
 ---
 title: "Redis 동시성 이슈 사례"
-tags: [guide, claude-obsidian, 백엔드, case-study]
-part: "Part 8: 실전 사례"
-created: 2026-01-10
 parent: "Part 8: 실전 사례"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 1
 ---
 
@@ -78,8 +74,6 @@ if (increment < 0) {
 ```markdown
 ---
 title: "Spring Data Redis 동시성 이슈"
-tags: [troubleshooting, redis, concurrency]
-status: resolved
 ---
 ```
 

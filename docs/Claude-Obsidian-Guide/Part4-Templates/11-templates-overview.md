@@ -1,10 +1,6 @@
 ---
 title: "템플릿 개요"
-tags: [guide, claude-obsidian, 백엔드, templates]
-part: "Part 4: 템플릿 활용"
-created: 2026-01-10
 parent: "Part 4: 템플릿 활용"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 1
 ---
 
@@ -145,7 +141,6 @@ Claude:
 ## API Rate Limiting 템플릿
 ---
 title: "{{endpoint}} Rate Limiting"
-tags: [api, rate-limit, performance]
 created: {{date}}
 ---
 
@@ -198,9 +193,7 @@ Claude:
 ```markdown
 ---
 title: "{{title}}"
-tags: [{{category}}, {{tech}}]
 created: {{date}}
-status: {{status}}
 ---
 
 # {{title}}
@@ -279,12 +272,8 @@ status: {{status}}
 ```markdown
 ---
 title: "Redis Connection Timeout"
-tags: [troubleshooting, redis, timeout]
-created: 2026-01-10
 parent: "Part 4: 템플릿 활용"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 1
-status: resolved
 environment: production
 ---
 
@@ -378,8 +367,7 @@ spring:
    ```markdown
    ---
    title: "{{pr_title}} 코드 리뷰"
-   tags: [code-review, {{language}}]
-   date: {{date}}
+      date: {{date}}
    ---
 
    # {{pr_title}}

@@ -1,10 +1,6 @@
 ---
 title: "Mermaid 다이어그램 기초"
-tags: [guide, claude-obsidian, 백엔드, mermaid]
-part: "Part 5: 문서화 기법"
-created: 2026-01-10
 parent: "Part 5: 문서화 기법"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 1
 ---
 

@@ -1,8 +1,5 @@
 ---
 title: "백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법"
-tags: [guide, claude-obsidian, 백엔드, knowledge-management]
-created: 2026-01-10
-type: guide-index
 has_children: true
 nav_order: 1
 ---

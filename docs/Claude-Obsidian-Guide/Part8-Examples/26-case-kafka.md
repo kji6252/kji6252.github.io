@@ -1,10 +1,6 @@
 ---
 title: "Kafka 도입 검토 사례"
-tags: [guide, claude-obsidian, 백엔드, case-kafka]
-part: "Part 8: 실전 사례"
-created: 2026-01-10
 parent: "Part 8: 실전 사례"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 2
 ---
 
@@ -87,9 +83,7 @@ nav_order: 2
 ```markdown
 ---
 title: "Kafka 도입 의사결정"
-tags: [adr, kafka, decision]
 date: 2024-12-01
-status: approved
 ---
 ```
 

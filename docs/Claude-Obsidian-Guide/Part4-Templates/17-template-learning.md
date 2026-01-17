@@ -1,10 +1,6 @@
 ---
 title: "학습 노트 템플릿"
-tags: [guide, claude-obsidian, 백엔드, template-learning]
-part: "Part 4: 템플릿 활용"
-created: 2026-01-10
 parent: "Part 4: 템플릿 활용"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 7
 ---
 
@@ -35,7 +31,6 @@ nav_order: 7
 ---
 title: "LM-{{title}}"
 source: {{source}}
-tags: [literature, {{topic}}, {{date}}]
 ---
 
 # {{title}}
@@ -63,7 +58,6 @@ tags: [literature, {{topic}}, {{date}}]
 ```markdown
 ---
 title: "{{concept}}"
-tags: [permanent, {{topic}}, {{category}}]
 ---
 
 # {{concept}}
@@ -102,7 +96,6 @@ tags: [permanent, {{topic}}, {{category}}]
 ---
 title: "LM-Spring Data Redis HINCRBY"
 source: "Redis 공식 문서"
-tags: [literature, redis, spring]
 ---
 
 # Spring Data Redis HINCRBY
@@ -137,7 +130,6 @@ Redis 해시의 필드 값을 원자적으로 증가시키는 명령어.
 ```markdown
 ---
 title: "Redis HINCRBY는 동시성에 안전하다"
-tags: [permanent, redis, concurrency, atomicity]
 ---
 
 # Redis HINCRBY는 동시성에 안전하다
@@ -394,7 +386,6 @@ Virtual Threads는 좋다.
 ```markdown
 ---
 title: "Redis HINCRBY 동시성 특성"
-tags: [permanent, redis, atomicity]
 ---
 
 # Redis HINCRBY 동시성 특성

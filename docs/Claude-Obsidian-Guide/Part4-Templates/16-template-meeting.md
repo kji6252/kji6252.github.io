@@ -1,10 +1,6 @@
 ---
 title: "회의록 템플릿"
-tags: [guide, claude-obsidian, 백엔드, template-meeting]
-part: "Part 4: 템플릿 활용"
-created: 2026-01-10
 parent: "Part 4: 템플릿 활용"
-grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 6
 ---
 
@@ -32,7 +28,6 @@ nav_order: 6
 ```markdown
 ---
 title: "{{회의명}}"
-tags: [meeting, {{meeting_type}}, {{date}}]
 date: {{date}}
 attendees: {{attendees}}
 ---
@@ -288,7 +283,6 @@ PoC 더 하기로 함.
 ```markdown
 ---
 title: "Kafka 마이그레이션 검토 회의"
-tags: [meeting, architecture, kafka]
 date: 2026-01-10
 attendees: 홍길동, 김철수, 이영희
 ---
