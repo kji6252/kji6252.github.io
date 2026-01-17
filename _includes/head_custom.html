@@ -1,0 +1,40 @@
+<!-- Mermaid.js for diagram rendering -->
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'default',
+    securityLevel: 'loose'
+  });
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    const mermaidCodes = document.querySelectorAll('code.language-mermaid');
+
+    mermaidCodes.forEach((codeElement) => {
+      const text = codeElement.textContent.trim();
+      const preElement = codeElement.closest('pre');
+
+      if (preElement) {
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = text;
+        preElement.parentNode.replaceChild(mermaidDiv, preElement);
+      }
+    });
+
+    await mermaid.run({
+      querySelector: '.mermaid'
+    });
+  });
+</script>
+
+<style>
+  .mermaid {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: center;
+  }
+</style>
