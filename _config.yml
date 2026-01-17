@@ -89,6 +89,7 @@ just_the_docs:
   collections:
     posts:
       name: 블로그 포스트
+      child_nav_order: reversed
     docs:
       name: Claude & Obsidian 가이드
 
