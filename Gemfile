@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Just the Docs theme
-gem "just-the-docs", "~> 0.9"
+gem "just-the-docs", "~> 0.11"
 
 # Jekyll
 gem "jekyll", "~> 3.10"

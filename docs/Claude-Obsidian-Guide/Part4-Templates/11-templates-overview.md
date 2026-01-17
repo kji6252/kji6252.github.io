@@ -3,7 +3,8 @@ title: "템플릿 개요"
 tags: [guide, claude-obsidian, 백엔드, templates]
 part: "Part 4: 템플릿 활용"
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 4: 템플릿 활용"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 1
 ---
 
@@ -280,7 +281,8 @@ status: {{status}}
 title: "Redis Connection Timeout"
 tags: [troubleshooting, redis, timeout]
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 4: 템플릿 활용"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 1
 status: resolved
 environment: production

@@ -3,7 +3,8 @@ title: "Mermaid 다이어그램 기초"
 tags: [guide, claude-obsidian, 백엔드, mermaid]
 part: "Part 5: 문서화 기법"
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 5: 문서화 기법"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 1
 ---
 
@@ -15,7 +16,6 @@ Mermaid 문법을 사용하여 시스템 아키텍처, API 흐름, 데이터 모
 
 Markdown으로 다이어그램을 작성할 수 있는 도구입니다.
 
-```mermaid
 ```mermaid
 graph TD
     A[Mermaid] --> B[텍스트로 작성]

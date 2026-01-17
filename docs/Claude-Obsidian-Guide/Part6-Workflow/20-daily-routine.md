@@ -3,7 +3,8 @@ title: "일일 루틴"
 tags: [guide, claude-obsidian, 백엔드, workflow]
 part: "Part 6: 실전 워크플로우"
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 6: 실전 워크플로우"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 1
 ---
 

@@ -3,7 +3,8 @@ title: "Claude로 노트 읽기"
 tags: [guide, claude-obsidian, 백엔드, claude-reading]
 part: "Part 3: Claude Code 연동"
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 3: Claude Code 연동"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 1
 ---
 

@@ -22,80 +22,80 @@ nav_order: 1
 
 ## 📚 가이드 구성
 
-### Part 1: 기초 다지기
+### [Part 1: 기초 다지기](Part1-Basics/)
 이 도구들을 왜 사용해야 하는지, 어떻게 시작하는지 배웁니다.
 
 | 노트 | 내용 | 시간 |
 |------|------|------|
-| [[01-why-claude-obsidian|왜 Claude Code + Obsidian인가?]] | 백엔드 개발자의 지식 관리 난제와 해결책 | 10분 |
-| [[02-installation|설치 및 초기 설정]] | MCP 서버 설정까지 완벽 가이드 | 20분 |
-| [[03-mcp-deep-dive|MCP 서버 심화]] | MCP 개념과 고급 설정 | 15분 |
-| [[04-first-steps|첫 노트 작성하기]] | 실전 첫 경험 | 10분 |
+| [왜 Claude Code + Obsidian인가?](Part1-Basics/01-why-claude-obsidian/) | 백엔드 개발자의 지식 관리 난제와 해결책 | 10분 |
+| [설치 및 초기 설정](Part1-Basics/02-installation/) | MCP 서버 설정까지 완벽 가이드 | 20분 |
+| [MCP 서버 심화](Part1-Basics/03-mcp-deep-dive/) | MCP 개념과 고급 설정 | 15분 |
+| [첫 노트 작성하기](Part1-Basics/04-first-steps/) | 실전 첫 경험 | 10분 |
 
-### Part 2: Vault 구조 설계
+### [Part 2: Vault 구조 설계](Part2-Structure/)
 백엔드 개발자에게 맞는 지식 저장소를 설계합니다.
 
 | 노트 | 내용 | 시간 |
 |------|------|------|
-| [[05-vault-design|Vault 설계]] | PARA Method와 기술 스택별 분류 | 15분 |
-| [[06-essential-plugins|필수 플러그인]] | REST API, Dataview, Excalidraw | 20분 |
-| [[07-folder-structure|폴더 구조]] | 실제 백엔드 팀을 위한 구조 | 10분 |
+| [Vault 설계](Part2-Structure/05-vault-design/) | PARA Method와 기술 스택별 분류 | 15분 |
+| [필수 플러그인](Part2-Structure/06-essential-plugins/) | REST API, Dataview, Excalidraw | 20분 |
+| [폴더 구조](Part2-Structure/07-folder-structure/) | 실제 백엔드 팀을 위한 구조 | 10분 |
 
-### Part 3: Claude Code 연동
+### [Part 3: Claude Code 연동](Part3-Integration/)
 AI와 함께 노트를 읽고 쓰는 방법을 배웁니다.
 
 | 노트 | 내용 | 시간 |
 |------|------|------|
-| [[08-claude-reading|Claude로 노트 읽기]] | 검색, 질의, 지식 추출 | 15분 |
-| [[09-claude-writing|Claude로 노트 쓰기]] | 자동 생성, 템플릿 적용 | 20분 |
-| [[10-automation|자동화 워크플로우]] | 일일 정리, 주간 회고 | 15분 |
+| [Claude로 노트 읽기](Part3-Integration/08-claude-reading/) | 검색, 질의, 지식 추출 | 15분 |
+| [Claude로 노트 쓰기](Part3-Integration/09-claude-writing/) | 자동 생성, 템플릿 적용 | 20분 |
+| [자동화 워크플로우](Part3-Integration/10-automation/) | 일일 정리, 주간 회고 | 15분 |
 
-### Part 4: 템플릿 활용
+### [Part 4: 템플릿 활용](Part4-Templates/)
 재사용 가능한 문서 템플릿을 만듭니다.
 
 | 노트 | 내용 | 시간 |
 |------|------|------|
-| [[11-templates-overview|템플릿 개요]] | 템플릿 사용법과 커스터마이징 | 10분 |
-| [[12-template-daily|일일 기록 템플릿]] | Daily Note, 주간 회고 | 15분 |
-| [[13-template-troubleshooting|트러블슈팅 템플릿]] | 문제 해결 문서화 | 15분 |
-| [[14-template-api|API 설계 템플릿]] | API 명세서 작성 | 20분 |
-| [[15-template-design|시스템 설계 템플릿]] | 아키텍처 문서화 | 20분 |
+| [템플릿 개요](Part4-Templates/11-templates-overview/) | 템플릿 사용법과 커스터마이징 | 10분 |
+| [일일 기록 템플릿](Part4-Templates/12-template-daily/) | Daily Note, 주간 회고 | 15분 |
+| [트러블슈팅 템플릿](Part4-Templates/13-template-troubleshooting/) | 문제 해결 문서화 | 15분 |
+| [API 설계 템플릿](Part4-Templates/14-template-api/) | API 명세서 작성 | 20분 |
+| [시스템 설계 템플릿](Part4-Templates/15-template-design/) | 아키텍처 문서화 | 20분 |
 
-### Part 5: 문서화 기법
+### [Part 5: 문서화 기법](Part5-Methodology/)
 시각화와 스마트 노트 작성법을 배웁니다.
 
 | 노트 | 내용 | 시간 |
 |------|------|------|
-| [[16-mermaid-basics|Mermaid 기초]] | 다이어그램 문법 | 15분 |
-| [[17-mermaid-backend|백엔드 다이어그램]] | 아키텍처, 시퀀스, ERD | 25분 |
-| [[18-smart-notes|Smart Notes]] | Zettelkasten 방법론 | 20분 |
-| [[19-moc-method|MOC 구축]] | 지도 만들기와 인덱싱 | 15분 |
+| [Mermaid 기초](Part5-Methodology/16-mermaid-basics/) | 다이어그램 문법 | 15분 |
+| [백엔드 다이어그램](Part5-Methodology/17-mermaid-backend/) | 아키텍처, 시퀀스, ERD | 25분 |
+| [Smart Notes](Part5-Methodology/18-smart-notes/) | Zettelkasten 방법론 | 20분 |
+| [MOC 구축](Part5-Methodology/19-moc-method/) | 지도 만들기와 인덱싱 | 15분 |
 
-### Part 6: 실전 워크플로우
+### [Part 6: 실전 워크플로우](Part6-Workflow/)
 실제 업무에 적용하는 루틴을 만듭니다.
 
 | 노트 | 내용 | 시간 |
 |------|------|------|
-| [[20-daily-routine|일일 루틴]] | 아침/저녁 루틴과 Claude 활용 | 15분 |
-| [[21-project-lifecycle|프로젝트 라이프사이클]] | 설계-개발-회고 | 20분 |
-| [[22-learning-cycle|학습 사이클]] | 학습-정리-재구성 | 15분 |
+| [일일 루틴](Part6-Workflow/20-daily-routine/) | 아침/저녁 루틴과 Claude 활용 | 15분 |
+| [프로젝트 라이프사이클](Part6-Workflow/21-project-lifecycle/) | 설계-개발-회고 | 20분 |
+| [학습 사이클](Part6-Workflow/22-learning-cycle/) | 학습-정리-재구성 | 15분 |
 
-### Part 7: 팀 협업
+### [Part 7: 팀 협업](Part7-Teamwork/)
 팀으로 확장하는 방법을 배웁니다.
 
 | 노트 | 내용 | 시간 |
 |------|------|------|
-| [[23-team-vault|팀 Vault 구축]] | Git 공유와 코드 리뷰 | 20분 |
-| [[24-onboarding|온보딩 자동화]] | 신규 입사자 가이드 | 15분 |
+| [팀 Vault 구축](Part7-Teamwork/23-team-vault/) | Git 공유와 코드 리뷰 | 20분 |
+| [온보딩 자동화](Part7-Teamwork/24-onboarding/) | 신규 입사자 가이드 | 15분 |
 
-### Part 8: 실전 사례
+### [Part 8: 실전 사례](Part8-Examples/)
 실제 프로젝트 사례를 학습합니다.
 
 | 노트 | 내용 | 시간 |
 |------|------|------|
-| [[25-case-redis|Redis 동시성 이슈]] | 트러블슈팅 사례 | 15분 |
-| [[26-case-kafka|Kafka 도입 검토]] | 기술 선택 문서 | 15분 |
-| [[27-case-virtual-threads|Virtual Threads 학습]] | 기술 학습 노트 | 15분 |
+| [Redis 동시성 이슈](Part8-Examples/25-case-redis/) | 트러블슈팅 사례 | 15분 |
+| [Kafka 도입 검토](Part8-Examples/26-case-kafka/) | 기술 선택 문서 | 15분 |
+| [Virtual Threads 학습](Part8-Examples/27-case-virtual-threads/) | 기술 학습 노트 | 15분 |
 
 ## 🚀 빠른 시작
 
@@ -112,12 +112,12 @@ flowchart LR
 ```
 
 **최소 경로 (2시간)**
-1. [[01-why-claude-obsidian|왜 Claude Code + Obsidian인가?]]
-2. [[02-installation|설치 및 초기 설정]]
-3. [[05-vault-design|Vault 설계]]
-4. [[09-claude-writing|Claude로 노트 쓰기]]
-5. [[13-template-troubleshooting|트러블슈팅 템플릿]]
-6. [[20-daily-routine|일일 루틴]]
+1. [왜 Claude Code + Obsidian인가?](Part1-Basics/01-why-claude-obsidian/)
+2. [설치 및 초기 설정](Part1-Basics/02-installation/)
+3. [Vault 설계](Part2-Structure/05-vault-design/)
+4. [Claude로 노트 쓰기](Part3-Integration/09-claude-writing/)
+5. [트러블슈팅 템플릿](Part4-Templates/13-template-troubleshooting/)
+6. [일일 루틴](Part6-Workflow/20-daily-routine/)
 
 ## 📁 템플릿 모음
 
@@ -185,4 +185,4 @@ mindmap
 
 ---
 
-**다음 단계**: [[01-why-claude-obsidian|왜 Claude Code + Obsidian인가?]] 편으로 계속하세요
+**다음 단계**: [왜 Claude Code + Obsidian인가?](Part1-Basics/01-why-claude-obsidian/) 편으로 계속하세요

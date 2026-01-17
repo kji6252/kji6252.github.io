@@ -3,7 +3,8 @@ title: "Claude로 노트 쓰기"
 tags: [guide, claude-obsidian, 백엔드, claude-writing]
 part: "Part 3: Claude Code 연동"
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 3: Claude Code 연동"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 2
 ---
 
@@ -56,7 +57,8 @@ Claude가 자동으로 생성:
 title: "Redis 타임아웃 최적화"
 tags: [troubleshooting, redis, performance]
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 3: Claude Code 연동"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 2
 status: resolved
 ---

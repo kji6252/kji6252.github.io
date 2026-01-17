@@ -3,7 +3,8 @@ title: "시스템 설계 템플릿"
 tags: [guide, claude-obsidian, 백엔드, template-design]
 part: "Part 4: 템플릿 활용"
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 4: 템플릿 활용"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 5
 ---
 
@@ -549,7 +550,8 @@ title: "이커머스 시스템 설계"
 tags: [architecture, design, ecommerce]
 version: "1.0.0"
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 4: 템플릿 활용"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 5
 author: 백엔드팀
 ---

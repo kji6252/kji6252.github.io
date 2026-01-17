@@ -3,7 +3,8 @@ title: "백엔드 개발자를 위한 Vault 설계"
 tags: [guide, claude-obsidian, 백엔드, vault-design, para]
 part: "Part 2: Vault 구조 설계"
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 2: Vault 구조 설계"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 1
 ---
 

@@ -3,7 +3,8 @@ title: "첫 노트 작성하기"
 tags: [guide, claude-obsidian, 백엔드, practical]
 part: "Part 1: 기초 다지기"
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 1: 기초 다지기"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 4
 ---
 

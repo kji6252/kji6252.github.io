@@ -3,7 +3,8 @@ title: "트러블슈팅 템플릿"
 tags: [guide, claude-obsidian, 백엔드, template-troubleshooting]
 part: "Part 4: 템플릿 활용"
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 4: 템플릿 활용"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 3
 ---
 
@@ -342,7 +343,8 @@ MOC 업데이트:
 title: "Redis Connection Timeout"
 tags: [troubleshooting, redis, timeout]
 created: 2026-01-10
-parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
+parent: "Part 4: 템플릿 활용"
+grand_parent: 백엔드 개발자를 위한 Claude Code + Obsidian 지식 관리법
 nav_order: 3
 status: resolved
 environment: production
