@@ -70,6 +70,32 @@ permalink: /projects/
 
 ## 사이드 프로젝트
 
+### 원천 자료 📰
+
+AI 트렌드 조사에 사용하는 뉴스 소스:
+
+**기술 뉴스**
+- [The Verge](https://www.theverge.com/ai-artificial-intelligence/) - AI 기술 최신 동향
+- [TechCrunch](https://techcrunch.com/artificial-intelligence/) - 스타트업 및 AI 뉴스
+- [MIT Technology Review](https://www.technologyreview.com/) - 심층 기술 분석
+- [Wired](https://www.wired.com/) - 기술 트렌드
+
+**개발 관련**
+- [Hacker News](https://news.ycombinator.com/) - 개발자 커뮤니티
+- [GitHub Trending](https://github.com/trending) - 오픈소스 트렌드
+- [Dev.to](https://dev.to/) - 개발자 플랫폼
+
+**AI 전용**
+- [OpenAI Blog](https://openai.com/blog) - OpenAI 공식 블로그
+- [Anthropic Blog](https://www.anthropic.com/blog) - Anthropic 공식 블로그
+- [Google AI Blog](https://blog.google/inside-google-ai) - Google AI 공식
+
+이 원천들을 사용하여 블로그 포스트를 작성하고 있습니다.
+
+---
+
+## 사이드 프로젝트
+
 ### 개발 도구 자동화 스크립트
 - **기술**: Shell Script, Python, Git Hooks
 - **내용**:
