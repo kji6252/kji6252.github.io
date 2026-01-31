@@ -25,19 +25,25 @@ search:
   heading_level: 2
   # Maximum amount of previews per search result
   previews: 3
-  # Maximum amount of words to display before a matched word in the preview
+  # Maximum amount of words to display before a matched word in preview
   preview_words_before: 5
-  # Maximum amount of words to display after a matched word in the preview
+  # Maximum amount of words to display after a matched word in preview
   preview_words_after: 10
-  # Display the relative url in search results
+  # Display relative url in search results
   rel_url: true
   # Enable or disable the search button
   button: false
 
-# Aux links for the upper right navigation
+# Aux links for upper right navigation
 aux_links:
   "GitHub":
     - "https://github.com/kji6252"
+  "Portfolio":
+    - "/portfolio/"
+  "About":
+    - "/about/"
+  "Projects":
+    - "/projects/"
 
 # Makes Aux links open in a new tab
 aux_links_new_tab: true
@@ -56,7 +62,7 @@ last_edit_time_format: "%Y-%m-%d %H:%M"
 gh_edit_link: true
 gh_edit_link_text: "페이지 수정하기"
 gh_edit_repository: "https://github.com/kji6252/kji6252.github.io"
-gh_edit_branch: "master"
+gh_edit_branch: "jekyll-migration"
 gh_edit_view_mode: "tree"
 
 # Navigation sidebar

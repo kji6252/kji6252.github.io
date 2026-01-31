@@ -429,12 +429,12 @@ baseUrl: "https://api.example.com"
 ```
 
 #### Request Body 검증
-| 필드 | 타입 | 필수 | 제약조건 |
-|------|------|------|----------|
-| email | String | Yes | 이메일 형식, 중복 불가 |
-| password | String | Yes | 최소 8자, 영문+숫자+특수문자 |
-| name | String | Yes | 2-50자 |
-| age | Integer | No | 0-150 |
+| 필드 | 타입 | 필수 | 제약조건 | 설명 |
+|------|------|------|----------|------|
+| email | String | Yes | 이메일 형식, 중복 불가 | 이메일 주소 |
+| password | String | Yes | 최소 8자, 영문+숫자+특수문자 | 비밀번호 |
+| name | String | Yes | 2-50자 | 이름 |
+| age | Integer | No | 0-150 | 나이 |
 
 #### Response
 **Success 201 Created**
