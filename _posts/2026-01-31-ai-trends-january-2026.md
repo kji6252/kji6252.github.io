@@ -72,4 +72,25 @@ AI 분야에서 주요 기업들이 치열한 경쟁을 벌이고 있습니다.
 
 ---
 
+## 📚 참고자료
+
+본 포스트 작성에 사용한 원천입니다.
+
+**기술 뉴스:**
+- [The Verge AI](https://www.theverge.com/ai-artificial-intelligence)
+- [TechCrunch AI](https://techcrunch.com/artificial-intelligence/)
+
+**기술 블로그:**
+- [OpenAI Blog](https://openai.com/blog)
+- [Anthropic Blog](https://www.anthropic.com/blog)
+- [Google AI Blog](https://blog.google/inside-google-ai)
+
+**AI 관련:**
+- [Project Genie](https://deepmind.google/discover/blog/project-genie)
+- [Cowork Research Preview](http://claude.com/blog/cowork-research-preview)
+- [Rabbit Project Cyberdeck](https://x.com/rabbit_hmi/status/2017082134717223008)
+- [OpenClaw](https://github.com/openclaw/openclaw)
+
+---
+
 *본 포스트는 2026년 1월 31일 기준 정보를 바탕으로 작성되었습니다.*
