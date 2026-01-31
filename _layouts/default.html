@@ -1,0 +1,133 @@
+---
+layout: table_wrappers
+---
+
+<!DOCTYPE html>
+
+<html lang="{{ site.lang | default: 'en-US' }}">
+{% include head.html %}
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  {% include icons/icons.html %}
+  {% if page.nav_enabled == true %}
+    {% include components/sidebar.html %}
+  {% elsif layout.nav_enabled == true and page.nav_enabled == nil %}
+    {% include components/sidebar.html %}
+  {% elsif site.nav_enabled != false and layout.nav_enabled == nil and page.nav_enabled == nil %}
+    {% include components/sidebar.html %}
+  {% endif %}
+  <div class="main" id="top">
+    {% include components/header.html %}
+    <div class="main-content-wrap">
+      {% include components/breadcrumbs.html %}
+      <div id="main-content" class="main-content">
+        <main>
+          {% if site.heading_anchors != false %}
+            {% include vendor/anchor_headings.html html=content beforeHeading="true" anchorBody="<svg viewBox=\"0 0 16 16\" aria-hidden=\"true\"><use xlink:href=\"#svg-link\"></use></svg>" anchorClass="anchor-heading" anchorAttrs="aria-labelledby=\"%html_id%\"" %}
+          {% else %}
+            {{ content }}
+          {% endif %}
+
+          {% if page.has_toc != false %}
+            {% include components/children_nav.html %}
+          {% endif %}
+        </main>
+        {% include components/footer.html %}
+      </div>
+    </div>
+    {% if site.search_enabled != false %}
+      {% include components/search_footer.html %}
+    {% endif %}
+  </div>
+
+  <!-- Mermaid.js with Redux color theme -->
+  {% if site.mermaid %}
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    // Mermaid 초기화 - Redux 색상 테마
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      securityLevel: 'loose',
+      themeVariables: {
+        // Redux 색상 테마
+        primaryColor: '#764ABC',
+        primaryTextColor: '#ffffff',
+        primaryBorderColor: '#5d3a9a',
+
+        lineColor: '#764ABC',
+        secondaryColor: '#D4B5E0',
+        tertiaryColor: '#F3E5F5',
+
+        background: '#ffffff',
+        mainBkg: '#764ABC',
+        nodeBorder: '#764ABC',
+
+        actorBkg: '#764ABC',
+        actorBorder: '#5d3a9a',
+        actorTextColor: '#ffffff',
+
+        actorLineColor: '#764ABC',
+        signalColor: '#764ABC',
+        signalTextColor: '#333333',
+
+        labelBoxBkgColor: '#D4B5E0',
+        labelBoxBorderColor: '#764ABC',
+        labelTextColor: '#333333',
+
+        loopTextColor: '#333333',
+        borderColor: '#764ABC',
+
+        noteBkgColor: '#FFF9C4',
+        noteBorderColor: '#FFD54F',
+        noteTextColor: '#333333',
+
+        activationBorderColor: '#764ABC',
+        activationBkgColor: '#F3E5F5',
+
+        sequenceNumberColor: '#764ABC'
+      }
+    });
+
+    // 다이어그램 렌더링�
+    async function renderMermaid() {
+      const mermaidCodes = document.querySelectorAll('code.language-mermaid');
+
+      for (const codeElement of mermaidCodes) {
+        const text = codeElement.textContent.trim();
+        const preElement = codeElement.closest('pre');
+
+        if (preElement) {
+          const mermaidDiv = document.createElement('div');
+          mermaidDiv.className = 'mermaid';
+          mermaidDiv.textContent = text;
+          preElement.parentNode.replaceChild(mermaidDiv, preElement);
+        }
+      }
+
+      await mermaid.run({
+        querySelector: '.mermaid'
+      });
+    }
+
+    // DOMContentLoaded 이후 실행
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderMermaid);
+    } else {
+      renderMermaid().catch(console.error);
+    }
+  </script>
+
+  <style>
+    .mermaid {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: center;
+    }
+  </style>
+  {% endif %}
+</body>
+</html>
