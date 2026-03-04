@@ -76,6 +76,9 @@ collections:
   docs:
     permalink: /:collection/:path/
     output: true
+  redis_patterns:
+    permalink: /:collection/:path/
+    output: true
 
 # Default layout for pages
 defaults:
@@ -89,6 +92,11 @@ defaults:
       type: "docs"
     values:
       layout: "default"
+  - scope:
+      path: "redis_patterns"
+      type: "redis_patterns"
+    values:
+      layout: "default"
 
 # Just the Docs collections configuration
 just_the_docs:
@@ -98,6 +106,8 @@ just_the_docs:
       child_nav_order: reversed
     docs:
       name: Claude & Obsidian 가이드
+    redis_patterns:
+      name: Redis Design Patterns
 
 # Plugins
 plugins:
