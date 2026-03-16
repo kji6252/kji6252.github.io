@@ -37,9 +37,7 @@ search:
 # Aux links for upper right navigation
 aux_links:
   "GitHub":
-    - "https://github.com/kji6252"
-  "Portfolio":
-    - "/portfolio/"
+    - "https://github.com/pallidev"
 
 # Makes Aux links open in a new tab
 aux_links_new_tab: true
