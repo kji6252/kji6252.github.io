@@ -40,10 +40,6 @@ aux_links:
     - "https://github.com/kji6252"
   "Portfolio":
     - "/portfolio/"
-  "About":
-    - "/about/"
-  "Projects":
-    - "/projects/"
 
 # Makes Aux links open in a new tab
 aux_links_new_tab: true

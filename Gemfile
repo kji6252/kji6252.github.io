@@ -1,5 +1,11 @@
 source "https://rubygems.org"
 
+# Ruby 4.0 compatibility
+gem "logger"
+gem "base64"
+gem "bigdecimal"
+gem "mutex_m"
+
 # Just the Docs theme
 gem "just-the-docs", "~> 0.11"
 
