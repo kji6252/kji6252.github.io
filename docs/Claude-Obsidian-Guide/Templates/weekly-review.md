@@ -1,9 +1,7 @@
 ---
-title: "&#123;&#123;week&#125;&#125; 주간 회고"
+title: "Weekly Review Template"
 tags: [weekly-review, retro]
-week: "&#123;&#123;week&#125;&#125;"
-date-range: [&#123;&#123;start_date&#125;&#125;, &#123;&#123;end_date&#125;&#125;]
-created: &#123;&#123;date&#125;&#125;
+layout: default
 ---
 
 {% raw %}

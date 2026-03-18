@@ -1,7 +1,7 @@
 ---
-title: "&#123;&#123;title&#125;&#125;"
-date: &#123;&#123;date&#125;&#125;
+title: "Daily Note Template"
 tags: [daily]
+layout: default
 ---
 
 {% raw %}

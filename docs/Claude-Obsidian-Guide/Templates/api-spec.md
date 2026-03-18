@@ -1,8 +1,7 @@
 ---
-title: "&#123;&#123;api_name&#125;&#125; API 명세"
-tags: [api, &#123;&#123;service&#125;&#125;, &#123;&#123;version&#125;&#125;]
-version: "&#123;&#123;version&#125;&#125;"
-last-updated: &#123;&#123;date&#125;&#125;
+title: "API Spec Template"
+tags: [api]
+layout: default
 ---
 
 {% raw %}

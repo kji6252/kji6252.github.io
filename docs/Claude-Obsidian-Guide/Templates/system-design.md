@@ -1,8 +1,7 @@
 ---
-title: "&#123;&#123;system_name&#125;&#125; 시스템 설계"
-tags: [architecture, design, &#123;&#123;tech_stack&#125;&#125;]
-created: &#123;&#123;date&#125;&#125;
-status: &#123;&#123;status&#125;&#125; // draft, review, approved
+title: "System Design Template"
+tags: [architecture, design]
+layout: default
 ---
 
 {% raw %}
