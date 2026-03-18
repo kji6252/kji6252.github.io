@@ -1,12 +1,13 @@
 ---
-title: "{{title}}"
-tags: [learning, {{technology}}, {{topic}}]
-source: {{source}}
-read-date: {{date}}
-rating: {{rating}} // 1-5
-status: {{status}} // reading, completed
+title: "&#123;&#123;title&#125;&#125;"
+tags: [learning, &#123;&#123;technology&#125;&#125;, &#123;&#123;topic&#125;&#125;]
+source: &#123;&#123;source&#125;&#125;
+read-date: &#123;&#123;date&#125;&#125;
+rating: &#123;&#123;rating&#125;&#125; // 1-5
+status: &#123;&#123;status&#125;&#125; // reading, completed
 ---
 
+{% raw %}
 # {{title}}
 
 ## 개요
@@ -71,3 +72,4 @@ status: {{status}} // reading, completed
 - [ ] 핵심 개념 이해
 - [ ] 코드 예제 실습
 - [ ] 실전 적용 계획
+{% endraw %}

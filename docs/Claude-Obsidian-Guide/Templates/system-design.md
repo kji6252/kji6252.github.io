@@ -1,10 +1,11 @@
 ---
-title: "{{system_name}} 시스템 설계"
-tags: [architecture, design, {{tech_stack}}]
-created: {{date}}
-status: {{status}} // draft, review, approved
+title: "&#123;&#123;system_name&#125;&#125; 시스템 설계"
+tags: [architecture, design, &#123;&#123;tech_stack&#125;&#125;]
+created: &#123;&#123;date&#125;&#125;
+status: &#123;&#123;status&#125;&#125; // draft, review, approved
 ---
 
+{% raw %}
 # {{system_name}} 설계
 
 ## 1. 개요
@@ -158,3 +159,4 @@ graph LR
 | 일자 | 버전 | 변경 내용 | 작성자 |
 |------|------|----------|--------|
 | {{date}} | {{version}} | {{changes}} | {{author}} |
+{% endraw %}

@@ -1,9 +1,10 @@
 ---
-title: "{{title}}"
-date: {{date}}
+title: "&#123;&#123;title&#125;&#125;"
+date: &#123;&#123;date&#125;&#125;
 tags: [daily]
 ---
 
+{% raw %}
 # {{date:YYYY-MM-DD}} {{day_of_week}}
 
 ## 오늘의 계획
@@ -41,3 +42,4 @@ tags: [daily]
 - [[{{yesterday_note}}]]: 어제
 - [[{{tomorrow_note}}]]: 내일
 - [[{{current_week}}]]: 이번 주
+{% endraw %}

@@ -1,10 +1,11 @@
 ---
-title: "{{api_name}} API 명세"
-tags: [api, {{service}}, {{version}}]
-version: "{{version}}"
-last-updated: {{date}}
+title: "&#123;&#123;api_name&#125;&#125; API 명세"
+tags: [api, &#123;&#123;service&#125;&#125;, &#123;&#123;version&#125;&#125;]
+version: "&#123;&#123;version&#125;&#125;"
+last-updated: &#123;&#123;date&#125;&#125;
 ---
 
+{% raw %}
 # {{api_name}} API
 
 ## 개요
@@ -113,3 +114,4 @@ last-updated: {{date}}
 | 버전 | 일자 | 변경 내용 | 작성자 |
 |------|------|----------|--------|
 | {{version}} | {{date}} | {{changes}} | {{author}} |
+{% endraw %}

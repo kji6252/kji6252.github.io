@@ -1,11 +1,12 @@
 ---
-title: "{{title}}"
-tags: [troubleshooting, {{technology}}, {{error_type}}]
-created: {{date}}
-status: {{status}}  # open, investigating, resolved
-environment: {{environment}}  # dev, staging, production
+title: "&#123;&#123;title&#125;&#125;"
+tags: [troubleshooting, &#123;&#123;technology&#125;&#125;, &#123;&#123;error_type&#125;&#125;]
+created: &#123;&#123;date&#125;&#125;
+status: &#123;&#123;status&#125;&#125;  # open, investigating, resolved
+environment: &#123;&#123;environment&#125;&#125;  # dev, staging, production
 ---
 
+{% raw %}
 # {{title}}
 
 ## 문제 상황
@@ -82,3 +83,4 @@ environment: {{environment}}  # dev, staging, production
 | 일자 | 변경 내용 | 작성자 |
 |------|----------|--------|
 | {{date}} | 초기 작성 | {{author}} |
+{% endraw %}

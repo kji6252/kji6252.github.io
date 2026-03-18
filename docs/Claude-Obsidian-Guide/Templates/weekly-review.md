@@ -1,11 +1,12 @@
 ---
-title: "{{week}} 주간 회고"
+title: "&#123;&#123;week&#125;&#125; 주간 회고"
 tags: [weekly-review, retro]
-week: "{{week}}"
-date-range: [{{start_date}}, {{end_date}}]
-created: {{date}}
+week: "&#123;&#123;week&#125;&#125;"
+date-range: [&#123;&#123;start_date&#125;&#125;, &#123;&#123;end_date&#125;&#125;]
+created: &#123;&#123;date&#125;&#125;
 ---
 
+{% raw %}
 # {{year}}년 {{week_number}}주 주간 회고
 
 ## 주간 요약
@@ -78,3 +79,4 @@ created: {{date}}
 ## 참고
 - [[{{last_week_review}}]]: 지난 주 회고
 - [[{{this_week_daily_notes}}]]: 이번 주 일일 노트들
+{% endraw %}
