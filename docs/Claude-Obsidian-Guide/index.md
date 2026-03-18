@@ -122,12 +122,12 @@ flowchart LR
 
 | 템플릿 | 용도 | 링크 |
 |--------|------|------|
-| Daily Note | 일일 기록과 태스크 관리 | [[Templates/daily-note]] |
-| Weekly Review | 주간 회고 | [[Templates/weekly-review]] |
-| Troubleshooting | 문제 해결 문서화 | [[Templates/troubleshooting]] |
-| API Spec | API 명세서 | [[Templates/api-spec]] |
-| System Design | 시스템 설계 | [[Templates/system-design]] |
-| Tech Study | 기술 학습 | [[Templates/tech-study]] |
+| Daily Note | 일일 기록과 태스크 관리 | [Daily Note](Templates/daily-note/) |
+| Weekly Review | 주간 회고 | [Weekly Review](Templates/weekly-review/) |
+| Troubleshooting | 문제 해결 문서화 | [Troubleshooting](Templates/troubleshooting/) |
+| API Spec | API 명세서 | [API Spec](Templates/api-spec/) |
+| System Design | 시스템 설계 | [System Design](Templates/system-design/) |
+| Tech Study | 기술 학습 | [Tech Study](Templates/tech-study/) |
 
 ## 🔧 전제 조건
 
