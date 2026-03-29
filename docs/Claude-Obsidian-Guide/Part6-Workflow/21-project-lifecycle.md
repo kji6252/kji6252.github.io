@@ -23,11 +23,11 @@ flowchart LR
 
 ```markdown
 Claude:
-"{{프로젝트}}의 시스템 설계 문서를
+"{% raw %}{{프로젝트}}{% endraw %}의 시스템 설계 문서를
 작성해줘.
 
 요구사항:
-- {{요구사항}}
+- {% raw %}{{요구사항}}{% endraw %}
 
 Templates/system-design 사용"
 ```
@@ -45,7 +45,7 @@ Templates/system-design 사용"
 
 # 트러블슈팅
 - 문제 발생 시 바로 문서화
-- [[Troubleshooting/{{이슈}}]]
+- [[Troubleshooting/{% raw %}{{이슈}}{% endraw %}]]
 ```
 
 ## 3. 배포 단계
@@ -61,7 +61,7 @@ Templates/system-design 사용"
 
 ```markdown
 Claude:
-"프로젝트 {{이름}}을
+"프로젝트 {% raw %}{{이름}}{% endraw %}을
 완료했으니 회고를 작성해줘.
 
 성과, 문제, 개선점 포함"

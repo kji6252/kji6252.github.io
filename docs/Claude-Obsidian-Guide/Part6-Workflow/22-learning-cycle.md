@@ -64,7 +64,7 @@ class KafkaConfig {
 
 ## 코드
 ```kotlin
-{{예시}}
+{% raw %}{{예시}}{% endraw %}
 ```
 
 ## 적용

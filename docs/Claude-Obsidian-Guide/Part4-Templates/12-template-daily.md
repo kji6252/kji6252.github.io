@@ -27,46 +27,46 @@ nav_order: 2
 
 ```markdown
 ---
-title: "{{date:YYYY-MM-DD}}"
+title: "{% raw %}{{date:YYYY-MM-DD}}{% endraw %}"
 ---
 
-# {{date:YYYY-MM-DD}} {{day_of_week}}
+# {% raw %}{{date:YYYY-MM-DD}}{% endraw %} {% raw %}{{day_of_week}}{% endraw %}
 
 ## 오늘의 계획
-- [ ] {{task_1}}
-- [ ] {{task_2}}
-- [ ] {{task_3}}
+- [ ] {% raw %}{{task_1}}{% endraw %}
+- [ ] {% raw %}{{task_2}}{% endraw %}
+- [ ] {% raw %}{{task_3}}{% endraw %}
 
 ## 회의 일정
-- {{time_1}} - {{meeting_1}}
-- {{time_2}} - {{meeting_2}}
+- {% raw %}{{time_1}}{% endraw %} - {% raw %}{{meeting_1}}{% endraw %}
+- {% raw %}{{time_2}}{% endraw %} - {% raw %}{{meeting_2}}{% endraw %}
 
 ## 완료한 작업
-- [x] {{completed_1}}
-- [x] {{completed_2}}
+- [x] {% raw %}{{completed_1}}{% endraw %}
+- [x] {% raw %}{{completed_2}}{% endraw %}
 
 ## 해결한 문제
-{{if_troubleshooting}}
+{% raw %}{{if_troubleshooting}}{% endraw %}
 
 ## 배운 것
-{{if_learning}}
+{% raw %}{{if_learning}}{% endraw %}
 
 ## 코드 리뷰
-{{if_code_review}}
+{% raw %}{{if_code_review}}{% endraw %}
 
 ## 내일 할 일
-- [ ] {{tomorrow_1}}
-- [ ] {{tomorrow_2}}
+- [ ] {% raw %}{{tomorrow_1}}{% endraw %}
+- [ ] {% raw %}{{tomorrow_2}}{% endraw %}
 
 ## 메모
-{{notes}}
+{% raw %}{{notes}}{% endraw %}
 
 ---
 
 ## 관련 링크
-- [[{{yesterday_note}}]]: 어제
-- [[{{tomorrow_note}}]]: 내일
-- [[{{current_week}}]]: 이번 주
+- [[{% raw %}{{yesterday_note}}{% endraw %}]]: 어제
+- [[{% raw %}{{tomorrow_note}}{% endraw %}]]: 내일
+- [[{% raw %}{{current_week}}{% endraw %}]]: 이번 주
 ```
 
 ---
@@ -329,9 +329,9 @@ graph LR
 
 ```markdown
 ## 오늘의 계획
-- [ ] 긴급: {{urgent_task}}
-- [ ] 중요: {{important_task}}
-- [ ] 일반: {{normal_task}}
+- [ ] 긴급: {% raw %}{{urgent_task}}{% endraw %}
+- [ ] 중요: {% raw %}{{important_task}}{% endraw %}
+- [ ] 일반: {% raw %}{{normal_task}}{% endraw %}
 ```
 
 ### 3. 링크 적극 활용

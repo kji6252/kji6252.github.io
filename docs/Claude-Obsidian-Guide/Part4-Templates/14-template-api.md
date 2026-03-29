@@ -27,17 +27,17 @@ API 명세서는 프론트엔드 개발자와 백엔드 개발자 간의 커뮤�
 
 ```markdown
 ---
-title: "{{API명}}"
-version: "{{version}}"
-baseUrl: "{{baseUrl}}"
+title: "{% raw %}{{API명}}{% endraw %}"
+version: "{% raw %}{{version}}{% endraw %}"
+baseUrl: "{% raw %}{{baseUrl}}{% endraw %}"
 ---
 
-# {{API명}} API
+# {% raw %}{{API명}}{% endraw %} API
 
 ## 개요
 
 ### 설명
-{{description}}
+{% raw %}{{description}}{% endraw %}
 
 ### 관련 문서
 - [[요구사항/기획서]]
@@ -47,30 +47,30 @@ baseUrl: "{{baseUrl}}"
 
 ## Endpoints
 
-### 1. {{endpoint_1}}
+### 1. {% raw %}{{endpoint_1}}{% endraw %}
 
-`{{METHOD}} /api/{{path}}`
+`{% raw %}{{METHOD}}{% endraw %} /api/{% raw %}{{path}}{% endraw %}`
 
 #### 설명
-{{description}}
+{% raw %}{{description}}{% endraw %}
 
 #### Request Headers
 ```http
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {% raw %}{{token}}{% endraw %}
 ```
 
 #### Path Parameters
 | 파라미터 | 타입 | 필수 | 설명 |
 |----------|------|------|------|
-| {{param_1}} | {{type}} | Yes | {{description}} |
-| {{param_2}} | {{type}} | No | {{description}} |
+| {% raw %}{{param_1}}{% endraw %} | {% raw %}{{type}}{% endraw %} | Yes | {% raw %}{{description}}{% endraw %} |
+| {% raw %}{{param_2}}{% endraw %} | {% raw %}{{type}}{% endraw %} | No | {% raw %}{{description}}{% endraw %} |
 
 #### Query Parameters
 | 파라미터 | 타입 | 필수 | 설명 |
 |----------|------|------|------|
-| {{query_1}} | {{type}} | Yes | {{description}} |
-| {{query_2}} | {{type}} | No | {{description}} |
+| {% raw %}{{query_1}}{% endraw %} | {% raw %}{{type}}{% endraw %} | Yes | {% raw %}{{description}}{% endraw %} |
+| {% raw %}{{query_2}}{% endraw %} | {% raw %}{{type}}{% endraw %} | No | {% raw %}{{description}}{% endraw %} |
 
 #### Request Body
 ```json
@@ -86,7 +86,7 @@ Authorization: Bearer {{token}}
 {
   "code": 200,
   "message": "성공",
-  "data": {{response_data}}
+  "data": {% raw %}{{response_data}}{% endraw %}
 }
 ```
 
@@ -130,9 +130,9 @@ Authorization: Bearer {{token}}
 
 #### Example
 ```bash
-curl -X {{METHOD}} 'https://api.example.com/api/{{path}}' \
+curl -X {% raw %}{{METHOD}}{% endraw %} 'https://api.example.com/api/{% raw %}{{path}}{% endraw %}' \
   -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer {{token}}' \
+  -H 'Authorization: Bearer {% raw %}{{token}}{% endraw %}' \
   -d '{
     "field1": "value1",
     "field2": "value2"
@@ -148,16 +148,16 @@ curl -X {{METHOD}} 'https://api.example.com/api/{{path}}' \
 {
   "code": 200,
   "message": "성공",
-  "data": {{actual_data}}
+  "data": {% raw %}{{actual_data}}{% endraw %}
 }
 ```
 
 ### 실패 응답
 ```json
 {
-  "code": {{error_code}},
-  "message": "{{error_message}}",
-  "errors": {{validation_errors}}
+  "code": {% raw %}{{error_code}}{% endraw %},
+  "message": "{% raw %}{{error_message}}{% endraw %}",
+  "errors": {% raw %}{{validation_errors}}{% endraw %}
 }
 ```
 
@@ -183,7 +183,7 @@ curl -X {{METHOD}} 'https://api.example.com/api/{{path}}' \
 
 | 버전 | 날짜 | 변경 내용 | 작성자 |
 |------|------|----------|--------|
-| 1.0.0 | {{date}} | 초기 버전 | {{author}} |
+| 1.0.0 | {% raw %}{{date}}{% endraw %} | 초기 버전 | {% raw %}{{author}}{% endraw %} |
 ```
 
 ---
@@ -495,16 +495,16 @@ curl -X POST 'https://api.example.com/api/users' \
 {
   "code": 200,
   "message": "성공",
-  "data": {{actual_data}}
+  "data": {% raw %}{{actual_data}}{% endraw %}
 }
 ```
 
 ### 실패 응답
 ```json
 {
-  "code": {{error_code}},
-  "message": "{{error_message}}",
-  "errors": {{validation_errors}}
+  "code": {% raw %}{{error_code}}{% endraw %},
+  "message": "{% raw %}{{error_message}}{% endraw %}",
+  "errors": {% raw %}{{validation_errors}}{% endraw %}
 }
 ```
 

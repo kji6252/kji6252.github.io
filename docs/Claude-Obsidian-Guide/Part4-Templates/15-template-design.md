@@ -27,27 +27,27 @@ nav_order: 5
 
 ```markdown
 ---
-title: "{{시스템명}} 설계"
-version: "{{version}}"
-created: {{date}}
-author: {{author}}
+title: "{% raw %}{{시스템명}}{% endraw %} 설계"
+version: "{% raw %}{{version}}{% endraw %}"
+created: {% raw %}{{date}}{% endraw %}
+author: {% raw %}{{author}}{% endraw %}
 ---
 
-# {{시스템명}} 설계
+# {% raw %}{{시스템명}}{% endraw %} 설계
 
 ## 개요
 
 ### 프로젝트 배경
-{{background}}
+{% raw %}{{background}}{% endraw %}
 
 ### 목표
-{{goals}}
+{% raw %}{{goals}}{% endraw %}
 
 ### 범위
-{{scope}}
+{% raw %}{{scope}}{% endraw %}
 
 ### 제약사항
-{{constraints}}
+{% raw %}{{constraints}}{% endraw %}
 
 ---
 
@@ -56,16 +56,16 @@ author: {{author}}
 ### 기능적 요구사항
 | ID | 요구사항 | 우선순위 |
 |----|----------|----------|
-| FR-001 | {{requirement_1}} | P0 |
-| FR-002 | {{requirement_2}} | P1 |
+| FR-001 | {% raw %}{{requirement_1}}{% endraw %} | P0 |
+| FR-002 | {% raw %}{{requirement_2}}{% endraw %} | P1 |
 
 ### 비기능적 요구사항
 | 항목 | 목표 | 측정 방법 |
 |------|------|-----------|
-| 성능 | {{performance_goal}} | {{metric}} |
-| 가용성 | {{availability_goal}} | {{metric}} |
-| 확장성 | {{scalability_goal}} | {{metric}} |
-| 보안 | {{security_goal}} | {{metric}} |
+| 성능 | {% raw %}{{performance_goal}}{% endraw %} | {% raw %}{{metric}}{% endraw %} |
+| 가용성 | {% raw %}{{availability_goal}}{% endraw %} | {% raw %}{{metric}}{% endraw %} |
+| 확장성 | {% raw %}{{scalability_goal}}{% endraw %} | {% raw %}{{metric}}{% endraw %} |
+| 보안 | {% raw %}{{security_goal}}{% endraw %} | {% raw %}{{metric}}{% endraw %} |
 
 ---
 
@@ -86,16 +86,16 @@ graph TB
 ```
 
 ### 계층별 설명
-{{layer_descriptions}}
+{% raw %}{{layer_descriptions}}{% endraw %}
 
 ### 기술 스택
 | 계층 | 기술 | 버전 |
 |------|------|------|
-| 프론트엔드 | {{frontend}} | {{version}} |
-| 백엔드 | {{backend}} | {{version}} |
-| 데이터베이스 | {{database}} | {{version}} |
-| 캐시 | {{cache}} | {{version}} |
-| 메시지 큐 | {{message_queue}} | {{version}} |
+| 프론트엔드 | {% raw %}{{frontend}}{% endraw %} | {% raw %}{{version}}{% endraw %} |
+| 백엔드 | {% raw %}{{backend}}{% endraw %} | {% raw %}{{version}}{% endraw %} |
+| 데이터베이스 | {% raw %}{{database}}{% endraw %} | {% raw %}{{version}}{% endraw %} |
+| 캐시 | {% raw %}{{cache}}{% endraw %} | {% raw %}{{version}}{% endraw %} |
+| 메시지 큐 | {% raw %}{{message_queue}}{% endraw %} | {% raw %}{{version}}{% endraw %} |
 
 ---
 
@@ -139,7 +139,7 @@ erDiagram
 ```
 
 ### 주요 테이블 설명
-{{table_descriptions}}
+{% raw %}{{table_descriptions}}{% endraw %}
 
 ---
 
@@ -153,7 +153,7 @@ erDiagram
 | GET | /api/users/{id} | 사용자 조회 |
 | PUT | /api/users/{id} | 사용자 수정 |
 
-상세 API 명세: [[{{api_spec_doc}}]]
+상세 API 명세: [[{% raw %}{{api_spec_doc}}{% endraw %}]]
 
 ---
 
@@ -161,17 +161,17 @@ erDiagram
 
 ### 핵심 컴포넌트
 
-#### 1. {{component_1}}
-**목적**: {{purpose}}
-**기술**: {{technology}}
+#### 1. {% raw %}{{component_1}}{% endraw %}
+**목적**: {% raw %}{{purpose}}{% endraw %}
+**기술**: {% raw %}{{technology}}{% endraw %}
 ```kotlin
-interface {{InterfaceName}} {
-    fun {{method}}(): {{ReturnType}}
+interface {% raw %}{{InterfaceName}}{% endraw %} {
+    fun {% raw %}{{method}}{% endraw %}(): {% raw %}{{ReturnType}}{% endraw %}
 }
 ```
 
-#### 2. {{component_2}}
-{{description}}
+#### 2. {% raw %}{{component_2}}{% endraw %}
+{% raw %}{{description}}{% endraw %}
 
 ### 데이터 흐름
 
@@ -218,9 +218,9 @@ graph LR
 ### 서버 사양
 | 서버 | 사양 | 개수 |
 |------|------|------|
-| API | {{api_spec}} | {{count}} |
-| DB | {{db_spec}} | {{count}} |
-| Cache | {{cache_spec}} | {{count}} |
+| API | {% raw %}{{api_spec}}{% endraw %} | {% raw %}{{count}}{% endraw %} |
+| DB | {% raw %}{{db_spec}}{% endraw %} | {% raw %}{{count}}{% endraw %} |
+| Cache | {% raw %}{{cache_spec}}{% endraw %} | {% raw %}{{count}}{% endraw %} |
 
 ---
 
@@ -249,13 +249,13 @@ graph LR
 ## 보안
 
 ### 인증/인가
-- 인증: {{auth_method}}
-- 인가: {{authorization_method}}
+- 인증: {% raw %}{{auth_method}}{% endraw %}
+- 인가: {% raw %}{{authorization_method}}{% endraw %}
 
 ### 데이터 보호
 - 전송: HTTPS (TLS 1.3)
-- 저장: {{encryption_method}}
-- 민감 정보: {{sensitive_data_protection}}
+- 저장: {% raw %}{{encryption_method}}{% endraw %}
+- 민감 정보: {% raw %}{{sensitive_data_protection}}{% endraw %}
 
 ---
 
@@ -264,8 +264,8 @@ graph LR
 ### 단계
 | 단계 | 작업 | 기간 | 담당자 |
 |------|------|------|--------|
-| 1단계 | {{task_1}} | {{duration}} | {{assignee}} |
-| 2단계 | {{task_2}} | {{duration}} | {{assignee}} |
+| 1단계 | {% raw %}{{task_1}}{% endraw %} | {% raw %}{{duration}}{% endraw %} | {% raw %}{{assignee}}{% endraw %} |
+| 2단계 | {% raw %}{{task_2}}{% endraw %} | {% raw %}{{duration}}{% endraw %} | {% raw %}{{assignee}}{% endraw %} |
 
 ### 마일스톤
 ```mermaid
@@ -290,10 +290,10 @@ gantt
 ### 기술적 리스크
 | 리스크 | 확률 | 영향 | 대응책 |
 |--------|------|------|--------|
-| {{risk_1}} | {{probability}} | {{impact}} | {{mitigation}} |
+| {% raw %}{{risk_1}}{% endraw %} | {% raw %}{{probability}}{% endraw %} | {% raw %}{{impact}}{% endraw %} | {% raw %}{{mitigation}}{% endraw %} |
 
 ### 일정 리스크
-{{schedule_risks}}
+{% raw %}{{schedule_risks}}{% endraw %}
 
 ---
 
@@ -302,7 +302,7 @@ gantt
 - [[요구사항 문서]]
 - [[API 명세서]]
 - [[데이터베이스 스키마]]
-- [{{reference_title}}]({{reference_url}})
+- [{% raw %}{{reference_title}}{% endraw %}]({% raw %}{{reference_url}}{% endraw %})
 ```
 
 ---

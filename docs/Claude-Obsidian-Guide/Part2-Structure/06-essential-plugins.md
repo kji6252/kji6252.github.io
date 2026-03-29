@@ -318,15 +318,15 @@ graph TB
 ```markdown
 # 템플릿 파일
 ---
-title: {{title}}
-date: {{date}}
-tags: [troubleshooting, {{tech}}]
+title: {% raw %}{{title}}{% endraw %}
+date: {% raw %}{{date}}{% endraw %}
+tags: [troubleshooting, {% raw %}{{tech}}{% endraw %}]
 ---
 
-# {{title}}
+# {% raw %}{{title}}{% endraw %}
 
 ## 발생 일시
-{{datetime}}
+{% raw %}{{datetime}}{% endraw %}
 
 ## 문제 상황
 
@@ -342,7 +342,7 @@ tags: [troubleshooting, {{tech}}]
 ### 동적 템플릿
 
 ```markdown
-# {{title}}
+# {% raw %}{{title}}{% endraw %}
 
 <%*
 let title = tp.file.title;
@@ -351,9 +351,9 @@ tR += `생성일: ${date}\n\n`;
 *%>
 
 ## 목차
-- [[{{title}}/개요]]
-- [[{{title}}/기술 스택]]
-- [[{{title}}/API 설계]]
+- [[{% raw %}{{title}}{% endraw %}/개요]]
+- [[{% raw %}{{title}}{% endraw %}/기술 스택]]
+- [[{% raw %}{{title}}{% endraw %}/API 설계]]
 ```
 
 ---
@@ -381,11 +381,11 @@ flowchart LR
 ```markdown
 # Templates/daily-note.md
 ---
-date: {{date}}
+date: {% raw %}{{date}}{% endraw %}
 tags: [daily]
 ---
 
-# {{date:YYYY-MM-DD}}
+# {% raw %}{{date:YYYY-MM-DD}}{% endraw %}
 
 ## 오늘의 계획
 - [ ]

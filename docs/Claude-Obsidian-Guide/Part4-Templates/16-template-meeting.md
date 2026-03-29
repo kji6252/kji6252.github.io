@@ -27,12 +27,12 @@ nav_order: 6
 
 ```markdown
 ---
-title: "{{회의명}}"
+title: "{% raw %}{{회의명}}{% endraw %}"
 date: {{date}}
 attendees: {{attendees}}
 ---
 
-# {{회의명}}
+# {% raw %}{{회의명}}{% endraw %}
 
 ## 기본 정보
 
@@ -434,7 +434,7 @@ graph LR
 ```markdown
 ## 안건
 
-### {{기술}} 도입 검토
+### {% raw %}{{기술}}{% endraw %} 도입 검토
 
 #### 현재 상황
 {{current_status}}
