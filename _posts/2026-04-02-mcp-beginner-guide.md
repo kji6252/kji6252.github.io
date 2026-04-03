@@ -49,27 +49,28 @@ MCP를 이해하는 가장 쉬운 방법은 **USB-C**에 비유하는 것입니�
 
 MCP가 없을 때의 문제를 살펴보겠습니다:
 
+**MCP 도입 전 — 도구마다 별도 통합 필요:**
+
+```mermaid
+graph LR
+    A[Claude] -- 각각 다른 방식 --> B[GitHub API]
+    A -- 각각 다른 방식 --> C[파일 시스템]
+    A -- 각각 다른 방식 --> D[데이터베이스]
+    A -- 각각 다른 방식 --> E[Slack API]
+    style A fill:#ff6b6b,color:#fff
 ```
-❌ MCP 이전的世界:
 
-Claude ←→ (각각 다른 방식으로) ←→ GitHub API
-Claude ←→ (각각 다른 방식으로) ←→ 파일 시스템
-Claude ←→ (각각 다른 방식으로) ←→ 데이터베이스
-Claude ←→ (각각 다른 방식으로) ←→ Slack API
+**MCP 도입 후 — 하나의 표준으로 모든 도구 연결:**
 
-→ 모든 도구마다 별도의 통합 개발이 필요!
-```
-
-```
-✅ MCP 이후의 세계:
-
-Claude ──┐
-         ├──→ MCP 표준 프로토콜 ──→ GitHub 서버
-         │                        ──→ 파일 시스템 서버
-         │                        ──→ 데이터베이스 서버
-         │                        ──→ Slack 서버
-
-→ 하나의 표준으로 모든 도구 연결!
+```mermaid
+graph LR
+    A[Claude] --> F[MCP 표준 프로토콜]
+    F --> B[GitHub 서버]
+    F --> C[파일 시스템 서버]
+    F --> D[데이터베이스 서버]
+    F --> E[Slack 서버]
+    style A fill:#51cf66,color:#fff
+    style F fill:#339af0,color:#fff
 ```
 
 ---
@@ -80,22 +81,20 @@ Claude ──┐
 
 MCP는 **클라이언트-서버 아키텍처**를 사용합니다:
 
-```
-┌──────────────────────────────────────────────────────┐
-│                    MCP Host                          │
-│         (Claude Desktop, Claude Code 등)             │
-│                                                      │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  │
-│  │ MCP Client  │  │ MCP Client  │  │ MCP Client  │  │
-│  │   (1:1)     │  │   (1:1)     │  │   (1:1)     │  │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  │
-└─────────┼────────────────┼────────────────┼─────────┘
-          │                │                │
-          ▼                ▼                ▼
-   ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-   │ MCP Server  │ │ MCP Server  │ │ MCP Server  │
-   │ (파일시스템) │ │ (GitHub)    │ │ (Slack)     │
-   └─────────────┘ └─────────────┘ └─────────────┘
+```mermaid
+graph TB
+    subgraph Host["MCP Host (Claude Desktop, Claude Code 등)"]
+        C1["MCP Client (1:1)"]
+        C2["MCP Client (1:1)"]
+        C3["MCP Client (1:1)"]
+    end
+    C1 --> S1["MCP Server\n(파일 시스템)"]
+    C2 --> S2["MCP Server\n(GitHub)"]
+    C3 --> S3["MCP Server\n(Slack)"]
+    style Host fill:#e9ecef,stroke:#495057
+    style S1 fill:#d0ebff,stroke:#339af0
+    style S2 fill:#d0ebff,stroke:#339af0
+    style S3 fill:#d0ebff,stroke:#339af0
 ```
 
 | 구성 요소 | 역할 | 예시 |
@@ -182,14 +181,16 @@ Claude Desktop에서 다음과 같이 물어보세요:
 
 MCP의 모든 작업은 **사용자의 명시적인 승인**이 필요합니다:
 
-```
-1. Claude가 작업 요청 (예: "파일 읽기")
-        ↓
-2. Claude Desktop이 승인 대화상자 표시
-        ↓
-3. 사용자가 "허용" 또는 "거부" 선택
-        ↓
-4. 허용 시에만 작업 실행
+```mermaid
+flowchart TD
+    A["Claude가 작업 요청\n(예: 파일 읽기)"] --> B["Claude Desktop이\n승인 대화상자 표시"]
+    B --> C{"사용자 선택"}
+    C -->|"허용"| D["작업 실행"]
+    C -->|"거부"| E["작업 취소"]
+    style A fill:#fff3bf,stroke:#fab005
+    style C fill:#ffe8cc,stroke:#fd7e14
+    style D fill:#d3f9d8,stroke:#40c057
+    style E fill:#ffe3e3,stroke:#fa5252
 ```
 
 ---

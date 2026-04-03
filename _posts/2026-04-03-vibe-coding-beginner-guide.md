@@ -131,16 +131,27 @@ Cursor는 VS Code를 기반으로 한 AI 전용 IDE입니다.
 
 ### 2.4 도구 선택 가이드
 
-```
-어떤 도구를 선택할까?
-
-터미널을 주로 사용한다 ───→ Claude Code
-                            │
-IDE를 주로 사용한다 ───────→ Cursor 또는 Copilot
-                            │
-오픈소스를 선호한다 ───────→ Aider
-                            │
-UI를 빠르게 만들고 싶다 ──→ v0
+```mermaid
+flowchart TD
+    Start["어떤 도구를 선택할까?"] --> Q1{"터미널을
+주로 사용하나요?"}
+    Q1 -->|"예"| Claude["Claude Code
+CLI 기반 자율 에이전트"]
+    Q1 -->|"아니오"| Q2{"IDE를
+주로 사용하나요?"}
+    Q2 -->|"예"| Cursor["Cursor 또는 Copilot
+IDE 내장 AI"]
+    Q2 -->|"아니오"| Q3{"오픈소스를
+선호하나요?"}
+    Q3 -->|"예"| Aider["Aider
+오픈소스 다중 LLM"]
+    Q3 -->|"아니오"| v0["v0
+웹 기반 UI 생성"]
+    style Start fill:#fff3bf,stroke:#fab005
+    style Claude fill:#d0ebff,stroke:#339af0
+    style Cursor fill:#d0ebff,stroke:#339af0
+    style Aider fill:#d0ebff,stroke:#339af0
+    style v0 fill:#d0ebff,stroke:#339af0
 ```
 
 ---
@@ -236,32 +247,28 @@ AI가 생성한 코드를 무비판적으로 수용하지 마세요:
 
 새 프로젝트를 Vibe Coding으로 시작하는 과정입니다:
 
-```
-Step 1: 아이디어를 자연어로 설명
-──────────────────────────────────
-"Todo 앱을 만들고 싶어.
- 할 일 추가, 완료 처리, 삭제 기능이 필요하고,
- 카테고리별로 필터링할 수 있어야 해.
- React + TypeScript + Tailwind CSS를 사용해줘."
+```mermaid
+flowchart LR
+    S1["Step 1
+아이디어를 자연어로 설명"] --> S2["Step 2
+AI가 초기 구조 생성"]
+    S2 --> S3["Step 3
+반복 개선"]
+    S3 --> S4["Step 4
+품질 개선"]
 
-Step 2: AI가 초기 구조 생성
-──────────────────────────────────
-→ 컴포넌트 구조
-→ 상태 관리
-→ 스타일링
-→ 기본 CRUD 로직
+    S1 -.- D1[""Todo 앱을 만들고 싶어...""]
+    S2 -.- D2["컴포넌트, 상태관리
+스타일링, CRUD 로직"]
+    S3 -.- D3["localStorage 저장
+드래그앤드롭, 다크모드"]
+    S4 -.- D4["테스트 코드
+성능 최적화, 접근성"]
 
-Step 3: 반복 개선
-──────────────────────────────────
-"localStorage에 데이터를 저장하게 해줘"
-"드래그앤드롭으로 순서를 바꿀 수 있게 해줘"
-"다크모드를 지원해줘"
-
-Step 4: 품질 개선
-──────────────────────────────────
-"테스트 코드를 작성해줘"
-"성능을 최적화해줘"
-"접근성(a11y)을 개선해줘"
+    style S1 fill:#fff3bf,stroke:#fab005
+    style S2 fill:#d0ebff,stroke:#339af0
+    style S3 fill:#d3f9d8,stroke:#40c057
+    style S4 fill:#e5dbff,stroke:#7950f2
 ```
 
 ### 4.2 기존 프로젝트에 기능 추가하기
