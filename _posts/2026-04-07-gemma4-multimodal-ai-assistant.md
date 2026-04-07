@@ -363,7 +363,7 @@ DuckDuckGo 검색 도구를 호출해 실시간 웹 검색 결과를 가져온 �
 
 ### 5-5. 웹 페이지 읽기 — `read_webpage` 도구
 
-> "https://example.com 페이지 내용 알려줘"
+> "https://ollama.com/blog/gemma3 페이지 내용 요약해줘"
 
 ![웹 페이지 읽기 결과](/assets/images/gemma4_05_webpage.png)
 
@@ -439,6 +439,30 @@ LangGraph의 `StateGraph`가 더 견고하지만, 2.3B 모델의 도구 호출 �
 ### 왜 `gr.ChatInterface`인가?
 
 `gr.Blocks` + `Chatbot` 조합으로 직접 빌드하는 것보다 **멀티턴 대화가 자동 처리**되고, `multimodal=True` 하나로 파일 업로드/마이크 입력이 활성화된다.
+
+### TTS 토글을 왜 추가했나?
+
+기본적으로 TTS는 LLM이 `text_to_speech` 도구를 **선택적으로 호출**하는 방식이었다. 하지만 매번 "음성으로 변환해줘"라고 요청하는 것은 비효율적이다. **토글 ON 시 모든 응답에 자동으로 TTS 오디오를 생성**하도록 개선했다.
+
+```python
+# additional_inputs에 체크박스 추가
+additional_inputs=[
+    gr.Checkbox(value=False, label="🔊 음성 자동 재생",
+                info="토글 ON 시 모든 응답을 TTS로 자동 생성합니다"),
+],
+
+# predict()에서 최종 답변 후 TTS 자동 생성
+if tts_enabled:
+    tts_filename = f"tts_{int(time.time() * 1000)}.mp3"
+    tts = gTTS(text=final_answer, lang='ko')
+    tts.save(os.path.join(TTS_DIR, tts_filename))
+    audio_html = (
+        f'<audio controls autoplay>'
+        f'<source src="/file=tts_output/{tts_filename}" type="audio/mpeg">'
+        f'</audio>'
+    )
+    result += audio_html
+```
 
 ---
 
