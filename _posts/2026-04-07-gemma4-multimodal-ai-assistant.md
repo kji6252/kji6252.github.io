@@ -21,13 +21,17 @@ tags:
 
 2026년, 구글이 Gemma 4를 발표했다. 오픈 가중치 모델이면서 **비전(Vision)** 기능을 기본 탑재한 것이 핵심이었다. 특히 E2B(2.3B effective params) 모델은 가벼우면서도 도구 호출(Tool Calling)을 지원해, 로컬 환경에서 멀티모달 에이전트를 구축하기에 적합했다.
 
-이 글에서는 **Gemma 4 E2B + Ollama + LangChain + Gradio** 조합으로 7개 도구를 사용하는 멀티모달 AI 어시스턴트를 구축하는 전 과정을 정리한다.
+이 글에서는 **Gemma 4 E2B + Ollama + LangChain + Gradio** 조합으로 7개 도구를 사용하는 멀티모달 AI 어시스턴트를 구축하는 전 과정을 정리한다. 모든 기능은 Playwright로 통합테스트를 진행했고, 실제 동작 화면을 스크린샷과 영상으로 첨부했다.
 
 | 기술 스택 | 역할 |
 |-----------|------|
 | Gemma 4 E2B (Ollama) | 로컬 LLM (2.3B, Vision 지원) |
 | LangChain | 에이전트 프레임워크 + 도구 바인딩 |
 | Gradio 6 | 멀티모달 채팅 UI |
+
+**완성된 어시스턴트의 초기 화면:**
+
+![Gemma 4 E2B 어시스턴트 초기 화면](/assets/images/gemma4_00_landing.png)
 
 ---
 
@@ -258,7 +262,11 @@ demo = gr.ChatInterface(
         sources=["upload", "microphone"],
         placeholder="메시지를 입력하세요. 이미지/음성 파일도 첨부할 수 있습니다...",
     ),
-    title="Gemma 4 E2B 어시스턴트",
+    title="🤖 Gemma 4 E2B 어시스턴트",
+    description=(
+        "### Ollama + LangChain 멀티도구 AI 챗봇\n"
+        "웹 검색 | 계산기 | 웹 페이지 읽기 | 시간 조회 | 이미지 분석 | TTS | STT"
+    ),
 )
 ```
 
@@ -317,7 +325,76 @@ def predict(message, history):
 
 ---
 
-## 5. 핵심 기술 결정
+## 5. 실제 동작 시연 (통합테스트)
+
+Playwright로 모든 기능을 순차적으로 테스트했다. 각 기능별 실제 응답 화면을 확인해보자.
+
+### 5-1. 자기소개
+
+> "안녕! 자기소개 해줘"
+
+![자기소개 응답](/assets/images/gemma4_01_intro.png)
+
+Gemma 4 E2B가 자신의 정체와 가능한 역할을 한국어로 자연스럽게 소개한다.
+
+### 5-2. 현재 시간 조회 — `get_current_time` 도구
+
+> "지금 몇 시야?"
+
+![현재 시간 조회](/assets/images/gemma4_02_time.png)
+
+LLM이 "현재 시간" 질문을 인식하고 `get_current_time` 도구를 호출한 뒤, 그 결과를 자연어로 정리해 응답한다. 에이전트의 **도구 호출 → 결과 반영 → 자연어 응답** 흐름이 잘 나타난다.
+
+### 5-3. 계산기 — `calculator` 도구
+
+> "(123 + 456) * 2는 몇이야?"
+
+![계산기 실행 결과](/assets/images/gemma4_03_calc.png)
+
+수식을 `calculator` 도구에 전달하고, 정확한 계산 결과 `1158`을 최종 답변에 반영한다. 2.3B 모델이 스스로 계산하지 않고 도구를 호출하는 것이 핵심이다.
+
+### 5-4. 웹 검색 — `duckduckgo_search` 도구
+
+> "2026년 최신 AI 뉴스 알려줘"
+
+![웹 검색 결과](/assets/images/gemma4_04_search.png)
+
+DuckDuckGo 검색 도구를 호출해 실시간 웹 검색 결과를 가져온 뒤, 이를 한국어로 요약해 응답한다. API 키 없이 로컬에서 실시간 정보를 검색할 수 있다.
+
+### 5-5. 웹 페이지 읽기 — `read_webpage` 도구
+
+> "https://example.com 페이지 내용 알려줘"
+
+![웹 페이지 읽기 결과](/assets/images/gemma4_05_webpage.png)
+
+URL을 인식해 `read_webpage` 도구를 호출하고, BeautifulSoup으로 추출한 페이지 내용을 요약해서 전달한다.
+
+### 5-6. 생각 과정 — ReAct 에이전트 동작 시각화
+
+![생각 과정 상세 보기](/assets/images/gemma4_06_thinking.png)
+
+`<details>` 태그를 펼치면 에이전트가 어떤 도구를 호출했는지, 각 단계에서 어떤 결정을 내렸는지 확인할 수 있다. 이것이 ReAct 루프의 실제 동작 로그다.
+
+### 5-7. 전체 대화 오버뷰
+
+![전체 대화 오버뷰](/assets/images/gemma4_07_overview.png)
+
+하나의 세션에서 멀티턴 대화가 이어지는 것을 볼 수 있다. Gradio ChatInterface가 대화 히스토리를 자동으로 관리한다.
+
+---
+
+## 6. 시연 영상
+
+전체 기능을 순차적으로 테스트한 Playwright 자동화 영상이다. 도구 호출 과정과 응답 생성이 실시간으로 진행되는 것을 확인할 수 있다.
+
+<video controls width="100%" style="max-width: 1280px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+  <source src="/assets/images/gemma4_demo_full.webm" type="video/webm">
+  브라우저가 video 태그를 지원하지 않습니다.
+</video>
+
+---
+
+## 7. 핵심 기술 결정
 
 ### 왜 DuckDuckGo인가?
 
@@ -333,7 +410,7 @@ LangGraph의 `StateGraph`가 더 견고하지만, 2.3B 모델의 도구 호출 �
 
 ---
 
-## 6. 알려진 한계
+## 8. 알려진 한계
 
 | 항목 | 내용 |
 |------|------|
@@ -344,7 +421,7 @@ LangGraph의 `StateGraph`가 더 견고하지만, 2.3B 모델의 도구 호출 �
 
 ---
 
-## 7. 실행 방법
+## 9. 실행 방법
 
 ```bash
 # 1. Ollama로 모델 실행 (백그라운드)
