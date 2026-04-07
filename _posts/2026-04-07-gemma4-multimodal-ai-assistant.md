@@ -369,17 +369,40 @@ DuckDuckGo 검색 도구를 호출해 실시간 웹 검색 결과를 가져온 �
 
 URL을 인식해 `read_webpage` 도구를 호출하고, BeautifulSoup으로 추출한 페이지 내용을 요약해서 전달한다.
 
-### 5-6. 생각 과정 — ReAct 에이전트 동작 시각화
+### 5-6. 이미지 분석 — `analyze_image` 도구 (Vision)
 
-![생각 과정 상세 보기](/assets/images/gemma4_06_thinking.png)
+테스트 이미지를 Gradio의 파일 업로드로 첨부하고 분석을 요청했다.
 
-`<details>` 태그를 펼치면 에이전트가 어떤 도구를 호출했는지, 각 단계에서 어떤 결정을 내렸는지 확인할 수 있다. 이것이 ReAct 루프의 실제 동작 로그다.
+![이미지 분석 과정](/assets/images/gemma4_08_image_analysis.png)
 
-### 5-7. 전체 대화 오버뷰
+Gemma 4의 **비전(Vision)** 기능이 동작하는 핵심 순간이다. 사용자가 이미지를 업로드하면:
+1. Gradio가 파일을 임시 경로에 저장
+2. `analyze_image` 도구가 이미지를 Base64로 인코딩하여 multimodal 메시지 생성
+3. LLM이 이미지를 시각적으로 분석하여 텍스트로 응답
 
-![전체 대화 오버뷰](/assets/images/gemma4_07_overview.png)
+`<details>` 태그 안에 "이미지 분석 중..." 진행 상황이 표시된다.
 
-하나의 세션에서 멀티턴 대화가 이어지는 것을 볼 수 있다. Gradio ChatInterface가 대화 히스토리를 자동으로 관리한다.
+### 5-7. 음성 인식 — `speech_to_text` 도구 (STT)
+
+gTTS로 생성한 한국어 음성("안녕하세요 오늘 날씨가 정말 좋네요")을 WAV 파일로 업로드했다.
+
+![음성 인식 결과](/assets/images/gemma4_09_stt.png)
+
+Google Speech Recognition API가 한국어 음성을 텍스트로 변환한다. Gradio의 `multimodal=True` 설정 덕분에 오디오 파일도 이미지와 동일한 방식으로 업로드할 수 있다.
+
+### 5-8. 텍스트 음성 변환 — `text_to_speech` 도구 (TTS)
+
+> "안녕하세요 반갑습니다 라는 텍스트를 음성 파일로 변환해줘"
+
+![TTS 실행 결과](/assets/images/gemma4_10_tts.png)
+
+`text_to_speech` 도구가 gTTS를 사용해 한국어 MP3 파일을 생성한다. 2.3B 모델이 **도구를 인식하고 직접 호출**하는 것이 핵심이다 — 모델 스스로 TTS를 수행하는 것이 아니라 외부 도구에 위임한다.
+
+### 5-9. 멀티모달 전체 오버뷰
+
+![멀티모달 전체 오버뷰](/assets/images/gemma4_11_multimodal_overview.png)
+
+텍스트, 이미지, 오디오가 하나의 세션에서 자연스럽게 섞여 동작하는 것을 볼 수 있다. 이것이 **멀티모달 AI 어시스턴트**의 핵심 가치다.
 
 ---
 
@@ -387,8 +410,17 @@ URL을 인식해 `read_webpage` 도구를 호출하고, BeautifulSoup으로 추�
 
 전체 기능을 순차적으로 테스트한 Playwright 자동화 영상이다. 도구 호출 과정과 응답 생성이 실시간으로 진행되는 것을 확인할 수 있다.
 
+### 텍스트 도구 데모 (시간, 계산, 검색, URL)
+
 <video controls width="100%" style="max-width: 1280px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
   <source src="/assets/images/gemma4_demo_full.webm" type="video/webm">
+  브라우저가 video 태그를 지원하지 않습니다.
+</video>
+
+### 멀티모달 데모 (이미지 분석, 음성 인식, TTS)
+
+<video controls width="100%" style="max-width: 1280px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+  <source src="/assets/images/gemma4_multimodal.webm" type="video/webm">
   브라우저가 video 태그를 지원하지 않습니다.
 </video>
 
