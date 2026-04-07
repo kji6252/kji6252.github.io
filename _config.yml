@@ -8,7 +8,7 @@ description: Jongin's Tech Blog - Java, Spring, JavaScript 개발 블로그
 # baseurl: ""
 
 # URL settings
-url: https://kji6252.github.io
+url: https://pallidev.github.io
 
 # Just the Docs theme settings
 theme: just-the-docs
@@ -46,7 +46,7 @@ aux_links_new_tab: true
 heading_anchors: true
 
 # Footer content
-footer_content: "Copyright &copy; 2024 Jongin Kim. Distributed by an <a href=\"https://github.com/kji6252/kji6252.github.io/blob/master/LICENSE\">MIT license.</a>"
+footer_content: "Copyright &copy; 2024 Jongin Kim. Distributed by an <a href=\"https://github.com/pallidev/pallidev.github.io/blob/master/LICENSE\">MIT license.</a>"
 
 # Footer last edited timestamp
 last_edit_timestamp: true
@@ -55,7 +55,7 @@ last_edit_time_format: "%Y-%m-%d %H:%M"
 # Footer "Edit this page on GitHub" link
 gh_edit_link: true
 gh_edit_link_text: "페이지 수정하기"
-gh_edit_repository: "https://github.com/kji6252/kji6252.github.io"
+gh_edit_repository: "https://github.com/pallidev/pallidev.github.io"
 gh_edit_branch: "jekyll-migration"
 gh_edit_view_mode: "tree"
 

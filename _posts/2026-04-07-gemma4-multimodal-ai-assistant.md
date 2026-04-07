@@ -369,15 +369,21 @@ DuckDuckGo 검색 도구를 호출해 실시간 웹 검색 결과를 가져온 �
 
 URL을 인식해 `read_webpage` 도구를 호출하고, BeautifulSoup으로 추출한 페이지 내용을 요약해서 전달한다.
 
-### 5-6. 생각 과정 — ReAct 에이전트 동작 시각화
+### 5-6. 이미지 분석 — `analyze_image` 도구
 
-![생각 과정 상세 보기](/assets/images/gemma4_06_thinking.png)
+![이미지 분석 결과](/assets/images/gemma4_06_image.png)
+
+테스트 이미지를 업로드하면 Gemma 4의 비전 기능이 이미지를 분석한다. 파일 업로드 → Base64 인코딩 → multimodal 메시지 전송의 전체 파이프라인이 Gradio UI에서 투명하게 동작한다.
+
+### 5-7. 생각 과정 — ReAct 에이전트 동작 시각화
+
+![생각 과정 상세 보기](/assets/images/gemma4_07_thinking.png)
 
 `<details>` 태그를 펼치면 에이전트가 어떤 도구를 호출했는지, 각 단계에서 어떤 결정을 내렸는지 확인할 수 있다. 이것이 ReAct 루프의 실제 동작 로그다.
 
-### 5-7. 전체 대화 오버뷰
+### 5-8. 전체 대화 오버뷰
 
-![전체 대화 오버뷰](/assets/images/gemma4_07_overview.png)
+![전체 대화 오버뷰](/assets/images/gemma4_09_overview.png)
 
 하나의 세션에서 멀티턴 대화가 이어지는 것을 볼 수 있다. Gradio ChatInterface가 대화 히스토리를 자동으로 관리한다.
 
