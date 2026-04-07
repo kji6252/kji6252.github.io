@@ -363,7 +363,7 @@ DuckDuckGo 검색 도구를 호출해 실시간 웹 검색 결과를 가져온 �
 
 ### 5-5. 웹 페이지 읽기 — `read_webpage` 도구
 
-> "https://ollama.com/blog/gemma3 페이지 내용 요약해줘"
+> "https://ollama.com/library/gemma4 페이지 내용 요약해줘"
 
 ![웹 페이지 읽기 결과](/assets/images/gemma4_05_webpage.png)
 
