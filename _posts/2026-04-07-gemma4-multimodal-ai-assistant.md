@@ -404,6 +404,26 @@ Google Speech Recognition API가 한국어 음성을 텍스트로 변환한다. 
 
 텍스트, 이미지, 오디오가 하나의 세션에서 자연스럽게 섞여 동작하는 것을 볼 수 있다. 이것이 **멀티모달 AI 어시스턴트**의 핵심 가치다.
 
+### 5-10. TTS 자동 재생 토글
+
+Gradio ChatInterface의 `additional_inputs`를 활용해 **음성 자동 재생** 토글을 추가했다.
+
+**토글 OFF 상태:**
+
+![TTS 토글 OFF](/assets/images/gemma4_13_tts_off_response.png)
+
+일반적인 텍스트 응답만 표시된다.
+
+**토글 ON 상태:**
+
+![TTS 토글 ON](/assets/images/gemma4_14_tts_toggle_on.png)
+
+체크박스를 켜면 `⚙️ 설정` 아코디언에서 활성화 상태를 확인할 수 있다.
+
+![TTS ON 응답 + 오디오 플레이어](/assets/images/gemma4_15_tts_on_response.png)
+
+토글 ON 후 메시지를 보내면 응답 아래에 **오디오 플레이어**가 자동으로 생성된다. gTTS로 한국어 음성을 생성하고 `<audio>` 태그로 삽입한다. `sanitize_html=False` 설정으로 Gradio가 HTML을 렌더링하도록 했다.
+
 ---
 
 ## 6. 시연 영상
