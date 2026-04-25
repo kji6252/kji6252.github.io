@@ -208,6 +208,8 @@ flowchart LR
 
 ---
 
+> **아래부터는 원문 블로그를 기반으로 한 작성자의 실무 시나리오 분석입니다.**
+
 ## 실제로 어떻게 사용해야 할까?
 
 개발자와 기획자가 실무에서 마주하는 시나리오별로, 어떤 프레임워크가 맞는지 정리한다.
@@ -323,7 +325,7 @@ GSTACK:
 
 세 프레임워크를 모두 설치하면 **글로벌(시스템 전체) 설정**과 **프로젝트 로컬 설정** 두 가지 레벨로 파일이 분산된다.
 
-### 글로벌 설치 위치
+### 글로벌 설치 위치 (`~/.claude/`)
 
 ```
 ~/.claude/
@@ -343,6 +345,7 @@ GSTACK:
 │   │       └── writing-skills/SKILL.md
 │   │
 │   ├── gsd-agents/ → (skills symlink)        # GSD 에이전트
+│   │   └── SKILL.md
 │   ├── gsd-new-project/SKILL.md
 │   ├── gsd-discuss-phase/SKILL.md
 │   ├── gsd-plan-phase/SKILL.md
@@ -350,79 +353,221 @@ GSTACK:
 │   ├── gsd-verify-work/SKILL.md
 │   ├── gsd-ship/SKILL.md
 │   ├── gsd-fast/SKILL.md
+│   ├── gsd-quick/SKILL.md
+│   ├── gsd-next/SKILL.md
+│   ├── gsd-help/SKILL.md
+│   ├── gsd-progress/SKILL.md
+│   ├── gsd-settings/SKILL.md
+│   ├── gsd-review/SKILL.md
+│   ├── gsd-debug/SKILL.md
+│   ├── gsd-map-codebase/SKILL.md
+│   ├── gsd-spike/SKILL.md
+│   ├── gsd-sketch/SKILL.md
 │   └── ... (약 40개+ GSD 스킬 파일)
 │
 ├── gstack/                                   # GSTACK 메인 디렉토리
-│   ├── setup
-│   ├── bin/
+│   ├── setup                                 # 설치 스크립트
+│   ├── bin/                                  # CLI 바이너리
+│   │   ├── gstack-team-init
+│   │   ├── gstack-uninstall
+│   │   ├── gstack-model-benchmark
+│   │   ├── gstack-taste-update
+│   │   └── gstack-analytics
 │   └── skills/                               # 23개 전문가 스킬
 │       ├── office-hours/SKILL.md
 │       ├── plan-ceo-review/SKILL.md
 │       ├── plan-eng-review/SKILL.md
+│       ├── plan-design-review/SKILL.md
+│       ├── plan-devex-review/SKILL.md
+│       ├── design-consultation/SKILL.md
+│       ├── design-shotgun/SKILL.md
+│       ├── design-html/SKILL.md
 │       ├── review/SKILL.md
+│       ├── investigate/SKILL.md
+│       ├── design-review/SKILL.md
+│       ├── devex-review/SKILL.md
 │       ├── qa/SKILL.md
+│       ├── qa-only/SKILL.md
 │       ├── ship/SKILL.md
+│       ├── land-and-deploy/SKILL.md
+│       ├── canary/SKILL.md
+│       ├── benchmark/SKILL.md
+│       ├── document-release/SKILL.md
 │       ├── cso/SKILL.md
+│       ├── autoplan/SKILL.md
+│       ├── browse/SKILL.md
+│       ├── careful/SKILL.md
+│       ├── freeze/SKILL.md
+│       ├── guard/SKILL.md
+│       ├── learn/SKILL.md
+│       ├── retro/SKILL.md
+│       ├── pair-agent/SKILL.md
+│       ├── codex/SKILL.md
 │       └── ...
 │
-└── office-hours → gstack/skills/office-hours # GSTACK 스킬 심볼릭 링크들
+├── office-hours → gstack/skills/office-hours # GSTACK 스킬 심볼릭 링크들
+├── review → gstack/skills/review
+├── ship → gstack/skills/ship
+├── qa → gstack/skills/qa
+└── ... (각 GSTACK 스킬별 심볼릭 링크)
 
 ~/.gstack/                                    # GSTACK 글로벌 상태
-├── config.yaml
-├── learnings/
-└── analytics/
+├── config.yaml                               # 글로벌 설정 (자동 업데이트 등)
+├── learnings/                                # 세션 간 학습 데이터
+└── analytics/                                # 사용 통계 (옵트인)
 ```
 
-### 프로젝트 로컬 위치
+### 프로젝트 로컬 위치 (프로젝트 루트)
 
 ```
 my-project/
 ├── CLAUDE.md                                 # 세 프레임워크 모두 참조하는 프로젝트 지침
+│                                             # Superpowers: 자동 감지하여 스킬 활성화
+│                                             # GSD: 프로젝트 설정 포함 가능
+│                                             # GSTACK: gstack 섹션 + 스킬 목록 필요
+│
 ├── .claude/
-│   ├── settings.json
-│   └── skills/
-├── .planning/                                # GSD의 핵심 작업 디렉토리
-│   ├── config.json
-│   ├── PROJECT.md                            # 프로젝트 비전
-│   ├── REQUIREMENTS.md                       # 범위 요구사항 + 페이즈 추적
-│   ├── ROADMAP.md                            # 페이즈 로드맵
+│   ├── settings.json                         # Claude Code 프로젝트 설정
+│   │                                         # GSD 권한 허용 목록 포함 가능
+│   ├── skills/                               # 프로젝트 로컬 스킬 (옵션)
+│   │   ├── gsd-*/SKILL.md                    # GSD 로컬 설치 시
+│   │   └── gstack → ~/.claude/skills/gstack  # GSTACK 팀 모드 시 심볼릭 링크
+│   ├── commands/gsd/                         # GSD 레거시 명령어 (구버전)
+│   └── hooks/                                # GSD 훅 (컨텍스트 경고 등)
+│
+├── .planning/                                # ★ GSD의 핵심 작업 디렉토리
+│   ├── config.json                           # 프로젝트 설정 (모드, 세분성, 모델 프로필)
+│   ├── PROJECT.md                            # 프로젝트 비전 (항상 로드됨)
+│   ├── REQUIREMENTS.md                       # v1/v2 범위 요구사항 + 페이즈 추적
+│   ├── ROADMAP.md                            # 페이즈 로드맵, 완료 상태
 │   ├── STATE.md                              # 결정사항, 블로커, 현재 위치
-│   ├── research/
-│   ├── 01-user-model/                        # 페이즈별 하위 디렉토리
+│   │
+│   ├── research/                             # 리서치 결과
+│   │   ├── 01-RESEARCH.md
+│   │   └── 02-RESEARCH.md
+│   │
+│   ├── 01-user-model/                        # 페이즈 1 (예시: 유저 모델)
+│   │   ├── 1-CONTEXT.md                      # discuss-phase 결과
+│   │   ├── 1-RESEARCH.md                     # 리서치 결과
+│   │   ├── 1-PLAN.md                         # XML 구조 실행 계획
+│   │   ├── 2-PLAN.md                         # 병렬 실행용 추가 계획
+│   │   ├── 1-SUMMARY.md                      # 실행 결과 요약
+│   │   ├── 2-SUMMARY.md
+│   │   └── 1-VERIFICATION.md                 # 자동 검증 결과
+│   │
+│   ├── 02-product-api/                       # 페이즈 2 (예시: 상품 API)
 │   │   ├── 1-CONTEXT.md
 │   │   ├── 1-RESEARCH.md
 │   │   ├── 1-PLAN.md
-│   │   ├── 1-SUMMARY.md
-│   │   └── 1-VERIFICATION.md
-│   ├── 02-product-api/
-│   ├── quick/
-│   ├── todos/
-│   └── threads/
+│   │   └── ...
+│   │
+│   ├── quick/                                # /gsd-quick 결과물
+│   │   └── 001-add-dark-mode/
+│   │       ├── PLAN.md
+│   │       └── SUMMARY.md
+│   │
+│   ├── todos/                                # 캡처된 아이디어
+│   ├── threads/                              # 세션 간 지속 컨텍스트
+│   ├── seeds/                                # 마일스톤에 따라 나타나는 아이디어
+│   └── workstreams/                          # 병렬 워크스트림 상태
+│
 ├── .gstack/                                  # GSTACK 프로젝트 상태
-│   ├── learnings/
-│   ├── taste/
-│   └── reviews/
-├── src/
-└── tests/
+│   ├── learnings/                            # 프로젝트별 학습 데이터
+│   ├── taste/                                # 디자인 취향 프로필 (취향 감쇠 5%/주)
+│   └── reviews/                              # 리뷰 결과 아카이브
+│
+├── src/                                      # 실제 프로젝트 코드
+├── tests/
+└── ...
 ```
+
+### 각 파일의 역할 요약
+
+#### GSD `.planning/` 파일들
+
+| 파일 | 역할 | 언제 생성/갱신되는가 |
+|------|------|---------------------|
+| `PROJECT.md` | 프로젝트 비전, 항상 에이전트에 로드 | `/gsd-new-project` 시 생성 |
+| `REQUIREMENTS.md` | v1/v2 범위 구분, 페이즈 추적 가능 | `/gsd-new-project` 시 생성 |
+| `ROADMAP.md` | 페이즈별 로드맵, 완료 상태 추적 | `/gsd-new-project` 시 생성 |
+| `STATE.md` | 결정사항, 블로커, 현재 위치 (세션 간 메모리) | 매 페이즈 완료 시 갱신 |
+| `{N}-CONTEXT.md` | 페이즈별 구현 결정사항 (사용자 입력) | `/gsd-discuss-phase` 시 생성 |
+| `{N}-RESEARCH.md` | 페이즈별 리서치 결과 | `/gsd-plan-phase` 시 생성 |
+| `{N}-{M}-PLAN.md` | XML 구조의 개별 실행 계획 | `/gsd-plan-phase` 시 생성 |
+| `{N}-{M}-SUMMARY.md` | 개별 계획의 실행 결과 요약 | `/gsd-execute-phase` 시 생성 |
+| `{N}-VERIFICATION.md` | 자동 검증 결과 | `/gsd-execute-phase` 시 생성 |
+| `{N}-UAT.md` | 사용자 수용 테스트 결과 | `/gsd-verify-work` 시 생성 |
+| `config.json` | 모드, 세분성, 모델 프로필 등 설정 | `/gsd-new-project` 또는 `/gsd-settings` |
+
+#### GSTACK 파일들
+
+| 파일/디렉토리 | 역할 | 언제 사용되는가 |
+|--------------|------|----------------|
+| `~/.claude/skills/gstack/` | 23개 스킬 + 바이너리 | 설치 시 |
+| `~/.gstack/config.yaml` | 글로벌 설정 | 최초 실행 시 |
+| `~/.gstack/learnings/` | 세션 간 학습 데이터 | `/learn` 사용 시 |
+| `.gstack/taste/` | 디자인 취향 프로필 | `/design-shotgun` 사용 시 |
+| CLAUDE.md gstack 섹션 | 스킬 목록 + 브라우저 지침 | 팀 모드 설정 시 |
+
+#### Superpowers 파일들
+
+| 파일/디렉토리 | 역할 | 언제 사용되는가 |
+|--------------|------|----------------|
+| `~/.claude/skills/superpowers/skills/` | 12개 스킬 파일 | 플러그인 설치 시 |
+| `CLAUDE.md` | 프로젝트별 지침 (Superpowers 자동 감지) | 자동으로 참조 |
+| Git worktree | 병렬 개발용 격리 브랜치 | `using-git-worktrees` 스킬 시 |
+
+### 세 프레임워크의 파일 생성 시점 비교
+
+```mermaid
+flowchart LR
+    subgraph Superpowers ["Superpowers"]
+        direction LR
+        S1["brainstorming<br/>📍 메모리"] --> S2["plan<br/>📍 메모리"]
+        S2 --> S3["TDD<br/>💾 테스트 파일"]
+        S3 --> S4["구현<br/>💾 코드 파일"]
+        S4 --> S5["review<br/>📍 메모리"]
+        S5 --> S6["finalize<br/>🔗 PR"]
+    end
+
+    subgraph GSD ["GSD"]
+        direction LR
+        G1["new-project<br/>💾 PROJECT.md<br/>💾 REQUIREMENTS.md<br/>💾 ROADMAP.md<br/>💾 STATE.md"]
+        G1 --> G2["discuss<br/>💾 CONTEXT.md"]
+        G2 --> G3["plan<br/>💾 PLAN.md<br/>💾 RESEARCH.md"]
+        G3 --> G4["execute<br/>💾 SUMMARY.md<br/>💾 VERIFICATION.md"]
+        G4 --> G5["verify<br/>💾 UAT.md"]
+        G5 --> G6["ship<br/>🔗 PR"]
+    end
+
+    subgraph GSTACK ["GSTACK"]
+        direction LR
+        K1["office-hours<br/>📍 메모리"] --> K2["plan-ceo<br/>📍 메모리"]
+        K2 --> K3["plan-eng<br/>📍 메모리"]
+        K3 --> K4["구현<br/>💾 코드"]
+        K4 --> K5["review<br/>📍 메모리"]
+        K5 --> K6["qa<br/>💾 QA 리포트"]
+        K6 --> K7["ship<br/>🔗 PR"]
+    end
+```
+
+> 📍 = 컨텍스트 윈도우(메모리)에만 유지, 💾 = 디스크에 영구 저장, 🔗 = 원격(PR)
+
+**핵심 차이**: GSD는 모든 중간 산출물을 디스크에 영구 저장하므로 세션이 끊겨도 복구 가능. Superpowers와 GSTACK은 주로 메모리(컨텍스트 윈도우)에 유지하며, 세션이 끊기면 재시작해야 한다.
 
 ---
 
-## 세 개를 동시에 쓰면 안 되는 이유
+## 세 프레임워크 조합 전략
 
-200K 컨텍스트 윈도우는 **공유 자원**이다. 세 프레임워크가 각자 자기 지침을 로드하면:
+> 원문 "Combining frameworks with Pulumi workflows" 섹션 요약. 프레임워크는 "어떻게(HOW)" 오케스트레이션할지, 스킬은 "무엇(WHAT)"을 할지 각각 해결하며 둘은 상호 보완 관계다.
 
-```mermaid
-pie showData
-    title "200K 컨텍스트 윈도우 예산 (동시 사용 시)"
-    "Superpowers 지침" : 18
-    "GSD 에이전트 지침" : 25
-    "GSTACK 역할 지침" : 18
-    "CLAUDE.md + 프로젝트" : 8
-    "실제 코드 + 도구 결과" : 31
-```
+원문은 **조합을 권장**한다. 하나를 선택하고 영원히 쓸 필요 없다:
 
-프레임워크들이 **해결하려는 문제(컨텍스트 부패)를 스스로 만들어버리는** 역설이 발생한다.
+- **GSD + 인프라**: GSD의 state-to-disk 방식은 stack outputs과 자연스럽게 연결된다. 네트워킹 페이즈에서 VPC를 프로비저닝하고, 컴퓨트 페이즈에서 subnet ID를 참조하는 것이 컨텍스트 윈도우 조작 없이 가능하다.
+- **Superpowers + 인프라 검증**: TDD 사이클이 인프라 검증에 매핑된다 — 실패하는 테스트(예상 인프라 형태) → `pulumi preview`(RED) → `pulumi up`(GREEN). 완벽한 비유는 아니지만 "다음으로 넘어가기 전에 검증"하는 규율은 그대로 적용된다.
+- **문제가 여러 개면 조합**: "All of the above" → GSTACK으로 방향을 잡고, Superpowers TDD를 끼워 넣는다. 단일 프레임워크로 모든 것을 커버하긴 아직 이르다.
+
+> 원문: "You do not have to pick one framework and commit forever. Try GSD for a long multi-stack project. Try Superpowers for a focused library."
 
 ### 작업 상태 추적 비교
 
@@ -432,19 +577,13 @@ pie showData
 | **GSD** | `.planning/STATE.md`, `ROADMAP.md` 디스크 영구 저장 | **완전 복구** — `/gsd-resume-work` 로 이어서 작업 |
 | **GSTACK** | 컨텍스트 윈도우 + `/learn` 학습 데이터 | 부분 복구 — 학습 데이터는 남지만 진행 상태는 손실 |
 
-### 추천: GSD 먼저 단독 도입
+### 실무 팁: 조합 시 세션 관리
 
-| 이유 | 설명 |
-|------|------|
-| 상태 추적 확실 | `.planning/` 에 모든 것이 파일로 남는다. `ROADMAP.md` 열면 어디까지 했는지 한눈에 보임 |
-| 세션 복구 가능 | 퇴근 후 다음 날 `/gsd-resume-work` 한 방으로 이어서 작업 |
-| 컨텍스트 관리가 아키텍처 레벨 | 페이즈마다 새 오케스트레이터를 쓰므로 200K를 깔끔하게 사용 |
-| 가벼운 작업도 가능 | `/gsd-quick`, `/gsd-fast` 로 간단한 태스크도 처리 |
-| 14개 에이전트 지원 | Claude Code, Cursor, Gemini CLI 등 팀원별 도구 혼용 가능 |
-
-Superpowers의 TDD 규율이 절실히 필요해지면 그때 Superpowers를 추가하는 **점진적 도입**이 맞다.
+200K 컨텍스트 윈도우는 공유 자원이므로 **같은 세션에서 여러 프레임워크를 동시에 로드하는 것은 주의**가 필요하다. 조합 시에는 아래 [Framework Router의 세션 전환 규칙](#조합-시-세션-전환-규칙)을 따르는 것이 안전하다.
 
 ---
+
+> **아래부터는 원문 블로그를 기반으로 한 작성자의 실무 적용 가이드입니다.**
 
 ## 실전: 기획부터 구현까지 Claude Code 워크플로우
 
@@ -520,6 +659,9 @@ Q3: 최대 발급 수량 도달 시 어떻게 처리할까요?
 
 You: Redis Lua 스크립트로 할게요. 디자인은 Figma 시안이 올라올 예정이고,
      수량 초과하면 품절 표시로 해주세요.
+
+Claude: 알겠습니다. 추가로...
+        [계속 질문하며 요구사항을 명확히 정제]
 ```
 
 이 과정이 끝나면 `.planning/` 에 다음 파일들이 생성된다:
@@ -538,6 +680,8 @@ You: Redis Lua 스크립트로 할게요. 디자인은 Figma 시안이 올라올
 ```
 > /gsd-discuss-phase 1
 ```
+
+Claude Code가 페이즈 1(예: "랜딩 페이지 레이아웃 + 데이터 모델")에 대한 구현 결정사항을 물어본다:
 
 ```
 Claude: 페이즈 1 "랜딩 페이지 + 데이터 모델"을 논의하겠습니다.
@@ -563,6 +707,10 @@ You: 구성 좋아요. 프레임워크는 React + Next.js로 해주세요.
 ```
 
 ```
+Claude: 페이즈 1 리서치를 시작합니다...
+        [서브에이전트 4개가 병렬로 리서치: Next.js 랜딩 페이지 패턴,
+         쿠폰 API 설계, 반응형 레이아웃, 테스트 전략]
+
 Claude: 리서치 완료. 실행 계획을 수립합니다.
 
 Plan 1: 랜딩 페이지 UI
@@ -578,6 +726,15 @@ Plan 2: 데이터 모델 + API
   - 검증: API 통합 테스트
 
 이 계획으로 진행할까요? [Y/n]
+```
+
+`.planning/01-landing-page/` 에 파일들이 생성된다:
+
+```
+.planning/01-landing-page/
+├── 1-CONTEXT.md         # 논의에서 결정한 내용 (React+Next.js, 레이아웃 구성 등)
+├── 1-RESEARCH.md        # 리서치 결과
+└── 1-PLAN.md            # XML 구조의 실행 계획
 ```
 
 ### Step 4: 실행 — 사람은 여기서 손을 뗀다
@@ -662,6 +819,8 @@ Body:
 > /gsd-next
 ```
 
+Claude Code가 현재 상태를 읽고 다음 단계를 자동으로 판단한다:
+
 ```
 Claude: 현재 상태: 페이즈 1 완료 (shipped)
 다음 단계: 페이즈 2 논의
@@ -692,11 +851,80 @@ Claude: 이전 세션 상태를 복원합니다.
 
 디스크에 저장된 `STATE.md`, `ROADMAP.md` 를 읽어서 **정확히 어디까지 했는지** 파악하고 이어서 작업한다.
 
+### 팀원에게 에이전트 작업을 넘기는 방법
+
+#### Case A: 다른 팀원이 GSD 프로젝트를 이어받는 경우
+
+GSD의 `.planning/` 디렉토리가 Git에 커밋되어 있으므로, 팀원이 clone 후 바로 이어서 작업할 수 있다:
+
+```bash
+# 팀원이 저장소를 clone
+git clone <repo-url>
+cd project
+
+# Claude Code 실행 후 상태 확인
+claude
+
+> /gsd-progress
+```
+
+```
+Claude: 프로젝트 상태:
+  페이즈 1: ✅ Shipped (PR #42 merged)
+  페이즈 2: 🔵 Planned (실행 대기)
+  페이즈 3: ⬜ Not started
+  페이즈 4: ⬜ Not started
+
+  다음 단계: /gsd-execute-phase 2
+```
+
+#### Case B: 다른 에이전트(Cursor, Gemini CLI)로 전환하는 경우
+
+GSD는 14개 에이전트를 지원하므로, 같은 `.planning/` 디렉토리를 공유한다:
+
+```
+개발자 A: Claude Code로 페이즈 1-2 완료
+                    ↓ (.planning/ 이 Git에 커밋됨)
+개발자 B: Cursor에서 페이즈 3 시작
+                    ↓
+개발자 C: Gemini CLI에서 페이즈 4 시작
+```
+
+각 에이전트가 같은 `.planning/PROJECT.md`, `ROADMAP.md`, `STATE.md` 를 읽으므로 일관성이 유지된다.
+
+#### Case C: 코드 리뷰만 GSTACK을 사용하는 경우
+
+구현은 GSD로, **리뷰만** GSTACK의 전문가 스킬을 사용하는 패턴:
+
+```
+# GSD로 구현 완료 후
+> /gsd-ship 1          # PR 생성
+
+# GSTACK으로 리뷰 (별도 세션에서)
+> /review              # 시니어 엔지니어 관점 코드 리뷰
+> /cso                 # 보안 감사 (API 키, 권한 체크)
+> /qa                  # Playwright 브라우저 테스트
+```
+
+**핵심**: 같은 세션에서 두 프레임워크를 돌리지 않는다. GSD 세션으로 구현을 완료하고 PR을 만든 뒤, **새 세션**에서 GSTACK 리뷰 스킬만 사용하는 방식이 안전하다.
+
 ---
 
-## Framework Router — 상황에 맞게 자동 선택
+## Framework Router 스킬 — 상황에 맞게 자동 선택
 
-세 프레임워크를 상황에 따라 조합해서 사용할 수 있도록, **어떤 패턴을 쓸지 결정해 주는 메타 스킬**이다. 작업 설명만 하면 진단 → 패턴 선택 → 워크플로우 출력까지 자동으로 진행된다.
+세 프레임워크를 상황에 따라 조합해서 사용할 수 있도록, **어떤 패턴을 쓸지 결정해 주는 메타 스킬**을 만들었다. 작업 설명만 하면 진단 → 패턴 선택 → 워크플로우 출력까지 자동으로 진행된다.
+
+### 7가지 조합 패턴
+
+| 패턴 | 구성 | 언제 사용하는가 |
+|------|------|----------------|
+| **A** | Superpowers 단독 | 버그 수정, 소규모 기능, 시간 단위 작업 |
+| **B** | GSD 단독 | 며칠 이상 프로젝트, 대규모 리팩토링 |
+| **C** | GSTACK 단독 | 신규 기능, 제품적 판단 필요, 보안 중요 |
+| **D** | GSTACK → Superpowers | 제품 판단 + TDD 규율 둘 다 필요 |
+| **E** | GSD → GSTACK 리뷰 | 장기 구현 후 보안/QA 종합 리뷰 |
+| **F** | GSD + Superpowers TDD | 장기 프로젝트 + 모든 변경에 테스트 강제 |
+| **G** | 프레임워크 없음 | 10분 이내 간단 작업 |
 
 ### 의사결정 트리 (빠른 참조)
 
@@ -731,18 +959,6 @@ flowchart TD
     style PG fill:#dee2e6,color:#000
 ```
 
-### 7가지 조합 패턴
-
-| 패턴 | 구성 | 언제 사용하는가 |
-|------|------|----------------|
-| **A** | Superpowers 단독 | 버그 수정, 소규모 기능, 시간 단위 작업 |
-| **B** | GSD 단독 | 며칠 이상 프로젝트, 대규모 리팩토링 |
-| **C** | GSTACK 단독 | 신규 기능, 제품적 판단 필요, 보안 중요 |
-| **D** | GSTACK → Superpowers | 제품 판단 + TDD 규율 둘 다 필요 |
-| **E** | GSD → GSTACK 리뷰 | 장기 구현 후 보안/QA 종합 리뷰 |
-| **F** | GSD + Superpowers TDD | 장기 프로젝트 + 모든 변경에 테스트 강제 |
-| **G** | 프레임워크 없음 | 10분 이내 간단 작업 |
-
 ### 조합 시 세션 전환 규칙
 
 프레임워크를 조합할 때 반드시 지켜야 할 **3가지 규칙**:
@@ -765,6 +981,10 @@ npx get-shit-done-cc@latest
 # GSTACK
 git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack \
   && cd ~/.claude/skills/gstack && ./setup
+
+# Framework Router (메타 스킬 — 세 프레임워크 조합 자동 추천)
+mkdir -p ~/.claude/skills/framework-router
+cp Framework_Router_Skill.md ~/.claude/skills/framework-router/SKILL.md
 ```
 
 > 각 저장소의 README에서 Cursor, Codex, Windsurf 등 다른 에이전트 설치 방법을 확인할 수 있다.
@@ -776,46 +996,6 @@ git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.cl
 1. **프레임워크는 도구다, 종교가 아니다** — 하나를 선택하고 영원히 쓸 필요 없다. 프로젝트 성격에 따라 다르게 선택하라.
 2. **무엇이 자주 고장 나는지 아는 것이 진짜 결정 기준** — 테스트 없이 망가진다면 Superpowers, 컨텍스트가 부패한다면 GSD, 범위가 확장된다면 GSTACK.
 3. **1시간 안에 알 수 있다** — 하나를 골라 프로젝트에 적용해 보면, 그것이 내 문제를 해결하는지 금방 알 수 있다.
-
----
-
-## 프레임워크별 파일 생성 시점 비교
-
-```mermaid
-flowchart LR
-    subgraph Superpowers ["Superpowers"]
-        direction LR
-        S1["brainstorming<br/>📍 메모리"] --> S2["plan<br/>📍 메모리"]
-        S2 --> S3["TDD<br/>💾 테스트 파일"]
-        S3 --> S4["구현<br/>💾 코드 파일"]
-        S4 --> S5["review<br/>📍 메모리"]
-        S5 --> S6["finalize<br/>🔗 PR"]
-    end
-
-    subgraph GSD ["GSD"]
-        direction LR
-        G1["new-project<br/>💾 PROJECT.md<br/>💾 REQUIREMENTS.md<br/>💾 ROADMAP.md<br/>💾 STATE.md"]
-        G1 --> G2["discuss<br/>💾 CONTEXT.md"]
-        G2 --> G3["plan<br/>💾 PLAN.md<br/>💾 RESEARCH.md"]
-        G3 --> G4["execute<br/>💾 SUMMARY.md<br/>💾 VERIFICATION.md"]
-        G4 --> G5["verify<br/>💾 UAT.md"]
-        G5 --> G6["ship<br/>🔗 PR"]
-    end
-
-    subgraph GSTACK ["GSTACK"]
-        direction LR
-        K1["office-hours<br/>📍 메모리"] --> K2["plan-ceo<br/>📍 메모리"]
-        K2 --> K3["plan-eng<br/>📍 메모리"]
-        K3 --> K4["구현<br/>💾 코드"]
-        K4 --> K5["review<br/>📍 메모리"]
-        K5 --> K6["qa<br/>💾 QA 리포트"]
-        K6 --> K7["ship<br/>🔗 PR"]
-    end
-```
-
-> 📍 = 컨텍스트 윈도우(메모리)에만 유지, 💾 = 디스크에 영구 저장, 🔗 = 원격(PR)
-
-**핵심 차이**: GSD는 모든 중간 산출물을 디스크에 영구 저장하므로 세션이 끊겨도 복구 가능. Superpowers와 GSTACK은 주로 메모리(컨텍스트 윈도우)에 유지하며, 세션이 끊기면 재시작해야 한다.
 
 ---
 
