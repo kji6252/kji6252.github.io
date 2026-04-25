@@ -19,7 +19,7 @@ tags:
 
 ## 들어가며
 
-AI 코딩 에이전트(Claude Code, Cursor, Codex, Windsurf 등)는 처음 30분은 놀라울 정도로 잘 동작한다. 하지만 시간이 지날수록 예측 가능하게 무너진다. 세 개의 독립적인 팀이 **같은 문제를 해결하기 위해** 각각 프레임워크를 만들었다. 이 글에서는 이 세 프레임워크의 핵심을 정리하고, **개발자와 기획자**가 실제로 어떻게 활용할 수 있는지 살펴본다.
+AI 코딩 에이전트(Claude Code, Cursor, Codex, Windsurf 등)는 처음 30분은 놀라울 정도로 잘 동작한다. 하지만 시간이 지날수록 예측 가능하게 무너진다. 세 개의 독립적인 팀이 **같은 문제를 해결하기 위해** 각각 프레임워크를 만들었다. 이 문서에서는 이 세 프레임워크의 핵심을 정리하고, **개발자와 기획자**가 실제로 어떻게 활용할 수 있는지 살펴본다.
 
 ---
 
@@ -193,7 +193,8 @@ flowchart LR
 | 코드가 오늘 되는데 내일 깨진다 | **Superpowers** | 모든 변경이 실패하는 테스트를 먼저 통과해야 함 |
 | 1시간 뒤 품질이 떨어진다 | **GSD** | 페이즈별 새 컨텍스트, 이전 것을 그대로 유지하지 않음 |
 | 요청하지 않은 기능이 계속 추가된다 | **GSTACK** | 엔지니어링 전 제품 리뷰 |
-| 위 셋 다 문제다 | **GSTACK → GSD + Superpowers TDD** | GSTACK으로 방향 잡기 → GSD로 장기 구현 → Superpowers로 테스트 규율, 단일 프레임워크로는 커버 불가 |
+| 위 셋 다 문제다 | **GSTACK + Superpowers** (원문) | 원문 추천: "GSTACK for direction, bolt on Superpowers TDD" — 세 프레임워크가 아닌 두 개 조합 |
+| 위 셋 다 + 장기 구현 | **GSTACK → GSD + Superpowers → GSTACK** (자체 분석) | GSTACK으로 방향 잡기 → GSD로 장기 구현 → Superpowers로 테스트 규율 → GSTACK 리뷰. 원문에는 없는 확장 |
 
 ### 작업 유형별 추천 (원문 작성자)
 
@@ -320,6 +321,8 @@ GSTACK:
 **팁**: 기획자가 `/design-shotgun` 으로 UI 방향을 시각적으로 탐색하고, 개발자가 `/gsd-quick` 으로 백엔드를 빠르게 구현하는 분업도 가능하다.
 
 ### 시나리오 7: 대규모 신규 서비스 개발 — GSTACK → GSD + Superpowers (세 프레임워크 전체 조합)
+
+> ⚠️ **원문 주의**: 원문 블로그는 세 프레임워크 동시 조합을 명시하지 않는다. "All of the above" 문제에 대해 **GSTACK + Superpowers** 두 개 조합만 추천한다 ("GSTACK for direction, bolt on Superpowers TDD"). 이 시나리오는 원문의 페어 조합 아이디어를 확장한 **자체 분석**이다.
 
 **대상**: 기획자 + 개발자
 **상황**: 새로운 커머스 플랫폼, 결제 시스템, 통합 관리자 등 며칠~몇 주 걸리며 제품적 판단, 장기 구현, 테스트 규율이 **모두** 필요한 작업
@@ -605,10 +608,25 @@ flowchart LR
 
 원문은 **조합을 권장**한다. 하나를 선택하고 영원히 쓸 필요 없다:
 
-- **GSD + 인프라**: GSD의 state-to-disk 방식은 stack outputs과 자연스럽게 연결된다. 네트워킹 페이즈에서 VPC를 프로비저닝하고, 컴퓨트 페이즈에서 subnet ID를 참조하는 것이 컨텍스트 윈도우 조작 없이 가능하다.
+#### 원문이 실제 추천하는 조합
+
+- **GSTACK + Superpowers** ("All of the above" 문제): 원문은 "GSTACK for direction, bolt on Superpowers TDD"라고 명시. 세 프레임워크가 아닌 **두 개 조합**을 추천한다. GSTACK으로 제품 방향을 잡고, Superpowers TDD로 구현 규율을 확보하는 방식.
+  - **사용 사례**: 신규 SaaS 기능 개발 — `/office-hours`로 제품 본질을 검증하고, `/plan-ceo-review`로 범위를 고정한 뒤, Superpowers TDD 사이클(brainstorming → TDD → 구현 → review)로 안정적으로 구현
+  - **사용 사례**: 보안이 중요한 결제 기능 — GSTACK의 `/cso`로 위협 모델링을 먼저 수행하고, Superpowers TDD로 보안 테스트를 포함한 구현
+  - **사용 사례**: 기존 서비스 리뉴얼 — `/plan-design-review`로 UI/UX 방향을 수립하고, Superpowers로 기존 테스트를 보존하며 점진적 리팩토링
+
+- **GSD 단독** (장기 인프라 프로젝트): GSD의 state-to-disk 방식은 stack outputs과 자연스럽게 연결된다. 네트워킹 페이즈에서 VPC를 프로비저닝하고, 컴퓨트 페이즈에서 subnet ID를 참조하는 것이 컨텍스트 윈도우 조작 없이 가능하다.
+  - **사용 사례**: 멀티 스택 클라우드 인프라 구축 — VPC → ECS → RDS → CDN 순서로 페이즈를 나누고, 각 페이즈의 산출물을 다음 페이즈에서 참조
+  - **사용 사례**: 대규모 데이터 마이그레이션 — 스키마 변경 → 데이터 복제 → 검증 → 컷오버를 며칠에 걸쳐 진행, `/gsd-resume-work`로 매일 이어서 작업
+  - **사용 사례**: 마이크로서비스 전체 재작성 — 여러 서비스를 개별 페이즈로 분리하고, 서브에이전트로 병렬 구현
+
 - **Superpowers + 인프라 검증**: TDD 사이클이 인프라 검증에 매핑된다 — 실패하는 테스트(예상 인프라 형태) → `pulumi preview`(RED) → `pulumi up`(GREEN). 완벽한 비유는 아니지만 "다음으로 넘어가기 전에 검증"하는 규율은 그대로 적용된다.
-- **문제가 여러 개면 조합**: "All of the above" → GSTACK으로 방향을 잡고, GSD로 장기 구현을 관리하며, Superpowers TDD를 끼워 넣는다. 단일 프레임워크로 모든 것을 커버하긴 아직 이르다.
-- **세 프레임워크 전체 조합**: GSTACK(제품 방향 + 설계) → GSD(페이즈별 장기 구현) → Superpowers TDD(각 페이즈 내 테스트 규율) → GSTACK(보안/QA/배포 리뷰). 대규모 신규 서비스에서 세 가지 문제(컨텍스트 부패 + 테스트 부재 + 범위 확장)가 동시에 발생할 때 사용한다.
+
+#### 자체 분석으로 확장한 조합
+
+- **GSD + Superpowers TDD**: GSD의 페이즈별 오케스트레이터 내에서 Superpowers TDD 사이클을 적용. 장기 프로젝트에서 컨텍스트 부패와 테스트 부재를 동시에 해결.
+- **GSD → GSTACK 리뷰**: GSD로 장기 구현을 완료한 뒤, 새 세션에서 GSTACK의 `/review`, `/qa`, `/cso`로 종합 리뷰.
+- **GSTACK → GSD + Superpowers → GSTACK** (시나리오 7): 세 프레임워크 전체 조합. 원문에는 없는 확장이며, 대규모 신규 서비스에서 세 가지 문제(컨텍스트 부패 + 테스트 부재 + 범위 확장)가 동시에 발생할 때 사용한다.
 
 > 원문: "You do not have to pick one framework and commit forever. Try GSD for a long multi-stack project. Try Superpowers for a focused library."
 
@@ -772,7 +790,6 @@ Plan 2: 데이터 모델 + API
 ```
 
 `.planning/01-landing-page/` 에 파일들이 생성된다:
-
 ```
 .planning/01-landing-page/
 ├── 1-CONTEXT.md         # 논의에서 결정한 내용 (React+Next.js, 레이아웃 구성 등)
@@ -852,7 +869,7 @@ Body:
   ## 테스트
   - 컴포넌트 스토리북 테스트 6/6 통과
   - API 통합 테스트 4/4 통과
-
+  
   PR: github.com/team/project/pull/42
 ```
 
@@ -957,7 +974,7 @@ GSD는 14개 에이전트를 지원하므로, 같은 `.planning/` 디렉토리�
 
 세 프레임워크를 상황에 따라 조합해서 사용할 수 있도록, **어떤 패턴을 쓸지 결정해 주는 메타 스킬**을 만들었다. 작업 설명만 하면 진단 → 패턴 선택 → 워크플로우 출력까지 자동으로 진행된다.
 
-### 7가지 조합 패턴
+### 8가지 조합 패턴
 
 | 패턴 | 구성 | 언제 사용하는가 |
 |------|------|----------------|
@@ -968,6 +985,7 @@ GSD는 14개 에이전트를 지원하므로, 같은 `.planning/` 디렉토리�
 | **E** | GSD → GSTACK 리뷰 | 장기 구현 후 보안/QA 종합 리뷰 |
 | **F** | GSD + Superpowers TDD | 장기 프로젝트 + 모든 변경에 테스트 강제 |
 | **G** | 프레임워크 없음 | 10분 이내 간단 작업 |
+| **H** | GSTACK → GSD + Superpowers → GSTACK | 대규모 신규 서비스: 제품 판단 + 장기 구현 + 테스트 규율 + 보안/QA 리뷰 모두 필요 |
 
 ### 의사결정 트리 (빠른 참조)
 
@@ -975,8 +993,10 @@ GSD는 14개 에이전트를 지원하므로, 같은 `.planning/` 디렉토리�
 flowchart TD
     START["작업을 설명하세요"] --> Q1{"규모가 며칠 이상인가?"}
 
-    Q1 -->|YES| Q1B{"보안 리뷰도<br/>필요한가?"}
-    Q1B -->|YES| PE["Pattern E<br/>GSD → GSTACK 리뷰"]
+    Q1 -->|YES| Q1B{"제품/보안 리뷰도<br/>필요한가?"}
+    Q1B -->|YES| Q1B2{"테스트 규율도<br/>필요한가?"}
+    Q1B2 -->|YES| PH["Pattern H<br/>GSTACK → GSD + Superpowers → GSTACK"]
+    Q1B2 -->|NO| PE["Pattern E<br/>GSD → GSTACK 리뷰"]
     Q1B -->|"NO, 테스트 강제 필요?"| Q1C
     Q1C -->|YES| PF["Pattern F<br/>GSD + Superpowers TDD"]
     Q1C -->|NO| PB["Pattern B<br/>GSD 단독"]
@@ -996,6 +1016,7 @@ flowchart TD
     style PB fill:#51cf66,color:#000
     style PE fill:#51cf66,color:#000
     style PF fill:#51cf66,color:#000
+    style PH fill:#ff6b6b,color:#fff
     style PD fill:#ffd43b,color:#000
     style PC fill:#ffd43b,color:#000
     style PA fill:#4dabf7,color:#000
@@ -1010,6 +1031,10 @@ flowchart TD
 2. **핸드오프는 파일로** — 세션 간 전달은 마크다운 파일(PLAN.md, DESIGN.md 등)로만 수행
 3. **전환 시 새 세션** — `/clear` 가 아니라 완전히 새 Claude Code 세션을 시작
 
+### 설치
+
+Framework Router 스킬의 설치 방법은 하단 **설치 방법** 섹션을 참조. 상세 스킬 내용은 [[Framework_Router_Skill]] 참조.
+
 ---
 
 ## 설치 방법 (Claude Code 기준)
@@ -1022,8 +1047,7 @@ flowchart TD
 npx get-shit-done-cc@latest
 
 # GSTACK
-git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack \
-  && cd ~/.claude/skills/gstack && ./setup
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack   && cd ~/.claude/skills/gstack && ./setup
 
 # Framework Router (메타 스킬 — 세 프레임워크 조합 자동 추천)
 mkdir -p ~/.claude/skills/framework-router
