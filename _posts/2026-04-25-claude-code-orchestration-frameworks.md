@@ -193,7 +193,7 @@ flowchart LR
 | 코드가 오늘 되는데 내일 깨진다 | **Superpowers** | 모든 변경이 실패하는 테스트를 먼저 통과해야 함 |
 | 1시간 뒤 품질이 떨어진다 | **GSD** | 페이즈별 새 컨텍스트, 이전 것을 그대로 유지하지 않음 |
 | 요청하지 않은 기능이 계속 추가된다 | **GSTACK** | 엔지니어링 전 제품 리뷰 |
-| 위 셋 다 문제다 | **GSTACK + Superpowers TDD** | 단일 프레임워크로 모든 것을 커버하긴 아직 이르다 |
+| 위 셋 다 문제다 | **GSTACK → GSD + Superpowers TDD** | GSTACK으로 방향 잡기 → GSD로 장기 구현 → Superpowers로 테스트 규율, 단일 프레임워크로는 커버 불가 |
 
 ### 작업 유형별 추천 (원문 작성자)
 
@@ -319,6 +319,44 @@ GSTACK:
 
 **팁**: 기획자가 `/design-shotgun` 으로 UI 방향을 시각적으로 탐색하고, 개발자가 `/gsd-quick` 으로 백엔드를 빠르게 구현하는 분업도 가능하다.
 
+### 시나리오 7: 대규모 신규 서비스 개발 — GSTACK → GSD + Superpowers (세 프레임워크 전체 조합)
+
+**대상**: 기획자 + 개발자
+**상황**: 새로운 커머스 플랫폼, 결제 시스템, 통합 관리자 등 며칠~몇 주 걸리며 제품적 판단, 장기 구현, 테스트 규율이 **모두** 필요한 작업
+
+```
+기획 단계 — GSTACK (세션 1):
+1. /office-hours → "정말 이 서비스가 필요한가?" 제품 본질 질문
+2. /plan-ceo-review → 범위 결정 (MVP vs 풀 스펙)
+3. /plan-design-review → UI/UX 방향 수립
+4. /plan-eng-review → 아키텍처, 데이터 흐름, 엣지 케이스 정리
+→ 산출물: CLAUDE.md에 gstack 섹션 저장, .gstack/에 학습 데이터
+
+구현 단계 — GSD + Superpowers TDD (세션 2~N):
+5. /gsd-new-project → GSTACK 산출물 기반으로 프로젝트 초기화
+6. /gsd-plan-phase → 페이즈별 계획 수립
+7. /gsd-execute-phase → 각 페이즈 내에서 Superpowers TDD 적용:
+   - brainstorming → 해당 페이즈 설계
+   - TDD → 실패 테스트 먼저 작성
+   - 구현 → 테스트 통과
+   - review → 기존 기능 회귀 확인
+8. /gsd-verify-work → 각 페이즈 사용자 검증
+9. /gsd-ship → PR 생성
+
+리뷰/배포 단계 — GSTACK (세션 N+1):
+10. /review → 시니어 엔지니어 관점 코드 리뷰
+11. /qa → Playwright 실제 브라우저 테스트
+12. /cso → OWASP + STRIDE 보안 감사
+13. /ship → 배포
+```
+
+**왜 세 개를 모두 쓰는가**: 대규모 신규 서비스는 세 가지 문제가 **동시에** 발생한다.
+- **컨텍스트 부패**: 며칠 걸리는 작업에서 초기 지시사항이 희미해짐 → GSD의 페이즈별 오케스트레이터로 해결
+- **테스트 부재**: 에이전트가 "그럴듯한 코드"를 만들고 기존 기능을 조용히 망가뜨림 → Superpowers TDD로 해결
+- **범위 확장**: 요청하지 않은 기능이 계속 추가됨 → GSTACK의 제품 리뷰 + 역할 격리로 해결
+
+**주의**: 세 프레임워크를 **같은 세션에서 동시에 로드하지 않는다**. 세션 1(GSTACK 기획) → 세션 2~N(GSD + Superpowers 구현) → 세션 N+1(GSTACK 리뷰)으로 나누고, 각 세션 전환 시 마크다운 파일로 상태를 전달한다.
+
 ---
 
 ## 세 프레임워크를 모두 사용할 때의 디렉토리 구조
@@ -327,42 +365,44 @@ GSTACK:
 
 ### 글로벌 설치 위치 (`~/.claude/`)
 
+Claude Code의 글로벌 설정 디렉토리에 세 프레임워크가 나란히 위치한다.
+
 ```
 ~/.claude/
 ├── skills/
 │   ├── superpowers/                          # Superpowers 플러그인
 │   │   └── skills/
-│   │       ├── brainstorming/SKILL.md
-│   │       ├── writing-plans/SKILL.md
-│   │       ├── test-driven-development/SKILL.md
-│   │       ├── subagent-driven-development/SKILL.md
-│   │       ├── executing-plans/SKILL.md
-│   │       ├── systematic-debugging/SKILL.md
-│   │       ├── requesting-code-review/SKILL.md
-│   │       ├── finishing-a-development-branch/SKILL.md
-│   │       ├── using-git-worktrees/SKILL.md
-│   │       ├── using-superpowers/SKILL.md
-│   │       └── writing-skills/SKILL.md
+│   │       ├── brainstorming/SKILL.md        # 소크라테스 질문으로 설계 정제
+│   │       ├── writing-plans/SKILL.md        # 2~5분 단위 태스크 분할
+│   │       ├── test-driven-development/SKILL.md  # RED-GREEN-REFACTOR
+│   │       ├── subagent-driven-development/SKILL.md  # 서브에이전트 파견
+│   │       ├── executing-plans/SKILL.md      # 배치 실행 + 체크포인트
+│   │       ├── systematic-debugging/SKILL.md # 4단계 근원 원인 분석
+│   │       ├── requesting-code-review/SKILL.md  # 계획 대비 코드 리뷰
+│   │       ├── finishing-a-development-branch/SKILL.md  # merge/PR/keep/discard
+│   │       ├── using-git-worktrees/SKILL.md  # 격리된 워크트리 브랜치
+│   │       ├── using-superpowers/SKILL.md    # 스킬 시스템 소개
+│   │       └── writing-skills/SKILL.md       # 새 스킬 작성 가이드
 │   │
 │   ├── gsd-agents/ → (skills symlink)        # GSD 에이전트
 │   │   └── SKILL.md
-│   ├── gsd-new-project/SKILL.md
-│   ├── gsd-discuss-phase/SKILL.md
-│   ├── gsd-plan-phase/SKILL.md
-│   ├── gsd-execute-phase/SKILL.md
-│   ├── gsd-verify-work/SKILL.md
-│   ├── gsd-ship/SKILL.md
-│   ├── gsd-fast/SKILL.md
-│   ├── gsd-quick/SKILL.md
-│   ├── gsd-next/SKILL.md
-│   ├── gsd-help/SKILL.md
-│   ├── gsd-progress/SKILL.md
-│   ├── gsd-settings/SKILL.md
-│   ├── gsd-review/SKILL.md
-│   ├── gsd-debug/SKILL.md
-│   ├── gsd-map-codebase/SKILL.md
-│   ├── gsd-spike/SKILL.md
-│   ├── gsd-sketch/SKILL.md
+│   ├── gsd-new-project/SKILL.md              # 프로젝트 초기화 커맨드
+│   ├── gsd-discuss-phase/SKILL.md            # 페이즈 논의
+│   ├── gsd-plan-phase/SKILL.md               # 페이즈 계획
+│   ├── gsd-execute-phase/SKILL.md            # 페이즈 실행
+│   ├── gsd-verify-work/SKILL.md              # 작업 검증
+│   ├── gsd-ship/SKILL.md                     # PR 생성
+│   ├── gsd-fast/SKILL.md                     # 빠른 실행
+│   ├── gsd-quick/SKILL.md                    # 애드혹 태스크
+│   ├── gsd-next/SKILL.md                     # 다음 단계 자동 감지
+│   ├── gsd-help/SKILL.md                     # 도움말
+│   ├── gsd-progress/SKILL.md                 # 진행 상황
+│   ├── gsd-settings/SKILL.md                 # 설정
+│   ├── gsd-review/SKILL.md                   # 코드 리뷰
+│   ├── gsd-debug/SKILL.md                    # 디버깅
+│   ├── gsd-map-codebase/SKILL.md             # 기존 코드베이스 분석
+│   ├── gsd-spike/SKILL.md                    # 실험적 프로토타이핑
+│   ├── gsd-sketch/SKILL.md                   # HTML 목업 생성
 │   └── ... (약 40개+ GSD 스킬 파일)
 │
 ├── gstack/                                   # GSTACK 메인 디렉토리
@@ -374,35 +414,35 @@ GSTACK:
 │   │   ├── gstack-taste-update
 │   │   └── gstack-analytics
 │   └── skills/                               # 23개 전문가 스킬
-│       ├── office-hours/SKILL.md
-│       ├── plan-ceo-review/SKILL.md
-│       ├── plan-eng-review/SKILL.md
-│       ├── plan-design-review/SKILL.md
-│       ├── plan-devex-review/SKILL.md
-│       ├── design-consultation/SKILL.md
-│       ├── design-shotgun/SKILL.md
-│       ├── design-html/SKILL.md
-│       ├── review/SKILL.md
-│       ├── investigate/SKILL.md
-│       ├── design-review/SKILL.md
-│       ├── devex-review/SKILL.md
-│       ├── qa/SKILL.md
-│       ├── qa-only/SKILL.md
-│       ├── ship/SKILL.md
-│       ├── land-and-deploy/SKILL.md
-│       ├── canary/SKILL.md
-│       ├── benchmark/SKILL.md
-│       ├── document-release/SKILL.md
-│       ├── cso/SKILL.md
-│       ├── autoplan/SKILL.md
-│       ├── browse/SKILL.md
-│       ├── careful/SKILL.md
-│       ├── freeze/SKILL.md
-│       ├── guard/SKILL.md
-│       ├── learn/SKILL.md
-│       ├── retro/SKILL.md
-│       ├── pair-agent/SKILL.md
-│       ├── codex/SKILL.md
+│       ├── office-hours/SKILL.md             # YC 오피스 아워
+│       ├── plan-ceo-review/SKILL.md          # CEO 리뷰
+│       ├── plan-eng-review/SKILL.md          # 엔지니어링 매니저 리뷰
+│       ├── plan-design-review/SKILL.md       # 디자인 리뷰
+│       ├── plan-devex-review/SKILL.md        # DX 리뷰
+│       ├── design-consultation/SKILL.md      # 디자인 시스템 구축
+│       ├── design-shotgun/SKILL.md           # 다수 목업 변형 탐색
+│       ├── design-html/SKILL.md              # 프로덕션 HTML 변환
+│       ├── review/SKILL.md                   # 시니어 엔지니어 리뷰
+│       ├── investigate/SKILL.md              # 체계적 디버깅
+│       ├── design-review/SKILL.md            # 라이브 디자인 감사
+│       ├── devex-review/SKILL.md             # 라이브 DX 감사
+│       ├── qa/SKILL.md                       # Playwright 브라우저 테스트
+│       ├── qa-only/SKILL.md                  # QA 리포트만
+│       ├── ship/SKILL.md                     # 릴리스 엔지니어
+│       ├── land-and-deploy/SKILL.md          # 배포+프로덕션 검증
+│       ├── canary/SKILL.md                   # 배포 후 모니터링
+│       ├── benchmark/SKILL.md                # 성능 베이스라인
+│       ├── document-release/SKILL.md         # 문서 업데이트
+│       ├── cso/SKILL.md                      # 보안 감사 (OWASP+STRIDE)
+│       ├── autoplan/SKILL.md                 # 자동 리뷰 파이프라인
+│       ├── browse/SKILL.md                   # 실제 브라우저 제어
+│       ├── careful/SKILL.md                  # 파괴적 명령 경고
+│       ├── freeze/SKILL.md                   # 파일 편집 잠금
+│       ├── guard/SKILL.md                    # careful + freeze
+│       ├── learn/SKILL.md                    # 세션 간 학습 메모리
+│       ├── retro/SKILL.md                    # 주간 회고
+│       ├── pair-agent/SKILL.md               # 멀티 에이전트 조정
+│       ├── codex/SKILL.md                    # OpenAI Codex 교차 리뷰
 │       └── ...
 │
 ├── office-hours → gstack/skills/office-hours # GSTACK 스킬 심볼릭 링크들
@@ -418,6 +458,8 @@ GSTACK:
 ```
 
 ### 프로젝트 로컬 위치 (프로젝트 루트)
+
+실제 개발하는 프로젝트 내부에 생성되는 파일들이다.
 
 ```
 my-project/
@@ -443,7 +485,7 @@ my-project/
 │   ├── STATE.md                              # 결정사항, 블로커, 현재 위치
 │   │
 │   ├── research/                             # 리서치 결과
-│   │   ├── 01-RESEARCH.md
+│   │   ├── 01-RESEARCH.md                    # 페이즈 1 리서치
 │   │   └── 02-RESEARCH.md
 │   │
 │   ├── 01-user-model/                        # 페이즈 1 (예시: 유저 모델)
@@ -565,7 +607,8 @@ flowchart LR
 
 - **GSD + 인프라**: GSD의 state-to-disk 방식은 stack outputs과 자연스럽게 연결된다. 네트워킹 페이즈에서 VPC를 프로비저닝하고, 컴퓨트 페이즈에서 subnet ID를 참조하는 것이 컨텍스트 윈도우 조작 없이 가능하다.
 - **Superpowers + 인프라 검증**: TDD 사이클이 인프라 검증에 매핑된다 — 실패하는 테스트(예상 인프라 형태) → `pulumi preview`(RED) → `pulumi up`(GREEN). 완벽한 비유는 아니지만 "다음으로 넘어가기 전에 검증"하는 규율은 그대로 적용된다.
-- **문제가 여러 개면 조합**: "All of the above" → GSTACK으로 방향을 잡고, Superpowers TDD를 끼워 넣는다. 단일 프레임워크로 모든 것을 커버하긴 아직 이르다.
+- **문제가 여러 개면 조합**: "All of the above" → GSTACK으로 방향을 잡고, GSD로 장기 구현을 관리하며, Superpowers TDD를 끼워 넣는다. 단일 프레임워크로 모든 것을 커버하긴 아직 이르다.
+- **세 프레임워크 전체 조합**: GSTACK(제품 방향 + 설계) → GSD(페이즈별 장기 구현) → Superpowers TDD(각 페이즈 내 테스트 규율) → GSTACK(보안/QA/배포 리뷰). 대규모 신규 서비스에서 세 가지 문제(컨텍스트 부패 + 테스트 부재 + 범위 확장)가 동시에 발생할 때 사용한다.
 
 > 원문: "You do not have to pick one framework and commit forever. Try GSD for a long multi-stack project. Try Superpowers for a focused library."
 
