@@ -91,13 +91,26 @@ GSD는 단일 메가 오케스트레이터를 사용하지 않는다. 대신 **�
 - 페이즈 완료 시 상태를 디스크의 Markdown 파일로 저장
 - 새로운 오케스트레이터가 이전 상태를 이어받아 작업 계속
 
-```
-[단일 오케스트레이터]                    [GSD: 페이즈별 오케스트레이터]
-200K 토큰 컨텍스트                      페이즈 1 오케스트레이터 (풀 컨텍스트)
-  ├── 페이즈 1                                ↓ 상태를 디스크에 저장
-  ├── 페이즈 2                           페이즈 2 오케스트레이터 (풀 컨텍스트)
-  ├── 페이즈 3                                ↓ 상태를 디스크에 저장
-  └── ... 점점 느려지고 지시사항이 희미해짐  페이즈 3 오케스트레이터 (풀 컨텍스트)
+```mermaid
+flowchart LR
+    subgraph 단일 오케스트레이터
+        direction TB
+        O1["200K 토큰 컨텍스트"] --- P1["페이즈 1"]
+        O1 --- P2["페이즈 2"]
+        O1 --- P3["페이즈 3"]
+        O1 -.- PX["... 점점 느려지고 지시사항이 희미해짐"]
+    end
+
+    subgraph "GSD: 페이즈별 오케스트레이터"
+        direction LR
+        G1["페이즈 1<br/>오케스트레이터<br/>풀 컨텍스트"] -->|"상태를<br/>디스크에 저장"| G2["페이즈 2<br/>오케스트레이터<br/>풀 컨텍스트"]
+        G2 -->|"상태를<br/>디스크에 저장"| G3["페이즈 3<br/>오케스트레이터<br/>풀 컨텍스트"]
+    end
+
+    style PX fill:#ff6b6b,color:#fff
+    style G1 fill:#51cf66,color:#fff
+    style G2 fill:#51cf66,color:#fff
+    style G3 fill:#51cf66,color:#fff
 ```
 
 ### 주요 명령어
@@ -399,13 +412,15 @@ my-project/
 
 200K 컨텍스트 윈도우는 **공유 자원**이다. 세 프레임워크가 각자 자기 지침을 로드하면:
 
-| 구성 요소 | 컨텍스트 점유율 |
-|-----------|----------------|
-| Superpowers 지침 | 18% |
-| GSD 에이전트 지침 | 25% |
-| GSTACK 역할 지침 | 18% |
-| CLAUDE.md + 프로젝트 | 8% |
-| 실제 코드 + 도구 결과 | 31% |
+```mermaid
+pie showData
+    title "200K 컨텍스트 윈도우 예산 (동시 사용 시)"
+    "Superpowers 지침" : 18
+    "GSD 에이전트 지침" : 25
+    "GSTACK 역할 지침" : 18
+    "CLAUDE.md + 프로젝트" : 8
+    "실제 코드 + 도구 결과" : 31
+```
 
 프레임워크들이 **해결하려는 문제(컨텍스트 부패)를 스스로 만들어버리는** 역설이 발생한다.
 
@@ -434,6 +449,26 @@ Superpowers의 TDD 규율이 절실히 필요해지면 그때 Superpowers를 추
 ## 실전: 기획부터 구현까지 Claude Code 워크플로우
 
 "프로모션 이벤트 페이지"를 실제 개발한다고 가정하고, 사람과 에이전트가 어떻게 협업하는지 전체 흐름을 보여준다. GSD 단독 사용 기준.
+
+### 전체 흐름도
+
+```mermaid
+flowchart TD
+    A["👤 사람: 기획/요구사항 정리"] --> B["🤖 /gsd-new-project<br/>프로젝트 초기화"]
+    B --> C["🤖 /gsd-discuss-phase 1<br/>구현 결정사항 입력"]
+    C --> D["🤖 /gsd-plan-phase 1<br/>리서치 + 계획 수립"]
+    D --> E{"👤 사람이<br/>계획 승인"}
+    E -->|승인| F["🤖 /gsd-execute-phase 1<br/>서브에이전트 병렬 구현"]
+    E -->|수정| D
+    F --> G["🤖 /gsd-verify-work 1<br/>👤 사람이 UAT 수행"]
+    G --> H["🤖 /gsd-ship 1<br/>PR 생성"]
+    H --> I["👤 PR 리뷰 + 머지"]
+
+    style A fill:#4a9eff,color:#fff
+    style E fill:#4a9eff,color:#fff
+    style G fill:#4a9eff,color:#fff
+    style I fill:#4a9eff,color:#fff
+```
 
 ### Step 1: 사람이 기획서를 준비한다
 
@@ -663,6 +698,39 @@ Claude: 이전 세션 상태를 복원합니다.
 
 세 프레임워크를 상황에 따라 조합해서 사용할 수 있도록, **어떤 패턴을 쓸지 결정해 주는 메타 스킬**이다. 작업 설명만 하면 진단 → 패턴 선택 → 워크플로우 출력까지 자동으로 진행된다.
 
+### 의사결정 트리 (빠른 참조)
+
+```mermaid
+flowchart TD
+    START["작업을 설명하세요"] --> Q1{"규모가 며칠 이상인가?"}
+
+    Q1 -->|YES| Q1B{"보안 리뷰도<br/>필요한가?"}
+    Q1B -->|YES| PE["Pattern E<br/>GSD → GSTACK 리뷰"]
+    Q1B -->|"NO, 테스트 강제 필요?"| Q1C
+    Q1C -->|YES| PF["Pattern F<br/>GSD + Superpowers TDD"]
+    Q1C -->|NO| PB["Pattern B<br/>GSD 단독"]
+
+    Q1 -->|NO| Q2{"제품/비즈니스<br/>판단이 필요한가?"}
+
+    Q2 -->|YES| Q2B{"규모가 큰가?"}
+    Q2B -->|YES| PD["Pattern D<br/>GSTACK 계획 → Superpowers 구현"]
+    Q2B -->|NO| PC["Pattern C<br/>GSTACK 단독"]
+
+    Q2 -->|NO| Q3{"버그 수정인가?"}
+    Q3 -->|YES| PA["Pattern A<br/>Superpowers 단독"]
+    Q3 -->|NO| Q4{"10분 이내인가?"}
+    Q4 -->|YES| PG["Pattern G<br/>직접 지시"]
+    Q4 -->|NO| PA
+
+    style PB fill:#51cf66,color:#000
+    style PE fill:#51cf66,color:#000
+    style PF fill:#51cf66,color:#000
+    style PD fill:#ffd43b,color:#000
+    style PC fill:#ffd43b,color:#000
+    style PA fill:#4dabf7,color:#000
+    style PG fill:#dee2e6,color:#000
+```
+
 ### 7가지 조합 패턴
 
 | 패턴 | 구성 | 언제 사용하는가 |
@@ -708,6 +776,46 @@ git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.cl
 1. **프레임워크는 도구다, 종교가 아니다** — 하나를 선택하고 영원히 쓸 필요 없다. 프로젝트 성격에 따라 다르게 선택하라.
 2. **무엇이 자주 고장 나는지 아는 것이 진짜 결정 기준** — 테스트 없이 망가진다면 Superpowers, 컨텍스트가 부패한다면 GSD, 범위가 확장된다면 GSTACK.
 3. **1시간 안에 알 수 있다** — 하나를 골라 프로젝트에 적용해 보면, 그것이 내 문제를 해결하는지 금방 알 수 있다.
+
+---
+
+## 프레임워크별 파일 생성 시점 비교
+
+```mermaid
+flowchart LR
+    subgraph Superpowers ["Superpowers"]
+        direction LR
+        S1["brainstorming<br/>📍 메모리"] --> S2["plan<br/>📍 메모리"]
+        S2 --> S3["TDD<br/>💾 테스트 파일"]
+        S3 --> S4["구현<br/>💾 코드 파일"]
+        S4 --> S5["review<br/>📍 메모리"]
+        S5 --> S6["finalize<br/>🔗 PR"]
+    end
+
+    subgraph GSD ["GSD"]
+        direction LR
+        G1["new-project<br/>💾 PROJECT.md<br/>💾 REQUIREMENTS.md<br/>💾 ROADMAP.md<br/>💾 STATE.md"]
+        G1 --> G2["discuss<br/>💾 CONTEXT.md"]
+        G2 --> G3["plan<br/>💾 PLAN.md<br/>💾 RESEARCH.md"]
+        G3 --> G4["execute<br/>💾 SUMMARY.md<br/>💾 VERIFICATION.md"]
+        G4 --> G5["verify<br/>💾 UAT.md"]
+        G5 --> G6["ship<br/>🔗 PR"]
+    end
+
+    subgraph GSTACK ["GSTACK"]
+        direction LR
+        K1["office-hours<br/>📍 메모리"] --> K2["plan-ceo<br/>📍 메모리"]
+        K2 --> K3["plan-eng<br/>📍 메모리"]
+        K3 --> K4["구현<br/>💾 코드"]
+        K4 --> K5["review<br/>📍 메모리"]
+        K5 --> K6["qa<br/>💾 QA 리포트"]
+        K6 --> K7["ship<br/>🔗 PR"]
+    end
+```
+
+> 📍 = 컨텍스트 윈도우(메모리)에만 유지, 💾 = 디스크에 영구 저장, 🔗 = 원격(PR)
+
+**핵심 차이**: GSD는 모든 중간 산출물을 디스크에 영구 저장하므로 세션이 끊겨도 복구 가능. Superpowers와 GSTACK은 주로 메모리(컨텍스트 윈도우)에 유지하며, 세션이 끊기면 재시작해야 한다.
 
 ---
 
