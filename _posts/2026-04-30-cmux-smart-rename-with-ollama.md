@@ -40,9 +40,11 @@ cmux rename-tab
 
 ## 핵심 설계 결정
 
-### Stop 훅 사용
+### Stop 훅 + 마커 파일로 한 번만 실행
 
-처음에는 `Notification` 훅을 사용했으나, OS 알림 전송 시점에만 발생하여 타이밍이 불안정했습니다. `Stop` 훅은 Claude Code가 응답을 완전히 마친 시점에 발생하므로, scrollback에 질문과 답변이 모두 확실히 들어있는 상태에서 실행됩니다.
+처음에는 `Notification` 훅을 사용했으나, OS 알림 전송 시점에만 발생하여 타이밍이 불안정했습니다. `Stop` 훅은 Claude Code가 응답을 완전히 마친 시점에 발생합니다.
+
+`once: true` 옵션에도 불구하고 매 턴마다 실행되는 현상이 있어서, surface별 마커 파일(`/tmp/cmux-renamed-사용자-surface:ID`)로 확실히 한 번만 실행되도록 보장합니다. 새 Claude Code 세션은 새 surface ID를 가지므로 마커가 없어 다시 실행됩니다.
 
 ### 질문+답변 모두 반영
 
@@ -76,6 +78,10 @@ cmux rename-tab
 MAX_CHARS=25
 
 [ -z "$CMUX_SURFACE_ID" ] && exit 0
+
+# 이미 실행된 surface면 스킵
+MARKER_FILE="/tmp/cmux-renamed-$(whoami)-${CMUX_SURFACE_ID}"
+[ -f "$MARKER_FILE" ] && exit 0
 
 content=$(cmux read-screen --surface "$CMUX_SURFACE_ID" --scrollback 2>/dev/null \
     | grep -v '^─\+$' \
@@ -117,6 +123,9 @@ except:
 
 summary=$(echo "$summary" | cut -c1-${MAX_CHARS})
 cmux rename-tab --surface "$CMUX_SURFACE_ID" "$summary" 2>/dev/null
+
+# 성공 시 마커 생성
+touch "$MARKER_FILE"
 ```
 
 ```bash
