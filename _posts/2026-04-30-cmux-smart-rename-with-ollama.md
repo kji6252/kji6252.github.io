@@ -73,23 +73,10 @@ cmux rename-tab
 
 ```bash
 #!/bin/bash
-THROTTLE_FILE="/tmp/cmux-smart-rename-$(whoami).last"
-THROTTLE_SECONDS=30
 MAX_CHARS=25
 
-# Throttle - 30초 이내 재실행 방지
-if [ -f "$THROTTLE_FILE" ]; then
-    last=$(cat "$THROTTLE_FILE")
-    now=$(date +%s)
-    if [ $((now - last)) -lt $THROTTLE_SECONDS ]; then
-        exit 0
-    fi
-fi
-
-# cmux 환경인지 확인
 [ -z "$CMUX_SURFACE_ID" ] && exit 0
 
-# 질문+답변 내용 추출 (UI 노이즈 필터링)
 content=$(cmux read-screen --surface "$CMUX_SURFACE_ID" --scrollback 2>/dev/null \
     | grep -v '^─\+$' \
     | grep -v '^\s*$' \
@@ -100,7 +87,6 @@ content=$(cmux read-screen --surface "$CMUX_SURFACE_ID" --scrollback 2>/dev/null
 
 [ -z "$content" ] && exit 0
 
-# Ollama API 호출
 summary=$(python3 -c "
 import json, urllib.request, sys
 
@@ -131,7 +117,6 @@ except:
 
 summary=$(echo "$summary" | cut -c1-${MAX_CHARS})
 cmux rename-tab --surface "$CMUX_SURFACE_ID" "$summary" 2>/dev/null
-date +%s > "$THROTTLE_FILE"
 ```
 
 ```bash
