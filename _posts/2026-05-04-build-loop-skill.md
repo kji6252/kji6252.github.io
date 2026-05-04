@@ -40,12 +40,30 @@ Build Loop는 이 과정을 **자동화**한다.
 
 ## 설치
 
+### 방법 1: skills.sh 스크립트 (권장)
+
 ```bash
-# 스킬 디렉토리에 클론
-mkdir -p ~/.claude/skills/build-loop
+# 전체 스킬 설치
+git clone https://github.com/pallidev/agent-skills.git
+cd agent-skills
+bash skills.sh
+
+# 또는 build-loop만 설치
+bash skills.sh build-loop
 ```
 
-`~/.claude/skills/build-loop/build-loop.md`에 스킬 정의 파일을 저장한다.
+### 방법 2: 한 줄 설치 (curl)
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/pallidev/agent-skills/main/skills.sh) build-loop
+```
+
+### 방법 3: 수동 설치
+
+```bash
+mkdir -p ~/.claude/skills/build-loop
+# SKILL.md 파일을 ~/.claude/skills/build-loop/ 에 저장
+```
 
 ---
 
