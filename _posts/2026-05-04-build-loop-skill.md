@@ -44,7 +44,10 @@ Build Loop는 이 과정을 **자동화**한다.
 
 ```bash
 # build-loop 스킬 설치
-npx skills add pallidev/agent-skills@build-loop
+npx skills add pallidev/agent-skills --skill build-loop
+
+# 글로벌 설치 (모든 프로젝트에서 사용)
+npx skills add pallidev/agent-skills --skill build-loop -g
 
 # 전체 스킬 설치
 npx skills add pallidev/agent-skills
