@@ -40,25 +40,19 @@ Build Loop는 이 과정을 **자동화**한다.
 
 ## 설치
 
-### 방법 1: skills.sh 스크립트 (권장)
+### 방법 1: skills CLI (권장)
 
 ```bash
+# build-loop 스킬 설치
+npx skills add pallidev/agent-skills@build-loop
+
 # 전체 스킬 설치
-git clone https://github.com/pallidev/agent-skills.git
-cd agent-skills
-bash skills.sh
-
-# 또는 build-loop만 설치
-bash skills.sh build-loop
+npx skills add pallidev/agent-skills
 ```
 
-### 방법 2: 한 줄 설치 (curl)
+> [skills.sh](https://skills.sh)는 Vercel Labs에서 만든 오픈소스 스킬 패키지 매니저다. 자세한 내용은 [skills.sh/docs/cli](https://skills.sh/docs/cli) 참고.
 
-```bash
-bash <(curl -s https://raw.githubusercontent.com/pallidev/agent-skills/main/skills.sh) build-loop
-```
-
-### 방법 3: 수동 설치
+### 방법 2: 수동 설치
 
 ```bash
 mkdir -p ~/.claude/skills/build-loop
