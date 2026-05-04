@@ -418,28 +418,63 @@ $ claude -p "Phase 2 실행: CRUD API 엔드포인트 구현"
 | Headless 세션 | 각 Phase를 실행하는 **독립적인 Claude 세션** (새 컨텍스트 윈도우) |
 | 컨텍스트 소모 | Orchestrator는 ~10%만 사용 (실제 작업은 Headless가 처리) |
 
-### RalphLoop (자동 Build Loop)
+### Ralph Wiggum Loop (자동 Build Loop)
 
-> **RalphLoop란?** 영상 작성자(Eric Tech)가 **직접 만든 커스텀 Claude Code 스킬**이다. 공식 프레임워크가 아니며, Skool 커뮤니티에서 제공된다.
+> **Ralph Wiggum Loop란?** **Geoffrey Huntley**가 창작한 자율 실행 패턴. 심슨의 Ralph Wiggum 캐릭터에서 따온 이름으로, 끈기 있게 반복 실행한다는 의미다. Eric Tech는 이 기법을 유튜브에서 소개한 크리에이터일 뿐, 창작자가 아니다.
 
-RalphLoop는 상태 파일로 진행 상황을 관리한다. 아래는 **개념적 예시**이며, 실제 형식은 RalphLoop 버전에 따라 다를 수 있다:
+핵심 원리는 **bash `while` 무한 루프**로 `claude -p`를 반복 실행하는 것이다:
+
+```bash
+# Ralph Wiggum Loop의 본질 (한 줄)
+while :; do cat PROMPT.md | claude -p; done
+```
+
+매 반복마다 **새 세션**(새 컨텍스트 윈도우)으로 실행되며, 상태는 **디스크 파일**(코드, git 히스토리, 계획 파일)로 유지된다. 이전 대화 기록이 아닌 파일에서 자신의 작업을 읽어온다.
+
+#### 주요 구현체
+
+| 구현체 | 형태 | 특징 |
+|--------|------|------|
+| **Anthropic 공식 플러그인** | `/ralph-loop` 슬래시 명령어 | Claude Code에 내장. Stop Hook 기반으로 동작 |
+| **[snarktank/ralph](https://github.com/snarktank/ralph)** | 독립 bash 스크립트 + PRD JSON | GitHub 10k+ 스타, 가장 인기 있는 독립 구현체 |
+| **[PageAI-Pro/ralph-loop](https://github.com/PageAI-Pro/ralph-loop)** | npm 패키지, Docker 샌드박스 | 격리된 환경에서 실행 |
+
+#### Anthropic 공식 플러그인 사용법
+
+```bash
+# Claude Code 세션 안에서
+> /ralph-loop "PROMPT.md를 읽고 모든 태스크를 완성해" --completion-promise "COMPLETE" --max-iterations 50
+> /cancel-ralph  # 중단 시
+```
+
+- Stop Hook 방식: Claude가 종료하려고 하면 훅이 이를 가로채고 동일한 프롬프트를 재전송
+- `<promise>COMPLETE</promise>` 태그가 출력에 나타나면 완료로 판단
+- 종료 코드: 0=완료, 1=최대 반복 도달, 2=차단됨, 3=결정 필요
+
+#### snarktank/ralph 상태 파일 예시 (PRD JSON)
 
 ```json
 {
-  "phases": [
-    { "id": 1, "name": "프로젝트 세팅", "status": "complete", "prompt": "..." },
-    { "id": 2, "name": "CRUD API", "status": "complete", "prompt": "..." },
-    { "id": 3, "name": "프론트엔드", "status": "in_progress", "prompt": "..." },
-    { "id": 4, "name": "카테고리 기능", "status": "pending", "prompt": "..." }
+  "project": "TodoApp",
+  "branchName": "ralph/todo-crud",
+  "description": "Todo CRUD 기능 구현",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "할 일 생성 API",
+      "acceptanceCriteria": ["POST /api/todos가 201 반환", "title 필수 필드 검증"],
+      "priority": 1,
+      "passes": false
+    }
   ]
 }
 ```
 
-각 반복에서: 미완료 Phase 찾기 → `claude -p`로 실행 → 상태 업데이트 → 다음 Phase
+각 반복: 미완료 태스크 찾기 → `claude -p`로 실행 → 테스트/린트 확인 → 커밋 → 상태 업데이트 → 다음 태스크
 
-### RalphLoop 없이 수동으로 돌리는 방법
+### Ralph Loop 없이 수동으로 돌리는 방법
 
-RalphLoop가 없어도 동일한 결과를 얻을 수 있다. 차이는 **수동으로 Phase를 하나씩 실행**해야 한다는 것뿐이다:
+Ralph Loop가 없어도 동일한 결과를 얻을 수 있다. 차이는 **수동으로 Phase를 하나씩 실행**해야 한다는 것뿐이다:
 
 ```bash
 # 수동 Build Loop — 터미널에서 직접 실행
@@ -454,9 +489,10 @@ $ claude -p "$(cat .planning/phases/02/02-01-PLAN.md)"
 ```
 
 > **요약**
-> - **RalphLoop 있음** → 밤새 100% 자동, 상태 파일 기반 관리
-> - **RalphLoop 없음** → 수동으로 Phase마다 `claude -p` 실행, 또는 `/loop`로 간이 자동화
+> - **Ralph Loop 사용** → 밤새 100% 자동, 상태 파일 기반 관리
+> - **수동 실행** → Phase마다 `claude -p` 직접 실행
 > - 결과물은 동일. 차이는 자동화 정도뿐
+> - Anthropic 공식 플러그인, snarktank/ralph 등 여러 성숙한 오픈소스 구현체가 존재
 
 ---
 
@@ -524,7 +560,7 @@ todo-app/
 **자동화가 100% 보장되지는 않는다**
 - 에이전트 간 자동 소통(GStack↔Superpowers)이 항상 올바르게 작동하지 않을 수 있음
 - Phase 실행이 실패하면 수동 개입이 필요할 수 있음
-- RalphLoop는 공식 프레임워크가 아니라 **직접 구현하거나 수동 대안 사용**
+- Ralph Loop는 Anthropic 공식 플러그인을 포함해 여러 오픈소스 구현체가 존재 (snarktank/ralph, PageAI-Pro/ralph-loop 등)
 
 **컨텍스트 로트 방지가 핵심이지만 완벽하지 않다**
 - GSD가 Phase를 쪼개지만, Phase 자체가 너무 크면 여전히 문제 발생 가능
@@ -546,3 +582,6 @@ todo-app/
 - [Superpowers GitHub](https://github.com/obra/superpowers) — TDD 기반 개발 프레임워크
 - [GSD GitHub](https://github.com/gsd-build/get-shit-done) — Phase 분해 & 컨텍스트 관리 프레임워크
 - [Spec Driven Playlist](https://www.youtube.com/playlist?list=PLm7xfhMOszqw2bbEYOVTdXn0Ou3wpNLHS)
+- [Ralph Wiggum Loop — Geoffrey Huntley](https://ghuntley.com/ralph/) — 창작자의 공식 설명
+- [snarktank/ralph](https://github.com/snarktank/ralph) — 가장 인기 있는 독립 구현체 (10k+ 스타)
+- [Anthropic 공식 플러그인](https://github.com/anthropics/claude-code/blob/main/plugins/ralph-wiggum/README.md) — Claude Code 내장 Ralph Loop
