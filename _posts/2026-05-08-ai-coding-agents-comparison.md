@@ -86,20 +86,20 @@ tags:
 
 ```mermaid
 graph TD
-    A[시작] --> B{Claude Code 쓰고 있음?}
-    B -->|네| C{비용이 부담?}
-    B -->|아니오| D{기능 많은 게 좋음?}
-    C -->|네| E{복잡함도 피곤함?}
-    C -->|아니오| F[OpenCode — Copilot 무료 모델로 비용 절감]
-    E -->|네| G[**Pi** — 미니멀 + 토큰 효율]
-    E -->|아니오| F
-    D -->|네| H[OpenCode — 75+ 프로바이더 풀기능]
-    D -->|아니오| I{마크다운 워크플로우 선호?}
-    I -->|네| G
-    I -->|아니오| H
-    style G fill:#10b981,color:#fff
-    style F fill:#3b82f6,color:#fff
-    style H fill:#3b82f6,color:#fff
+    A["🔍 시작"] --> B{"Claude Code 이미 사용 중?"}
+    B -->|"네"| C{"비용이 부담인가요?"}
+    B -->|"아니오"| D{"풍부한 기능이 중요한가요?"}
+    C -->|"네"| E{"복잡함도 피곤한가요?"}
+    C -->|"아니오"| F["🔵 OpenCode<br/>Copilot 무료 모델로 비용 절감"]
+    E -->|"네"| G["🟢 Pi<br/>미니멀 + 토큰 효율"]
+    E -->|"아니오"| F
+    D -->|"네"| H["🔵 OpenCode<br/>75+ 프로바이더 · 풀기능"]
+    D -->|"아니오"| I{"마크다운 기반 워크플로우 선호?"}
+    I -->|"네"| G
+    I -->|"아니오"| H
+    style G fill:#10b981,color:#fff,stroke:#059669,stroke-width:2px
+    style F fill:#3b82f6,color:#fff,stroke:#2563eb,stroke-width:2px
+    style H fill:#3b82f6,color:#fff,stroke:#2563eb,stroke-width:2px
 ```
 
 ---
