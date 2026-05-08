@@ -14,22 +14,40 @@ tags:
   - CLI
 ---
 
-> 2025-2026년 터미널 기반 AI 코딩 에이전트가 급증했다. Claude Code(유료/Anthropic 종속), OpenCode(오픈소스/풀기능), Pi(오픈소스/미니멀)가 대표적. 도구 선택은 비용, 제어 수준, 워크플로우 호환성에 직결된다.
+> **TL;DR** — Pi를 추천한다. 이유: (1) 숨겨진 컨텍스트 주입 없이 예측 가능 (2) 시스템 프롬프트 1/10로 API 비용 절감 (3) 필요한 기능만 확장으로 추가 (4) Pi 스스로 확장을 작성하는 자가 수정 가능. 즉시 풍부한 기능이 필요하면 OpenCode가 대안.
+>
+> **빠른 시작:**
+> ```bash
+> npm install -g @earendil-works/pi-coding-agent   # 설치
+> cd /path/to/project && pi && /login               # 실행 + 인증
+> npx @robzolkos/lazypi                             # 확장 한번에 설치 (선택)
+> ```
 
 ---
 
-## 세 도구 한눈에 보기
+## 한눈에 보기 — 철학 스펙트럼
 
-### 기본 정보
+<video autoplay loop muted playsinline width="100%" style="max-width: 1280px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+  <source src="/assets/videos/philosophy-spectrum.webm" type="video/webm">
+</video>
 
 | | Claude Code | OpenCode | Pi |
 |---|---|---|---|
 | **개발** | Anthropic | anomalyco (커뮤니티) | Mario Zechner |
 | **오픈소스** | 아니오 | 네 (100%) | 네 |
-| **언어** | TypeScript | TypeScript | TypeScript |
 | **비용** | $20/월 + API | API 비용만 | API 비용만 |
 
-### 기능 비교
+- **Claude Code** — Anthropic 생태계에 깊이 통합. 강력한 기본값, 낮은 설정 부담, 벤더 종속.
+- **OpenCode** — Claude Code의 오픈소스 미러. provider 무관, TUI/데스크톱/모바일 클라이언트, Client/Server 아키텍처. neovim 유저와 terminal.shop 제작자가 개발.
+- **Pi** — "반대 방향". 최소한의 코어, 모든 추가 기능은 사용자가 선택해 확장. 예측 가능하고 토큰 효율적.
+
+---
+
+## 기능 비교 — 레이더 차트
+
+<video autoplay loop muted playsinline width="100%" style="max-width: 1280px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+  <source src="/assets/videos/feature-radar.webm" type="video/webm">
+</video>
 
 | | Claude Code | OpenCode | Pi |
 |---|---|---|---|
@@ -48,22 +66,11 @@ tags:
 
 ---
 
-## 철학의 차이
-
-```
-풀기능 / 통합형
-  ├── Claude Code  ──오픈소스 대체──>  OpenCode
-  └── Claude Code  ──미니멀 대체──>  Pi
-                                          미니멀 / 조립형
-```
-
-- **Claude Code** — Anthropic 생태계에 깊이 통합. 강력한 기본값, 낮은 설정 부담, 벤더 종속.
-- **OpenCode** — Claude Code의 오픈소스 미러. provider 무관, TUI/데스크톱/모바일 클라이언트, Client/Server 아키텍처. neovim 유저와 terminal.shop 제작자가 개발.
-- **Pi** — "반대 방향". 최소한의 코어, 모든 추가 기능은 사용자가 선택해 확장. 예측 가능하고 토큰 효율적.
-
----
-
 ## 비용 비교 (월 기준)
+
+<video autoplay loop muted playsinline width="100%" style="max-width: 1280px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+  <source src="/assets/videos/cost-comparison.webm" type="video/webm">
+</video>
 
 | 사용 패턴 | Claude Code | OpenCode + OpenRouter | Pi + OpenRouter |
 |---|---|---|---|
@@ -72,6 +79,28 @@ tags:
 | 고강도 사용 | $20 + ~$50+ API | ~$30-60 | ~$20-40 |
 
 > Pi의 토큰 효율(<1k 시스템 프롬프트)로 동일 작업 대비 API 비용이 절감된다.
+
+---
+
+## 어떤 걸 골라야 할까?
+
+```mermaid
+graph TD
+    A[시작] --> B{Claude Code 쓰고 있음?}
+    B -->|네| C{비용이 부담?}
+    B -->|아니오| D{기능 많은 게 좋음?}
+    C -->|네| E{복잡함도 피곤함?}
+    C -->|아니오| F[OpenCode — Copilot 무료 모델로 비용 절감]
+    E -->|네| G[**Pi** — 미니멀 + 토큰 효율]
+    E -->|아니오| F
+    D -->|네| H[OpenCode — 75+ 프로바이더 풀기능]
+    D -->|아니오| I{마크다운 워크플로우 선호?}
+    I -->|네| G
+    I -->|아니오| H
+    style G fill:#10b981,color:#fff
+    style F fill:#3b82f6,color:#fff
+    style H fill:#3b82f6,color:#fff
+```
 
 ---
 
@@ -92,19 +121,6 @@ Pi는 기본 4개 툴(read, write, edit, bash)만 제공한다. MCP, 메모리, 
 ### 4. 자가 수정
 
 Pi는 TypeScript 확장 시스템을 갖추고 있어, Pi 스스로에게 "이 확장을 만들어줘"라고 요청할 수 있다. Pi가 Pi 자신의 기능을 확장하는 셈이다.
-
----
-
-## 상황별 추천
-
-| 상황 | 추천 | 이유 |
-|---|---|---|
-| Claude 생태계에 만족하나 비용이 부담 | **OpenCode** | 거의 동일 기능, Copilot 무료 모델 사용 가능 |
-| Claude Code의 복잡함이 피곤함 | **Pi** | 미니멀 코어, 예측 가능, 토큰 효율 |
-| 마크다운 기반 구조적 워크플로우 선호 | **Pi** | AGENTS.md 기반, 파일로 컨텍스트 제어 |
-| 다양한 모델을 상황별로 교체 사용 | **OpenCode** | 75+ 프로바이더, 내장 모델 전환 |
-| VPS/원격 환경에서 코딩 | **Pi** | 가벼운 코어, tmux/SSH 친화적 |
-| 처음 시작, 설정 없이 바로 사용 | **OpenCode** | 풀기능 기본 제공, 설정 부담 최소 |
 
 ---
 
