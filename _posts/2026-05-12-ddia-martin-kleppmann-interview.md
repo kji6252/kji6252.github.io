@@ -238,7 +238,7 @@ Martin Kleppmann은 실무자이자 연구자이자 작가인, 보기 드문 하
 
 ---
 
-- **원본 인터뷰 영상:** [Designing Data-Intensive Applications — Interview with Martin Kleppmann](https://www.youtube.com/watch?v=O0e8tdaIBjE)
+- **원본 인터뷰 영상:** [Designing Data-Intensive Applications with Martin Kleppmann — The Pragmatic Engineer Podcast](https://youtu.be/SVOrURyOu_U)
 - **DDIA 2판:** O'Reilly 출간 예정
 - **Automerge:** [automerge.org](https://automerge.org/)
 - **Local-First Software:** [localfirstweb.dev](https://localfirstweb.dev/)
