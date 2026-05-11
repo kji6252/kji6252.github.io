@@ -21,9 +21,13 @@ tags:
 
 ---
 
+![Thomas Schilling — Claude Code for Spring Developers]({{ site.baseurl }}/images/spring-io-2026/slide_01_intro.jpg){: .shadow}
+
 ## 발표자 소개
 
 Thomas Schilling — Stuttgart 기반, **Photo Quest**(웨딩 포토 게임 플랫폼) 창립자. Spring Boot + Kotlin + HTMX 스택. 3개월간 Claude Code로 실전 개발하며 얻은 패턴과 워크플로우를 공유.
+
+![3개월간 3,700 커밋, 1,700 세션, 커밋 속도 5배]({{ site.baseurl }}/images/spring-io-2026/slide_02_stats.jpg){: .shadow}
 
 ### 실적 (실화)
 
@@ -32,6 +36,8 @@ Thomas Schilling — Stuttgart 기반, **Photo Quest**(웨딩 포토 게임 플�
 - GitHub contribution graph에 뚜렷한 스파이크로 확인 가능
 
 ---
+
+![What is Claude Code?]({{ site.baseurl }}/images/spring-io-2026/slide_03_what_is_claude_code.jpg){: .shadow}
 
 ## 1. Claude Code란?
 
@@ -51,6 +57,8 @@ CLI 기반 에이전트 도구. 터미널에서 프롬프트를 입력하면:
 **접속 방법:** CLI 터미널, VS Code, IntelliJ, 브라우저, 스마트폰 앱, Slack, GitHub Actions
 
 ---
+
+![Why Spring is the best backend for agentic development]({{ site.baseurl }}/images/spring-io-2026/slide_04_why_spring.jpg){: .shadow}
 
 ## 2. 왜 Spring이 에이전트 개발에 최적인가?
 
@@ -100,6 +108,8 @@ Claude가 잘못된 방향으로 가면 `/rewind`로 즉시 복원. 모든 파�
 - 결과: 완전한 아키텍처 요약 + 다이어그램
 - 메인 컨텍스트는 깨끗하게 유지
 
+![Sub-agent: 49 tool calls, 84K tokens, 90 seconds]({{ site.baseurl }}/images/spring-io-2026/slide_06_subagent.jpg){: .shadow}
+
 ### Headless 모드
 
 `claude -p`로 UI 없이 프롬프트 → 결과. `--model haiku`로 빠르고 저렴한 조회. CI 스크립트나 파이프라인에 활용.
@@ -110,6 +120,8 @@ claude -p --model haiku "Find all ranking game tables in the migration files"
 ```
 
 ---
+
+![Vibe Coding의 결과: 버그 8개, 테스트 0개]({{ site.baseurl }}/images/spring-io-2026/slide_07_vibe_coding.jpg){: .shadow}
 
 ## 4. ⚠️ Vibe Coding의 참상 — 반면교사
 
@@ -129,6 +141,8 @@ claude -p --model haiku "Find all ranking game tables in the migration files"
 
 ---
 
+![CLAUDE.md: 첫날은 5줄만 쓴다]({{ site.baseurl }}/images/spring-io-2026/slide_09_claude_md.jpg){: .shadow}
+
 ## 5. CLAUDE.md 구축법 — 컨텍스트의 기반
 
 ### 핵심 원칙: 모든 규칙은 실제 실패로부터 얻어라
@@ -139,6 +153,8 @@ claude -p --model haiku "Find all ranking game tables in the migration files"
 - 잘못된 가정 → 규칙 추가
 - 잘못된 import → 규칙 추가
 - **모든 규칙은 실제 실패를 통해 자리를 잡아야 한다**
+
+![CLAUDE.md의 3가지 핵심 규칙]({{ site.baseurl }}/images/spring-io-2026/slide_10_claude_md_rules.jpg){: .shadow}
 
 ### 발표자의 3가지 핵심 규칙
 
@@ -165,6 +181,8 @@ auto memory        → 사용자 폴더, Git 미추적 (발표자는 비활성�
 ```
 
 **`.claude/rules/`의 핵심:** 각 파일에 `path` 필드가 있어, 해당 경로를 수정할 때만 로드된다. Kotlin 규칙은 Kotlin 파일 수정 시, 결제 규칙은 결제 패키지 수정 시. Claude는 **관련 있는 컨텍스트만** 본다.
+
+![컨텍스트 3계층: CLAUDE.md → .claude/rules → auto memory]({{ site.baseurl }}/images/spring-io-2026/slide_11_context_hierarchy.jpg){: .shadow}
 
 ### 컨텍스트 관리 실전 팁
 
@@ -194,7 +212,11 @@ auto memory        → 사용자 폴더, Git 미추적 (발표자는 비활성�
 
 > "에이전트는 서두르지 않는다. 매번 같은 규율. 이것이 나를 검증, 설계, 아키텍처에 집중하게 해준다."
 
+![Skills: Interview, TDD, Test, Commit]({{ site.baseurl }}/images/spring-io-2026/slide_13_four_skills.jpg){: .shadow}
+
 ### 🌟 Interview 스킬 — 이 발표의 하이라이트
+
+![Interview 스킬 실제 데모: PM처럼 질문하며 스펙 작성]({{ site.baseurl }}/images/spring-io-2026/slide_15_interview.jpg){: .shadow}
 
 **동작 방식:**
 1. 서브에이전트가 코드베이스 탐색
@@ -245,6 +267,8 @@ Body: instructions, steps, constraints, patterns
 
 ---
 
+![Hooks: Pre-tool use, Post-tool use, Session end]({{ site.baseurl }}/images/spring-io-2026/slide_18_hooks.jpg){: .shadow}
+
 ## 7. Hooks — 선택이 아닌 강제
 
 > "Skills drift, Claude.md gets buried. **Hooks fire every time.**"
@@ -282,6 +306,8 @@ Hooks      → 매번 실행, 강제, 무시 불가
 
 ---
 
+![MCP: 에이전트를 IDE에 연결]({{ site.baseurl }}/images/spring-io-2026/slide_20_mcp.jpg){: .shadow}
+
 ## 8. MCP — 에이전트를 IDE에 연결
 
 MCP(Model Context Protocol)로 Claude가 코드베이스 밖의 도구에 접근.
@@ -293,6 +319,8 @@ MCP(Model Context Protocol)로 Claude가 코드베이스 밖의 도구에 접근
 - **Sentry** — 프로덕션 에러 직접 조사 (스택 트레이스 복사 불필요)
 - **Javadoc Central** — 최신 라이브러리 문서 제공
 - **Spring AI MCP Service Starter** — 커스텀 MCP 서버 구축
+
+![IDE가 에이전트의 API가 된다]({{ site.baseurl }}/images/spring-io-2026/slide_21_ide_as_api.jpg){: .shadow}
 
 ### IntelliJ MCP가 특히 중요한 이유
 
@@ -318,6 +346,8 @@ Use "reformat file" instead of sed for formatting.
 
 ---
 
+![워크플로우 5단계]({{ site.baseurl }}/images/spring-io-2026/slide_22_five_levels.jpg){: .shadow}
+
 ## 9. 워크플로우 5단계
 
 ### Level 1: Human in the Loop
@@ -338,6 +368,8 @@ Use "reformat file" instead of sed for formatting.
 - 반복 1: 테스트 0, 버그 8개, 스펙 없음
 - 반복 4: 테스트 37개, 설계 결정 20개, CLAUDE.md 규칙 8개 추가
 
+![Ralph: bash while 루프로 자율 실행]({{ site.baseurl }}/images/spring-io-2026/slide_23_ralph.jpg){: .shadow}
+
 ### Level 4: Ralph — 자율 루프
 
 > Claude는 게으르다. 스킬을 스킵하고, 코너를 자르고, 계획의 단계를 누락한다.
@@ -357,6 +389,8 @@ done < plan.md
 **진화:** 마크다운 체크리스트(39테스트, 뭉침) → **built-in TodoWrite 도구**(60테스트, 매 phase마다 test-first)
 
 > **"낮에는 생각하고, 밤에는 Claude가 구현한다."** — Matt Pocock
+
+![Claude vs Codex: 다른 모델, 다른 맹점]({{ site.baseurl }}/images/spring-io-2026/slide_24_multi_agent.jpg){: .shadow}
 
 ### Level 5: 멀티 에이전트 리뷰
 
@@ -397,6 +431,8 @@ Claude Code + OpenAI Codex를 같은 브랜치/프롬프트로 병렬 코드 리
 여러 세션의 커밋 노이즈 → 논리적 기능 단위로 정리. 리뷰어가 디버깅 노이즈가 아닌 **기능**을 볼 수 있게.
 
 ---
+
+![The speed is free, but the discipline is yours]({{ site.baseurl }}/images/spring-io-2026/slide_26_discipline.jpg){: .shadow}
 
 ## 핵심 철학
 
