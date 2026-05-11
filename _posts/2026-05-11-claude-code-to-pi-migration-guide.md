@@ -93,7 +93,7 @@ Pi는 정반대 접근: 최소 코어, 필요한 것만 조립.
 
 ## 전환 절차
 
-### 1. 설치 + LazyPi
+### 1. 설치 + LazyPi로 한 번에 설정
 
 ```bash
 npm install -g @earendil-works/pi-coding-agent
@@ -101,6 +101,42 @@ npx @robzolkos/lazypi    # 확장, 스킬, 테마 한번에
 ```
 
 > 기존 `.agents/skills/` 디렉토리를 Pi와 공유하므로 Claude Code에서 쓰던 스킬이 그대로 작동한다.
+
+#### LazyPi가 뭔가
+
+[LazyPi](https://github.com/robzolkos/lazypi)는 Rob Zolkos가 만든 Pi 원샷 셋업 도구다. Pi의 "미니멀 코어에 필요한 것만 조립한다"는 철학은 좋지만, 처음부터 하나하나 고르는 건 귀찮다. LazyPi는 이 문제를 **한 방에** 해결한다.
+
+```bash
+npx @robzolkos/lazypi
+```
+
+실행하면 자동으로 설치하는 것들:
+
+| 카테고리 | 내용 |
+|----------|------|
+| **60+ 스킬** | agent-browser, mermaid-visualizer, excalidraw-diagram, frontend-tailwind, nextjs, sqlite-database-expert 등 |
+| **76개 테마** | Catppuccin, Gruvbox, Dracula, Nord, Solarized 등 인기 터미널 테마 |
+| **MCP 어댑터** | `pi-mcp-adapter` — GitHub, Playwright 등 MCP 서버 연동 |
+| **핵심 확장** | `pi-subagents`, `pi-memory-md`, `pi-web-access`, `pi-ask-user`, `pi-autoresearch`, `pi-ralph-wiggum`, `pi-interactive-shell` 등 20+개 |
+| **유틸리티** | `pi-powerbar` (상태바), `pi-usage-extension` (비용 추적), `pi-raw-paste` (붙여넣기) 등 |
+
+**LazyPi가 해결하는 문제:**
+
+| 문제 | LazyPi 전 | LazyPi 후 |
+|------|-----------|-----------|
+| Pi 초기 설정 | 확장을 하나하나 찾아서 설치 | `npx` 한 줄로 끝 |
+| Claude Code 수준 기능 | 기본 4개 툴만 있어 부족 | 60+ 스킬로 Claude Code 이상 |
+| 테마 | 기본 2개 | 76개 커뮤니티 테마 |
+| MCP 연동 | 수동 설정 | 자동 구성 |
+
+> **핵심:** LazyPi는 Claude Code 사용자가 Pi로 넘어올 때 겪는 **"초기 설정 장벽"**을 사실상 제거한다. 설치 후 `settings.json`에 Provider와 모델만 지정하면 바로 Claude Code와 동등한 환경이 완성된다.
+
+**설치 후 확인:**
+```bash
+pi list                    # 설치된 패키지 확인
+pi                         # 세션 시작
+/model                     # 모델 선택
+```
 
 ### 2. Provider 설정
 
