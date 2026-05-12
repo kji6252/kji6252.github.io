@@ -56,15 +56,17 @@ LinkedIn에서 Martin은 대규모 데이터 파이프라인을 설계했다. �
 
 Rapportive 시절 MySQL로 씨름하며 느낀 좌절이 출발점이었다.
 
-> "왜 이 쿼리는 느린가? 인덱스는 제대로 있는데. B-tree의 내부 구조를 이해하면 답이 보일 텐데, 그걸 설명해 주는 책이 없었다."
+> "we were all like searching around in the dark where we're having performance problems with our database and we had no idea what to do basically because we were totally lacking the foundations"
 
-기존 데이터베이스 책은 너무 학술적이거나 너무 실무에 치우쳐 있었다. **원리를 설명하면서도 실무에서 바로 쓸 수 있는 책**이 필요했다.
+데이터베이스 성능 문제가 발생했을 때, 아무것도 할 수 없었다. 기초가 전혀 없었기 때문이다. 기존 데이터베이스 책은 너무 학술적이거나 너무 실무에 치우쳐 있었다. **원리를 설명하면서도 실무에서 바로 쓸 수 있는 책**이 필요했다.
 
 ### 4년의 집필, 2.5년의 초과
 
-O'Reilly와 계약 후 **4년**이 걸렸다. 출판사 마감일을 **2.5년 초과**했다.
+O'Reilly와 계약 후 **4년**이 걸렸다. 출판사 마감일은 황당할 정도로 초과했다.
 
-초반에는 LinkedIn에서 일하면서 **주당 50%의 시간**을 집필에 할애했다. 하지만 진전이 더뎠고, 결국 LinkedIn을 퇴사하고 전념했다.
+> "The publisher deadline I missed by a ludicrous margin. I think I missed it by about 2 and a half years"
+
+무려 **2년 반**이나 마감을 넘겼다. 초반에는 LinkedIn에서 일하면서 **주당 50%의 시간**을 집필에 할애했다. 하지만 진전이 더뎠고, 결국 LinkedIn을 퇴사하고 전념했다.
 
 > "퇴사한 이유 중 하나는 솔직히 말하면, LinkedIn에서 내가 하던 일의 상당수를 Kafka와 Samza가 이미 해결하고 있었다. 더 이상 나에게 의존하지 않는 시스템을 남겨두고 떠나는 건 괜찮은 일이라고 생각했다."
 
@@ -86,9 +88,9 @@ DDIA의 3파트 구조 — **데이터 시스템의 기초**, **분산 데이터
 
 가장 과감한 결단.
 
-> "MapReduce는 죽었다. 역사적 의미는 있지만, 2026년에 MapReduce를 상세히 설명하는 건 독자에게 불친절하다."
+> "MapReduce is dead. Nobody uses it anymore."
 
-2판에서 MapReduce는 역사적 배경으로만 간략히 언급된다.
+명확하고 단호한 선언이다. 2판에서 MapReduce는 역사적 배경으로만 간략히 언급된다. 1판에서 상당한 분량을 할애하던 MapReduce와 Hadoop의 상세한 설명을 과감히 삭제하고, 그 자리를 현대적인 데이터 처리 기술로 채웠다.
 
 ### 추가: 클라우드 네이티브, 벡터 인덱스, 데이터프레임, 윤리
 
@@ -109,17 +111,41 @@ DDIA 1장에서 제시하는 세 가지 원칙을 Martin이 다시 정의한다.
 
 하드웨어 고장, 소프트웨어 버그, 인간의 실수 — 이 세 가지는 반드시 일어난다. 문제는 "어떻게 막을까"가 아니라 "어떻게 견딜까"다.
 
+### 해저 케이블과 소의 발
+
+분산 시스템의 신뢰성 이야기에서 빠질 수 없는 것이 바로 **물리적 인프라의 장애**다. 그중에서도 가장 흥미로운 것이 해저 케이블이다.
+
+> "the sharks biting undersea cables... the shielding has got better and therefore the sharks are not biting them anymore. But instead the cows on land are stepping on cables"
+
+상어가 해저 케이블을 물어뜯는 문제는 케이블 차폐(shielding)가 개선되면서 해결됐다. 하지만 이번에는 육지에서 **소가 케이블을 밟는** 문제가 생겼다. 장애의 형태는 변하지만, 장애는 항상 찾아온다. DDIA에서 다루는 "장애 허용" 철학이 현실에서도 이렇게 역설적으로 나타난다.
+
 ### 확장성: 스케일 업만이 아니다
 
 흥미로운 지점은 **스케일 다운**의 중요성이다.
 
-> "서버리스 환경에서는 함수 하나가 128MB 메모리에서 실행된다. 거대한 클러스터를 운영하는 것만 확장성이 아니다. **작은 자원에서도 잘 동작하게 만드는 것**이 오늘날 더 중요할 수 있다."
+> "not just scaling up but scaling down as well... how do you run a service that if it has a very small amount of load it's really cheap to run"
 
-### 추상화는 슈퍼파워
+대규모 트래픽을 처리하는 것만 확장성이 아니다. **적은 부하에서도 비용 효율적으로 동작**하는 것 역시 중요한 과제다. 서버리스가 이 철학의 극단적인 사례다.
+
+> "I have a small website that runs on serverless and my bill is like 13 cents per month"
+
+Martin 자신이 서버리스의 실사용 사례를 들며, 트래픽이 적을 때 얼마나 저렴하게 운영할 수 있는지를 보여준다. 거대한 클러스터를 운영하는 것만이 확장성의 전부가 아니라는 것.
+
+### Row vs Column: 아는 것이 슈퍼파워
+
+스토리지 엔진의 내부 구조를 이해하는 것은 생각보다 훨씬 큰 차이를 만든다.
+
+> "whether you're using row oriented storage or column oriented storage... it has a massive performance implication... knowing a bit about the internals is actually like a superpower"
+
+행 기반 저장과 열 기반 저장의 선택은 쿼리 성능에 **거대한 영향**을 미친다. 내부 원리를 조금만 알아도 문제 해결 속도가 완전히 달라진다. DDIA를 읽는 가장 큰 이유 중 하나가 바로 이런 "슈퍼파워"를 얻는 것이다.
+
+### 추상화의 역설
 
 클라우드 매니지드 서비스를 쓰면 내부 원리를 몰라도 된다. 하지만...
 
-> "비즈니스 로직 개발자는 DynamoDB 내부를 알 필요 없다. 하지만 알면 **슈퍼파워**다. 장애가 났을 때 원인을 파악하는 속도가 완전히 달라진다."
+> "if you're building the higher level systems... that's fine. But somebody still has to build those lower level abstractions"
+
+추상화 위에서 비즈니스 로직을 만드는 것은 좋다. 하지만 **누군가는 그 아래 층의 추상화를 만들어야 한다**. 그리고 추상화가 무너질 때 — 장애가 났을 때 — 내부 원리를 아는 사람만이 원인을 파악할 수 있다.
 
 ---
 
@@ -144,7 +170,9 @@ Martin의 학계 연구 중 가장 돋보이는 분야 중 하나가 **형식 �
 
 "바이브 코딩" — AI가 코드를 마구 생성하는 시대에, 그 코드가 정말로 올바른지 확인하는 수단이 더욱 중요해진다.
 
-> "LLM이 10만 줄을 생성해 줬다고 치자. 리뷰할 건가? 테스트도 한계가 있다. 형식 명세를 작성하고 자동으로 검증하는 파이프라인이 필요하다."
+> "we're vibe coding a bunch of stuff. If we have to manually review all of that code, then that will become the bottleneck... the thing that proof can do that tests can't is to consider absolutely every possible thing"
+
+AI가 대량의 코드를 생성하면 **수동 리뷰가 병목**이 된다. 테스트는 한계가 있다 — 생각하는 시나리오만 검증할 수 있을 뿐이다. 반면 **형식 증명(formal proof)**은 **절대적으로 모든 가능한 경우**를 고려할 수 있다. 테스트와 증명은 상호 보완적이며, 바이브 코딩 시대에는 증명의 가치가 그 어느 때보다 크다.
 
 ---
 
@@ -174,7 +202,9 @@ Local-First는 오프라인 동작을 기본으로 하고, 클라우드는 동�
 
 Martin은 현재 SaaS 모델에 대해 강하게 비판한다.
 
-> "SaaS는 본질적으로 고객 머리에 총을 겨누는 것이다. '구독을 끊으면 데이터를 잃는다'는 위협으로 고객을 묶어두는 건 건강한 관계가 아니다."
+> "software as a service businesses... the whole reason why they can charge a subscription is because they are able to essentially hold a gun to the customer's head"
+
+SaaS 비즈니스가 구독을 청구할 수 있는 근본적인 이유는, 고객의 데이터를 쥐고 있어서 **사실상 협박**이 가능하기 때문이다. "구독을 끊으면 데이터를 잃는다"는 구조는 건강한 관계가 아니다.
 
 Local-First는 데이터 소유권을 사용자에게 돌려줌으로써 이 관계를 근본적으로 바꾸려 한다.
 
@@ -223,6 +253,12 @@ Martin이 추천하는 경로:
 3. **박사 과정** — 산업에서 발견한 문제를 깊이 파고들
 
 > "산업 경험 없이 박사 과정에 들어오면, 진짜 문제가 뭔지 모른 채 논문을 쓰게 된다. 반대로 산업만 하면 '왜'를 묻지 않게 된다. 둘 다 필요하다."
+
+그리고 학습 과정에서의 어려움에 대해서도 조언을 남긴다.
+
+> "sometimes in order to learn something you just have to struggle with it a bit"
+
+**직접 부딪히고 고생해 보는 것**을 대체할 학습법은 없다. DDIA도 읽기만 해서는 안 되고, 실제 문제에 직면했을 때 다시 펼쳐봐야 진정한 가치를 얻을 수 있다.
 
 ---
 
