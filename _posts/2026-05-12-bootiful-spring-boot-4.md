@@ -153,6 +153,24 @@ class MyRegistrar implements BeanRegistrar {
 
 ## 🔒 Spring Security 7: 보안의 패러다임 전환
 
+### Customizer: Additive 보안 설정
+
+Spring Security 6까지는 `SecurityFilterChain` Bean을 하나만 만들어도 Spring Boot의 기본 보안 설정이 **전부 사라졌다**. HTTP Basic, Form Login, endpoint 보호 — defaults가 싹 날아감.
+
+Spring Security 7에서는 **`Customizer` API**로 기본값을 유지하면서 필요한 기능만 추가(additive)한다:
+
+```java
+@Bean
+SecurityFilterChain chain(HttpSecurity http) throws Exception {
+    http.customizer(c -> c
+        .oneTimeTokenLogin(ott -> ott.tokenEndpoint("/login/ott"))
+    );
+    return http.build();
+}
+```
+
+> "보안에 정통하다면 괜찮지만, 전혀 보호되지 않는 상태로 시작하는 것은 좋은 security posture가 아닙니다." — Josh Long
+
 ### Password Migration
 
 기존 사용자의 SHA-256 비밀번호를 **로그인 시 자동으로 BCrypt로 마이그레이션**. 평문 비밀번호가 메모리에 있는 순간을 활용.
@@ -173,7 +191,40 @@ Slack처럼 이메일 링크 하나로 로그인. **내가 관리할 비밀번�
 
 `@EnableMultiFactor`로 password + OTT 조합 인증을 간단히 설정.
 
+### JdbcUserDetailsManager
+
+DB 기반 사용자 관리는 `JdbcUserDetailsManager` 빈 하나로 끝:
+
+```java
+@Bean
+UserDetailsManager users(DataSource ds) {
+    return new JdbcUserDetailsManager(ds);
+}
+```
+
+기존 `users`, `authorities` 테이블 스키마와 연동되며, Password Migration과 함께 쓰면 레거시 사용자의 비밀번호가 로그인 시 자동으로 안전한 해시로 마이그레이션된다.
+
 ![One-Time Token]({{ site.baseurl }}/images/spring-io-bootiful/slide_15_ott.jpg){: .shadow}
+
+---
+
+## 🧬 Spring Framework 7: API 설계 철학
+
+### `@NonNullApi` 기본
+
+`org.springframework.beans.factory` 패키지 전체가 `@NonNullApi`로 선언되어 있다. 모든 파라미터와 반환값이 기본적으로 non-null.
+
+```java
+// 패키지-info.java
+@NonNullApi
+package org.springframework.beans.factory;
+```
+
+- null 허용이 필요한 경우 명시적 opt-in (`@Nullable`)
+- IDE에서 null safety 경고 자동 제공
+- `BeanRegistrar`의 `register()` 메서드 등이 이 패키지에 위치
+
+Spring Framework 7의 API 설계 철학: **null을 기본으로 금지**하여 NPE를 컴파일 타임에 방어.
 
 ![WebAuthn / Passkeys]({{ site.baseurl }}/images/spring-io-bootiful/slide_16_webauthn.jpg){: .shadow}
 
