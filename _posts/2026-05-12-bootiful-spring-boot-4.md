@@ -187,9 +187,13 @@ Slack처럼 이메일 링크 하나로 로그인. **내가 관리할 비밀번�
 
 공개키 암호화 기반. Touch ID, Face ID, Apple Watch 모두 같은 키. OS가 관리하므로 비밀번호 자체가 사라진다.
 
+![WebAuthn / Passkeys]({{ site.baseurl }}/images/spring-io-bootiful/slide_16_webauthn.jpg){: .shadow}
+
 ### Multi-Factor Authentication
 
 `@EnableMultiFactor`로 password + OTT 조합 인증을 간단히 설정.
+
+![Multi-Factor Auth]({{ site.baseurl }}/images/spring-io-bootiful/slide_17_mfa.jpg){: .shadow}
 
 ### JdbcUserDetailsManager
 
@@ -225,10 +229,6 @@ package org.springframework.beans.factory;
 - `BeanRegistrar`의 `register()` 메서드 등이 이 패키지에 위치
 
 Spring Framework 7의 API 설계 철학: **null을 기본으로 금지**하여 NPE를 컴파일 타임에 방어.
-
-![WebAuthn / Passkeys]({{ site.baseurl }}/images/spring-io-bootiful/slide_16_webauthn.jpg){: .shadow}
-
-![Multi-Factor Auth]({{ site.baseurl }}/images/spring-io-bootiful/slide_17_mfa.jpg){: .shadow}
 
 ---
 
