@@ -24,3 +24,6 @@ vendor/bundle/
 vendor/cache/
 vendor/gems/
 vendor/ruby/
+
+# Video files (too large for GitHub)
+*.mp4
