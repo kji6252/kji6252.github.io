@@ -46,7 +46,7 @@ tags:
 
 ### McKinsey Insights (맥킨지 인사이트)
 
-![McKinsey Insights](/images/investment-insights-tools-books/frame_220.jpg)
+![McKinsey Insights](/images/investment-insights-tools-books/frame_328.jpg)
 
 > "우리가 주식 투자를 할 때 뭘 알아야 하죠? 미래를 좀 아셔야 돼요. 미래를 보는 방법을 연습하기 위해 시간에 채널을 보고 계시는 겁니다. 조금 더 장기적인 관점에서 3년, 5년, 10년의 미래를 보는 연습을 하고 싶다면 이거 추천을 드리고 싶어요."
 
@@ -58,7 +58,7 @@ tags:
 
 ### FRED (Federal Reserve Economic Data)
 
-![FRED 데이터](/images/investment-insights-tools-books/frame_328.jpg)
+![FRED 데이터](/images/investment-insights-tools-books/frame_380.jpg)
 
 > "FRED는 세인트루이스 연준이 제공하는 데이터입니다. 유가 차트가 1946년도부터 보여져요. 데이터가 몇 개가 있을까요? 36만 개가 올라가 있어요. 한국 데이터 몇 개 있을까요? 3,800개."
 
@@ -161,7 +161,7 @@ tags:
 
 ### 트레이딩 — 매매와 펀더멘털
 
-![트레이딩 도서](/images/investment-insights-tools-books/frame_1100.jpg)
+![트레이딩 도서](/images/investment-insights-tools-books/frame_1180.jpg)
 
 | 도서 | 포인트 |
 |------|--------|
