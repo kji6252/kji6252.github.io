@@ -26,7 +26,7 @@ Kamailio는 다양한 network protocol 조합을 지원한다. 기본적으로 *
 
 Daniel-Constantin Mierla는 이 발표에서 Kamailio가 지원하는 transport layer의 조합과 그 scaling 전략을 상세히 설명했다. 주요 use case는 다음과 같다:
 
-- **Security bridging** — 외부 네트워크(TLS)와 내부 네트워크(UDP/TCP) 간 보안 경계 역할. Kamailio를 SBC(Security Border Controller)로 사용하여 media server, PSTN gateway 등을 private network에 보관
+- **Security bridging** — 외부 네트워크(TLS)와 내부 네트워크(UDP/TCP) 간 보안 경계 역할. Kamailio를 SBC(Session Border Controller)로 사용하여 media server, PSTN gateway 등을 private network에 보관
 - **IPv4 ↔ IPv6 전환** — 레거시 IPv4 환경과 IPv6 환경 간 SIP proxy
 - **WebRTC ↔ SIP** — WebSocket을 통한 WebRTC client와 classic SIP 전화기 간 연결
 - **WebSocket Proxy** — Kamailio가 WebSocket proxy로 동작하는 신규 패턴
@@ -147,11 +147,13 @@ UDP에 대한 multi-threading 지원이 추가되면서, 한 process가 여러 s
 ### udp_receive_mode
 
 ```kamailio
+# Mode 0 (default): 기존 multi-process 모델 (변경 없음)
 # Mode 1: 한 process가 여러 socket을 담당
-# 각 socket마다 전용 receive thread를 생성
+#          각 socket마다 전용 receive thread를 생성
+# Mode 2: dedicated async worker group 할당
 udp_receive_mode = 1
 
-# Mode 2: dedicated async worker group 할당
+# Mode 2 예시
 udp_receive_mode = 2
 ```
 
@@ -197,18 +199,18 @@ socket {
 
 TCP/TLS에서의 multi-threading 도입은 더 복잡한 배경이 있다.
 
-### 문제: libSSL의 Thread-Safety
+### 문제: OpenSSL 3.0의 Thread-Safety
 
-**Heartbleed 취약점(CVE-2014-0160)** 이후, OpenSSL(libSSL)은 내부적으로 multi-threading을 도입했다. 그 결과 SSL context와 thread-local data가 process 간에 안전하게 공유되지 않는 문제가 발생했다.
+**OpenSSL 3.0**에서 대규모 내부 아키텍처 변경이 이루어졌다. Heartbleed 취약점(CVE-2014-0160) 이후 지속된 보안 강화 과정에서 OpenSSL 내부 구조가 크게 재설계되었고, 그 결과 **`fork()` 기반 multi-process 환경에서 SSL_CTX와 thread-local data의 일관성** 문제가 발생했다.
 
 기존 Kamailio의 multi-process 모델에서는:
 1. 여러 TCP worker process가 존재
 2. 각 process가 독립적으로 SSL context를 사용
-3. 하지만 libSSL의 내부 state가 process 간에 일관되지 않아 **random crash** 발생
+3. 하지만 OpenSSL 3.0의 내부 refactoring으로 인해 process 간 SSL state 일관성이 깨져 **random crash** 발생
 
 ![libSSL 3.0 Problem](/images/kamailio-transport/frame_480.jpg)
 
-Mierla는 "Willix guys가 매우 유용한 debugging 정보를 제공해주었다. 그 덕분에 실제 원인을 식별할 수 있었다"며, 실제 운영 환경에서 겪는 문제를 community의 협력으로 해결한 과정을 설명했다.
+Mierla는 "Willix 팀이 매우 유용한 debugging 정보를 제공해주었다. 그 덕분에 실제 원인을 식별할 수 있었다"며, 실제 운영 환경에서 겪는 문제를 community의 협력으로 해결한 과정을 설명했다.
 
 ![Original TCP Architecture](/images/kamailio-transport/frame_400.jpg)
 
@@ -285,14 +287,14 @@ Mierla는 개발 버전에서 더 진보된 multi-threading 작업이 진행 중
 
 - **Attribute access의 multi-threading migration** — config reload 등의 작업이 multi-threading 아키텍처에 맞게 재작성
 - **Config file reloading** — shared context space 절약
-- **WolfSSL 전면 전환** — 개발 버전에서 WolfSSL TLS module은 **multi-threading 전용**으로 동작. Victor가 "이 library에도 올바른 접근"이라고 판단
+- **WolfSSL 전면 전환** — 개발 버전에서 WolfSSL TLS module은 **multi-threading 전용**으로 동작. Victor가 "이 라이브러리를 사용하는 것이 적절한 접근"이라고 판단
 - **libSSL 4.0 대응** — 아직 major Linux distribution에 포함되지 않았지만, 이미 대응 작업 진행 중
 
 ![Development Version Progress](/images/kamailio-transport/frame_680.jpg)
 
 ### Auto-Mode 계획
 
-현재는 `tcp_main_threads = 1`을 명시적으로 설정해야 하지만, auto-detection mode가 계획 중이다:
+현재는 `tcp_main_threads = 1`을 명시적으로 설정해야 하지만, auto-detection mode가 구상 중이다:
 
 > TLS나 WolfSSL module이 load된 경우 자동으로 thread를 생성. 명시적 설정 불필요.
 
@@ -346,7 +348,7 @@ WebSocket client 개발을 위해 Mierla가 SIP Expresser 테스트 도구도 �
 - **Plain WebSocket 지원** — 기존에는 WSS만 지원
 - **강력한 인증 해시 알고리즘** — 최신/현대 해시 알고리즘 추가
 - **자동화 시나리오** — register 후 self-call, 두 user 간 call 등
-- **Presence testing** 추가 (아직 충분한 테스트 미완료)
+- **Presence testing** 추가 (테스트가 미완료 상태)
 
 ![SIP Expresser Updates](/images/kamailio-transport/frame_840.jpg)
 
