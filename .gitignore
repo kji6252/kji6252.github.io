@@ -27,3 +27,5 @@ vendor/ruby/
 
 # Video files (too large for GitHub)
 *.mp4
+images/spring-io-2026/
+images/spring-io-bootiful/
