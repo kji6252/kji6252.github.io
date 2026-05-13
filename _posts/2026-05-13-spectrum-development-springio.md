@@ -28,7 +28,7 @@ tags:
 이 문제를 해결하기 위해 2024년 크리스마스쯤 **Spectrum Development**를 발견했다. 그리고 이것이 화이트 코딩의 한계를 넘어서는 핵심 접근법이 되었다.
 
 
-![Spectrum Development 발견](images/spectrum-dev/frame_352.jpg)
+![Spectrum Development 발견](/images/spectrum-dev/frame_352.jpg)
 
 화이트 코딩이 실패하는 이유는 명확하다:
 - AI에게 컨텍스트 없이 "만들어줘"라고 하면, AI는 **그 순간의 프롬프트**만 보고 코드를 생성한다
@@ -47,7 +47,7 @@ Spectrum Development는 AI 기반 소프트웨어 개발 방법론으로, 세 �
 ### 3대 기둥
 
 
-![3대 기둥](images/spectrum-dev/frame_388.jpg)
+![3대 기둥](/images/spectrum-dev/frame_388.jpg)
 
 **1. Spec-centric — 명세가 소스 오브 트루스**
 
@@ -64,7 +64,7 @@ AI가 아니라 **개발자**가 중심이다. Claude Code의 Skills, MCP 서버
 ### Model-Driven Development(MDD)와의 차이
 
 
-![MDD와의 차이](images/spectrum-dev/frame_592.jpg)
+![MDD와의 차이](/images/spectrum-dev/frame_592.jpg)
 
 "또 모델 기반 개발인가?"라는 질문이 나올 수 있다. Simon은 명확히 구분한다:
 
@@ -86,12 +86,12 @@ AI가 아니라 **개발자**가 중심이다. Claude Code의 Skills, MCP 서버
 Simon이 소개하는 **AI Unify Process**는 Greenfield와 Brownfield 두 가지 워크플로우로 나뉜다.
 
 
-![AI Unify Process](images/spectrum-dev/frame_752.jpg)
+![AI Unify Process](/images/spectrum-dev/frame_752.jpg)
 
 ### Greenfield 워크플로우
 
 
-![Greenfield 워크플로우](images/spectrum-dev/frame_783.jpg)
+![Greenfield 워크플로우](/images/spectrum-dev/frame_783.jpg)
 
 새로운 프로젝트를 만들 때의 흐름:
 
@@ -108,7 +108,7 @@ Simon이 소개하는 **AI Unify Process**는 Greenfield와 Brownfield 두 가�
 ### Brownfield 워크플로우 (★ 핵심)
 
 
-![Brownfield 워크플로우](images/spectrum-dev/frame_917.jpg)
+![Brownfield 워크플로우](/images/spectrum-dev/frame_917.jpg)
 
 이 발표의 **하이라이트**는 기존 시스템 현대화 워크플로우다:
 
@@ -132,7 +132,7 @@ Simon이 소개하는 **AI Unify Process**는 Greenfield와 Brownfield 두 가�
 ## 실제 프로젝트 사례
 
 
-![PetClinic Entity Model](images/spectrum-dev/frame_1167.jpg)
+![PetClinic Entity Model](/images/spectrum-dev/frame_1167.jpg)
 
 ### 사례 1: 스위스 정부 프로젝트
 
@@ -158,7 +158,7 @@ Simon이 소개하는 **AI Unify Process**는 Greenfield와 Brownfield 두 가�
 ## 유스케이스 구조
 
 
-![유스케이스 그룹화](images/spectrum-dev/frame_1206.jpg)
+![유스케이스 그룹화](/images/spectrum-dev/frame_1206.jpg)
 
 Spectrum Development에서 사용하는 유스케이스는 **Ivar Jacobson** 템플릿을 기반으로 한다. 이것은 소프트웨어 엔지니어링에서 오랜 역사를 가진 검증된 형식이다:
 
@@ -176,7 +176,7 @@ Spectrum Development에서 사용하는 유스케이스는 **Ivar Jacobson** 템
 ### 유스케이스 작성의 실전 팁
 
 
-![유스케이스 상세 예시](images/spectrum-dev/frame_1286.jpg)
+![유스케이스 상세 예시](/images/spectrum-dev/frame_1286.jpg)
 
 유스케이스를 처음 작성할 때 어디서부터 시작해야 할지 막막할 수 있다. Simon은 다음과 같은 접근법을 추천한다:
 
@@ -206,7 +206,7 @@ Spectrum Development의 실제 구현은 Claude Code의 기능 위에서 이루�
 ### Skills 활용
 
 
-![Implement Skill 실행](images/spectrum-dev/frame_1587.jpg)
+![Implement Skill 실행](/images/spectrum-dev/frame_1587.jpg)
 
 Thomas Schilling의 세션에서도 강조되었지만, Claude Code Skills은 Spectrum Development의 핵심 인프라다.
 
@@ -221,7 +221,7 @@ Thomas Schilling의 세션에서도 강조되었지만, Claude Code Skills은 Sp
 **스킬 프론트매터의 역할:**
 
 
-![Implement 스킬 내용](images/spectrum-dev/frame_1620.jpg)
+![Implement 스킬 내용](/images/spectrum-dev/frame_1620.jpg)
 
 Skills에 프론트매터를 달면 AI가 **자동으로 언제 사용할지 판단**한다:
 
@@ -246,7 +246,7 @@ globs:
 ### MCP 서버
 
 
-![MCP 서버 목록](images/spectrum-dev/frame_1882.jpg)
+![MCP 서버 목록](/images/spectrum-dev/frame_1882.jpg)
 
 MCP(Model Context Protocol) 서버는 AI의 컨텍스트를 풍부하게 만드는 핵심 도구다. Simon이 실제 프로젝트에서 사용하는 MCP 서버들:
 
@@ -264,7 +264,7 @@ Thomas Schilling이 IntelliJ MCP를 강조했다면, Simon은 **JavaDoc MCP와 F
 ## 테스트 전략
 
 
-![테스트 전략](images/spectrum-dev/frame_2114.jpg)
+![테스트 전략](/images/spectrum-dev/frame_2114.jpg)
 
 명세 기반 개발에서 테스트는 **명세와 구현 사이의 계약**이다. Simon은 두 가지 테스트 전략을 소개한다:
 
@@ -307,7 +307,7 @@ public void processVolunteerRegistration(...) {
 ## 아키텍처가 AI 개발에 미치는 영향
 
 
-![아키텍처 영향](images/spectrum-dev/frame_2228.jpg)
+![아키텍처 영향](/images/spectrum-dev/frame_2228.jpg)
 
 이 발표에서 가장 실무적인 통찰은 **아키텍처 선택이 AI 개발의 성패를 가른다**는 것이다.
 
@@ -318,7 +318,7 @@ AI에게 프로젝트 전체를 주면 **컨텍스트 과부하**가 발생한�
 **Self-contained System**이 해결책이다:
 
 
-![Self-contained System](images/spectrum-dev/frame_2275.jpg)
+![Self-contained System](/images/spectrum-dev/frame_2275.jpg)
 
 ```
 ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
@@ -347,7 +347,7 @@ Vaadin, Thymeleaf, Next.js 같은 **풀스택 프레임워크**는 AI 개발에 
 ### Modular Monolith이 AI 개발에 최적
 
 
-![Modular Monolith](images/spectrum-dev/frame_2406.jpg)
+![Modular Monolith](/images/spectrum-dev/frame_2406.jpg)
 
 Simon의 결론은 명확하다:
 
