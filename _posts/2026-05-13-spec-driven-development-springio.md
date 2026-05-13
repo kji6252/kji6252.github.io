@@ -1,19 +1,19 @@
 ---
-title: "Spectrum Development — AI가 유스케이스를 읽고 코드를 짓다 (Spring I/O 2026)"
+title: "Spec-driven Development — AI가 바꾼 것과 바꾸지 못한 것 (Spring I/O 2026)"
 layout: post
 date: 2026-05-13 21:30:00
 categories:
   - AI
 tags:
   - AI
-  - SpectrumDevelopment
+  - SpecDrivenDevelopment
   - SpecDriven
   - SpringIO
   - ClaudeCode
   - AgenticDevelopment
 ---
 
-> **원본 영상:** [Spectrum Development — Simon Martinelli @ Spring I/O 2026](https://www.youtube.com/watch?v=35dH6q18UtI)
+> **원본 영상:** [Spec-driven Development — Simon Martinelli @ Spring I/O 2026](https://www.youtube.com/watch?v=35dH6q18UtI)
 >
 > **TL;DR** — 코드를 짜지 말고 **유스케이스(명세)**를 먼저 쓰세요. AI가 명세를 읽고 코드를 생성합니다. 기존 레거시 시스템은 AI가 코드에서 유스케이스를 **역추출**하고, 그걸로 새 앱을 만듭니다. 스프린트는 폐지하고 유스케이스 단위로 진행합니다. 결과: 현대화 프로젝트에서 신기능까지 자연스럽게 추가 가능.
 
@@ -25,10 +25,10 @@ tags:
 
 > "내가 뭘 만들고 있는지 모르겠다."
 
-이 문제를 해결하기 위해 2024년 크리스마스쯤 **Spectrum Development**를 발견했다. 그리고 이것이 화이트 코딩의 한계를 넘어서는 핵심 접근법이 되었다.
+이 문제를 해결하기 위해 2024년 크리스마스쯤 **Spec-driven Development**를 발견했다. 그리고 이것이 화이트 코딩의 한계를 넘어서는 핵심 접근법이 되었다.
 
 
-![Spectrum Development 발견](/images/spectrum-dev/frame_352.jpg)
+![Spec-driven Development 발견](/images/spectrum-dev/frame_352.jpg)
 
 화이트 코딩이 실패하는 이유는 명확하다:
 - AI에게 컨텍스트 없이 "만들어줘"라고 하면, AI는 **그 순간의 프롬프트**만 보고 코드를 생성한다
@@ -40,9 +40,9 @@ Thomas Schilling이 전날 세션에서 말했던 것과 정확히 같은教训�
 
 ---
 
-## Spectrum Development란?
+## Spec-driven Development란?
 
-Spectrum Development는 AI 기반 소프트웨어 개발 방법론으로, 세 가지 핵심 기둥 위에 서 있다.
+Spec-driven Development는 AI 기반 소프트웨어 개발 방법론으로, 세 가지 핵심 기둥 위에 서 있다.
 
 ### 3대 기둥
 
@@ -68,16 +68,16 @@ AI가 아니라 **개발자**가 중심이다. Claude Code의 Skills, MCP 서버
 
 "또 모델 기반 개발인가?"라는 질문이 나올 수 있다. Simon은 명확히 구분한다:
 
-| 측면 | MDD | Spectrum Development |
+| 측면 | MDD | Spec-driven Development |
 |---|---|---|
 | **결정론성** | 모델에서 항상 같은 코드 생성 | AI는 비결정론적 — 매번 다른 코드 가능 |
 | **검증** | 모델과 코드의 1:1 일치 | 테스트 통과면 OK |
 | **유연성** | 템플릿에 종속 | 프리텍스트에 따라 최적의 구현 선택 |
 | **비유** | 조립 라인 | 두 개발자에게 같은 과제를 준 것 |
 
-> "두 개발자에게 같은 과제를 주면 코드는 다르지만 결과는 같은 것" — Spectrum Development는 이것을 AI에게 허용한다.
+> "두 개발자에게 같은 과제를 주면 코드는 다르지만 결과는 같은 것" — Spec-driven Development는 이것을 AI에게 허용한다.
 
-핵심 차이는 **결과가 아니라 과정**에 있다. MDD는 결정론적이라 모든 엣지 케이스를 모델에 정의해야 한다. Spectrum은 AI가 비결정론적으로 코드를 작성하되, **유스케이스 테스트**가 통과하면 그 구현을 인정한다. 이것이 훨씬 현실적이고 확장 가능한 접근법이다.
+핵심 차이는 **결과가 아니라 과정**에 있다. MDD는 결정론적이라 모든 엣지 케이스를 모델에 정의해야 한다. Spec-driven Development는 AI가 비결정론적으로 코드를 작성하되, **유스케이스 테스트**가 통과하면 그 구현을 인정한다. 이것이 훨씬 현실적이고 확장 가능한 접근법이다.
 
 ---
 
@@ -103,7 +103,7 @@ Simon이 소개하는 **AI Unify Process**는 Greenfield와 Brownfield 두 가�
     → 병합
 ```
 
-이 워크플로우의 핵심은 **명세 작성이 AI 코딩보다 먼저**라는 점이다. Thomas Schilling의 Interview 스킬과 유사한 접근이지만, Spectrum은 더 포말한 유스케이스 템플릿을 사용한다.
+이 워크플로우의 핵심은 **명세 작성이 AI 코딩보다 먼저**라는 점이다. Thomas Schilling의 Interview 스킬과 유사한 접근이지만, Spec-driven Development는 더 포말한 유스케이스 템플릿을 사용한다.
 
 ### Brownfield 워크플로우 (★ 핵심)
 
@@ -160,7 +160,7 @@ Simon이 소개하는 **AI Unify Process**는 Greenfield와 Brownfield 두 가�
 
 ![유스케이스 그룹화](/images/spectrum-dev/frame_1206.jpg)
 
-Spectrum Development에서 사용하는 유스케이스는 **Ivar Jacobson** 템플릿을 기반으로 한다. 이것은 소프트웨어 엔지니어링에서 오랜 역사를 가진 검증된 형식이다:
+Spec-driven Development에서 사용하는 유스케이스는 **Ivar Jacobson** 템플릿을 기반으로 한다. 이것은 소프트웨어 엔지니어링에서 오랜 역사를 가진 검증된 형식이다:
 
 ### 유스케이스 필수 요소
 
@@ -192,7 +192,7 @@ Spectrum Development에서 사용하는 유스케이스는 **Ivar Jacobson** 템
 
 **실전에서는 Word 문서 26페이지 분량**의 유스케이스도 있다. 이 정도 되면 엔지니어뿐 아니라 비즈니스 사용자도 읽고 검증할 수 있는 수준이다.
 
-이것이 Spectrum Development의 숨겨진 장점이다. 유스케이스가 **자연어**로 작성되어 있기 때문에:
+이것이 Spec-driven Development의 숨겨진 장점이다. 유스케이스가 **자연어**로 작성되어 있기 때문에:
 - 비즈니스 사용자가 직접 요구사항을 검증할 수 있다
 - 개발자와 비개발자 간의 **의사소통 갭**이 줄어든다
 - AI가 읽을 수 있고 사람도 읽을 수 있는 **공통 언어**가 된다
@@ -201,14 +201,14 @@ Spectrum Development에서 사용하는 유스케이스는 **Ivar Jacobson** 템
 
 ## Claude Code Skills + MCP
 
-Spectrum Development의 실제 구현은 Claude Code의 기능 위에서 이루어진다.
+Spec-driven Development의 실제 구현은 Claude Code의 기능 위에서 이루어진다.
 
 ### Skills 활용
 
 
 ![Implement Skill 실행](/images/spectrum-dev/frame_1587.jpg)
 
-Thomas Schilling의 세션에서도 강조되었지만, Claude Code Skills은 Spectrum Development의 핵심 인프라다.
+Thomas Schilling의 세션에서도 강조되었지만, Claude Code Skills은 Spec-driven Development의 핵심 인프라다.
 
 **실제 사용 예:**
 
@@ -257,7 +257,7 @@ MCP(Model Context Protocol) 서버는 AI의 컨텍스트를 풍부하게 만드�
 | **Vaadin MCP** | Vaadin 컴포넌트에 대한 컨텍스트 제공 |
 | **Karibu Testing MCP** | Vaadin 테스트 프레임워크 지원 |
 
-Thomas Schilling이 IntelliJ MCP를 강조했다면, Simon은 **JavaDoc MCP와 Figma MCP**를 특히 강조한다. 이것은 Spectrum Development가 UI까지 포함한 풀스택 접근법임을 보여준다.
+Thomas Schilling이 IntelliJ MCP를 강조했다면, Simon은 **JavaDoc MCP와 Figma MCP**를 특히 강조한다. 이것은 Spec-driven Development가 UI까지 포함한 풀스택 접근법임을 보여준다.
 
 ---
 
@@ -373,13 +373,13 @@ Simon의 결론은 명확하다:
 
 ## 프로젝트 관리의 변화
 
-Spectrum Development는 소프트웨어 개발 방법론뿐 아니라 **프로젝트 관리 방식**도 근본적으로 바꾼다.
+Spec-driven Development는 소프트웨어 개발 방법론뿐 아니라 **프로젝트 관리 방식**도 근본적으로 바꾼다.
 
 ### 스프린트 폐지
 
 전통적인 애자일의 스프린트(Sprint) 개념을 폐지하고, **유스케이스 단위(compound flow)**로 전환한다:
 
-| 전통적 애자일 | Spectrum Development |
+| 전통적 애자일 | Spec-driven Development |
 |---|---|
 | 2주 스프린트 | 유스케이스 단위 진행 |
 | 스토리 포인트 | 유스케이스 복잡도 |
@@ -399,7 +399,7 @@ Spectrum Development는 소프트웨어 개발 방법론뿐 아니라 **프로�
 
 전통적인 현대화 프로젝트의 가장 큰 문제는 **"기존 기능만 그대로 옮기는"** 제약이었다. 사용자는 5년, 10년간 기다려온 신기능을 원하지만, 프로젝트 범위가 "기존 기능 유지"로 제한되면 결코 추가할 수 없었다.
 
-Spectrum Development는 이 제약을 완전히 해제한다:
+Spec-driven Development는 이 제약을 완전히 해제한다:
 - 사양에 새 기능을 추가하면 AI가 기존 기능과 함께 구현한다
 - 현대화와 신기능 개발이 **하나의 프로젝트**로 통합된다
 - 사용자 만족도가 극적으로 상승한다 — 마침내 기다리던 기능이 온다
@@ -430,7 +430,7 @@ Spectrum Development는 이 제약을 완전히 해제한다:
 
 ### 4. 도메인 지식은 AI의 것이 아니다
 
-AI는 코딩을 잘하지만, **비즈니스 도메인**을 이해하지 못한다. 아키텍처 결정, 비즈니스 룰 정의, 우선순위 결정은 여전히 **사람의 몫**이다. Spectrum Development는 이를 명확히 분리한다 — 사람은 명세를 쓰고, AI는 코드를 짠다.
+AI는 코딩을 잘하지만, **비즈니스 도메인**을 이해하지 못한다. 아키텍처 결정, 비즈니스 룰 정의, 우선순위 결정은 여전히 **사람의 몫**이다. Spec-driven Development는 이를 명확히 분리한다 — 사람은 명세를 쓰고, AI는 코드를 짠다.
 
 ### 5. 현대화 프로젝트의 패러다임 전환
 
@@ -440,7 +440,7 @@ AI는 코딩을 잘하지만, **비즈니스 도메인**을 이해하지 못한�
 
 ## 정리
 
-Simon Martinelli의 Spectrum Development는 AI 기반 소프트웨어 개발에 대한 **실무적이고 검증된 접근법**을 제시한다. 화이트 코딩의 한계를 명확히 인정하면서도, 그것을 넘어서는 방법을 구체적으로 보여준다.
+Simon Martinelli의 Spec-driven Development는 AI 기반 소프트웨어 개발에 대한 **실무적이고 검증된 접근법**을 제시한다. 화이트 코딩의 한계를 명확히 인정하면서도, 그것을 넘어서는 방법을 구체적으로 보여준다.
 
 Thomas Schilling의 세션(CLAUDE.md + Skills + Hooks)이 **에이전트 도구 셋업**에 집중했다면, Simon의 세션은 **프로세스와 방법론**에 집중한다. 두 발표를 함께 보면 AI 기반 개발의 전체 그림이 그려진다:
 
@@ -459,4 +459,4 @@ Thomas Schilling          Simon Martinelli
 
 ---
 
-> **원본 영상:** [Spectrum Development — Simon Martinelli @ Spring I/O 2026](https://www.youtube.com/watch?v=35dH6q18UtI)
+> **원본 영상:** [Spec-driven Development — Simon Martinelli @ Spring I/O 2026](https://www.youtube.com/watch?v=35dH6q18UtI)
