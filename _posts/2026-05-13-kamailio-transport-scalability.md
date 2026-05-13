@@ -31,6 +31,9 @@ Daniel-Constantin Mierla는 이 발표에서 Kamailio가 지원하는 transport 
 - **WebRTC ↔ SIP** — WebSocket을 통한 WebRTC client와 classic SIP 전화기 간 연결
 - **WebSocket Proxy** — Kamailio가 WebSocket proxy로 동작하는 신규 패턴
 
+![Kamailio Transport Layer Options](/images/kamailio-transport/frame_0.jpg)
+![Transport Use Cases](/images/kamailio-transport/frame_20.jpg)
+
 ---
 
 ## 소켓 설정: listen vs socket
@@ -48,6 +51,8 @@ listen=wss:192.168.1.100:443
 
 여러 번 선언할 수 있고, protocol과 port는 생략 가능하다. 생략 시 default port(5060)와 default transport(UDP)가 사용된다. interface 이름(예: `eth0`)도 IP 대신 지정할 수 있다.
 
+![Listen Directive](/images/kamailio-transport/frame_40.jpg)
+
 ### 구조화된 socket global parameter
 
 최근 major release에서 추가된 `socket` parameter는 더 구조화된 방식이다:
@@ -63,6 +68,8 @@ socket {
 - **bind** — 실제 binding할 주소
 - **advertise** — SIP header에 기록할 public 주소 (NAT 환경에서 유용)
 - **async_group** — UDP multi-threading에서 worker group 지정
+
+![Socket Global Parameter](/images/kamailio-transport/frame_80.jpg)
 
 명시적으로 `listen`이나 `socket`을 지정하지 않으면, Kamailio는 해당 시점에 사용 가능한 IP를 auto-discovery한다. IPv6까지 자동 발견하려면 `auto_bind_ipv6` global parameter를 설정해야 한다.
 
@@ -98,6 +105,8 @@ tcp_connection_lifetime = 3605
 
 공격자가 connection을 맺고 데이터를 보내지 않거나, 한 글자씩 10초마다 보내는 식으로 file descriptor를 소모하는 공격을 방어한다. 물론 이런 공격은 **firewall 단**에서 차단하는 것이 더 바람직하다.
 
+![TCP Security Options](/images/kamailio-transport/frame_120.jpg)
+
 ---
 
 ## Multi-Process Architecture (2001~)
@@ -109,6 +118,8 @@ Kamailio(SIP Express Router)의 초기 설계자인 Andre가 **2001년**에 mult
 - **경량 설계** — worker 간에 synchronization이 필요 없다. 각 process가 독립적인 memory space를 가지므로 shared resource에 대한 lock이 불필요
 - **안정성** — 한 worker가 crash해도 다른 process는 정상 동작
 - **UDP dispatching** — transport layer가 datagram을 읽어서 각 process에 하나씩 분배. Kamailio 자체가 아닌 OS가 receiving/distribution을 처리
+
+![Multi-Process Benefits](/images/kamailio-transport/frame_140.jpg)
 
 ### 단점
 
@@ -124,6 +135,8 @@ Socket 2 ──→ Worker 2 ──→ DB Connection 2
 Socket 3 ──→ Worker 3 ──→ DB Connection 3
 ... (socket/process 수에 비례하여 DB connection 증가)
 ```
+
+![Multi-Process Drawbacks](/images/kamailio-transport/frame_200.jpg)
 
 ---
 
@@ -143,6 +156,8 @@ udp_receive_mode = 2
 ```
 
 **Mode 1**은 각 listening socket마다 전용 receive thread를 생성하여, multi-process 모델에서 "소켓당 최소 1 process"가 필요했던 제약을 해소한다.
+
+![Multi-Threading UDP Architecture](/images/kamailio-transport/frame_240.jpg)
 
 ### async_workers와 Worker Group
 
@@ -167,10 +182,14 @@ socket {
 
 이 설정으로 특정 socket에 대해 **전용 worker thread pool**을 가질 수 있다. 예를 들어 carrier A 트래픽은 4개 thread로, carrier B 트래픽은 2개 thread로 처리하는 식의 세분화된 resource 분배가 가능하다.
 
+![udp_receive_mode Config](/images/kamailio-transport/frame_300.jpg)
+
 ### UDP Multi-Threading 장단점
 
 - **장점** — process 수 감소 → DB connection 감소, memory 공유로 효율 증가
 - **단점** — shared memory space를 사용하므로 synchronization 필요. config 내에서 shared data에 대한 concurrent access에 주의해야 함
+
+![Mixed Mode async_workers](/images/kamailio-transport/frame_360.jpg)
 
 ---
 
@@ -187,7 +206,11 @@ TCP/TLS에서의 multi-threading 도입은 더 복잡한 배경이 있다.
 2. 각 process가 독립적으로 SSL context를 사용
 3. 하지만 libSSL의 내부 state가 process 간에 일관되지 않아 **random crash** 발생
 
+![libSSL 3.0 Problem](/images/kamailio-transport/frame_480.jpg)
+
 Mierla는 "Willix guys가 매우 유용한 debugging 정보를 제공해주었다. 그 덕분에 실제 원인을 식별할 수 있었다"며, 실제 운영 환경에서 겪는 문제를 community의 협력으로 해결한 과정을 설명했다.
+
+![Original TCP Architecture](/images/kamailio-transport/frame_400.jpg)
 
 ### 해결책: tcp_main_threads
 
@@ -232,6 +255,8 @@ tcp_main_threads = 1 (Multi-Thread):
 
 이렇게 하면 모든 libSSL context와 thread-local data가 **동일한 process 내**에 존재하므로 안전하게 사용할 수 있다.
 
+![tcp_main_threads Solution](/images/kamailio-transport/frame_560.jpg)
+
 ### 주의사항
 
 - **v6.1 stable**부터 사용 가능
@@ -248,6 +273,8 @@ listen = tls:10.0.0.1:5061
 listen = wss:10.0.0.1:443
 ```
 
+![TCP TLS Multi-Threading Summary](/images/kamailio-transport/frame_620.jpg)
+
 ---
 
 ## 개발 버전의 진행 상황 (Devel)
@@ -260,6 +287,8 @@ Mierla는 개발 버전에서 더 진보된 multi-threading 작업이 진행 중
 - **Config file reloading** — shared context space 절약
 - **WolfSSL 전면 전환** — 개발 버전에서 WolfSSL TLS module은 **multi-threading 전용**으로 동작. Victor가 "이 library에도 올바른 접근"이라고 판단
 - **libSSL 4.0 대응** — 아직 major Linux distribution에 포함되지 않았지만, 이미 대응 작업 진행 중
+
+![Development Version Progress](/images/kamailio-transport/frame_680.jpg)
 
 ### Auto-Mode 계획
 
@@ -306,6 +335,8 @@ ws_send("wss://example.com:443/ws");
 
 `t_relay`가 SIP address를 기대하는 반면, WebSocket client는 host/port/path가 필요하므로 이를 어떻게 통합할지가 과제다.
 
+![WebSocket Client Feature](/images/kamailio-transport/frame_760.jpg)
+
 ---
 
 ## SIP Expresser (테스트 도구) 업데이트
@@ -316,6 +347,8 @@ WebSocket client 개발을 위해 Mierla가 SIP Expresser 테스트 도구도 �
 - **강력한 인증 해시 알고리즘** — 최신/현대 해시 알고리즘 추가
 - **자동화 시나리오** — register 후 self-call, 두 user 간 call 등
 - **Presence testing** 추가 (아직 충분한 테스트 미완료)
+
+![SIP Expresser Updates](/images/kamailio-transport/frame_840.jpg)
 
 ---
 
