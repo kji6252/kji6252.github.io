@@ -39,6 +39,50 @@ Pi(부모 세션)가 작업을 전문 자식 에이전트에게 위임하는 구
 
 **핵심:** 에이전트 팀은 자동으로 돌아가지 않는다. 사용자가 자연어로 지시하거나 슬래시 커맨드로 실행해야 한다.
 
+```mermaid
+graph TB
+    subgraph user["사용자"]
+        prompt["자연어 지시 / 슬래시 커맨드"]
+    end
+
+    subgraph pi["Pi 부모 세션"]
+        parent["Pi Agent"]
+    end
+
+    subgraph agents["자식 에이전트 독립 세션"]
+        scout["scout<br/>코드 파악"]
+        researcher["researcher<br/>외부 조사"]
+        planner["planner<br/>계획 수립"]
+        worker["worker<br/>실제 구현"]
+        reviewer["reviewer<br/>코드 리뷰"]
+        oracle["oracle<br/>2번 의견"]
+        contextbuilder["context-builder<br/>컨텍스트 수집"]
+        delegate["delegate<br/>일반 위임"]
+    end
+
+    prompt -->|지시| parent
+    parent -->|위임| scout
+    parent -->|위임| researcher
+    parent -->|위임| planner
+    parent -->|위임| worker
+    parent -->|위임| reviewer
+    parent -->|위임| oracle
+    parent -->|위임| contextbuilder
+    parent -->|위임| delegate
+
+    style user fill:#e7f5ff,stroke:#1971c2
+    style pi fill:#ffe3e3,stroke:#c92a2a
+    style agents fill:#d3f9d8,stroke:#2f9e44
+    style scout fill:#fff3bf,stroke:#e67700
+    style researcher fill:#fff3bf,stroke:#e67700
+    style planner fill:#fff3bf,stroke:#e67700
+    style worker fill:#ffd8a8,stroke:#d9480f
+    style reviewer fill:#ffd8a8,stroke:#d9480f
+    style oracle fill:#d0bfff,stroke:#5f3dc4
+    style contextbuilder fill:#fff3bf,stroke:#e67700
+    style delegate fill:#d0bfff,stroke:#5f3dc4
+```
+
 ## 내장 에이전트
 
 `pi-subagents`를 설치하면 8개의 전문 에이전트를 바로 사용할 수 있다.
@@ -112,7 +156,19 @@ scout로 코드베이스를 파악하고, 그 결과로 planner에게 계획을 
 
 ## 단계별 설정 옵션
 
-체인 실행 시 각 단계마다 세밀하게 설정 가능:
+체인 실행 시 각 단계마다 세밀하게 설정 가능. 앞 단계의 `output`을 뒤 단계의 `reads`로 연결하면 에이전트 간 데이터 파이프라인이 만들어진다:
+
+```mermaid
+graph LR
+    A["scout<br/>output=context.md"] -->|파일 전달| B["planner<br/>reads=context.md"]
+    B -->|output=plan.md| C["worker<br/>reads=plan.md"]
+    C -->|완료 알림| D["reviewer<br/>fresh context"]
+
+    style A fill:#fff3bf,stroke:#e67700
+    style B fill:#fff3bf,stroke:#e67700
+    style C fill:#ffd8a8,stroke:#d9480f
+    style D fill:#ffe3e3,stroke:#c92a2a
+```
 
 ```
 /chain scout[output=context.md] "코드 스캔" -> planner[reads=context.md] "인증 분석"
@@ -170,23 +226,50 @@ max_turns: 30
 
 Pi 공식이 추천하는 오케스트레이션 패턴:
 
-```
-확인(clarify) → 계획(planner) → 구현(worker) → 리뷰(reviewer) → 수정(worker)
+```mermaid
+graph TB
+    clarify["사용자<br/>요청/확인"] --> planner
+    planner["planner<br/>계획 수립"] --> worker
+    worker["worker<br/>구현"] --> reviewer1
+    reviewer1["reviewer #1<br/>fresh context 리뷰"] -->|"수정사항"| worker
+    reviewer1 -->|"승인"| done["완료"]
+
+    style clarify fill:#e7f5ff,stroke:#1971c2
+    style planner fill:#fff3bf,stroke:#e67700
+    style worker fill:#ffd8a8,stroke:#d9480f
+    style reviewer1 fill:#ffe3e3,stroke:#c92a2a
+    style done fill:#d3f9d8,stroke:#2f9e44
 ```
 
 실전에서 자주 쓰는 패턴들:
 
-**1) 병렬 코드 리뷰:**
+**1) 병렬 코드 리뷰 — 3명의 리뷰어가 동시에 서로 다른 관점에서 검토:**
+
+```mermaid
+graph TB
+    parent["Pi"] -->|"지시"| r1
+    parent -->|"지시"| r2
+    parent -->|"지시"| r3
+    r1["reviewer #1<br/>보안 관점"] -->|"결과 종합"| parent
+    r2["reviewer #2<br/>성능 관점"] -->|"결과 종합"| parent
+    r3["reviewer #3<br/>아키텍처 관점"] -->|"결과 종합"| parent
+
+    style parent fill:#ffe3e3,stroke:#c92a2a
+    style r1 fill:#d0bfff,stroke:#5f3dc4
+    style r2 fill:#d0bfff,stroke:#5f3dc4
+    style r3 fill:#d0bfff,stroke:#5f3dc4
+```
+
 ```
 /parallel reviewer "보안 관점 리뷰" -> reviewer "성능 관점 리뷰" -> reviewer "아키텍처 관점 리뷰"
 ```
 
-**2) 컨텍스트 빌드 → 계획 → 구현:**
+**2) 컨텍스트 빌드 → 계획 → 구현 — 순차 체인:**
 ```
 /chain context-builder "수집" -> planner "계획" -> worker "구현" -> reviewer "리뷰"
 ```
 
-**3) 외부 조사 + 코드 분석:**
+**3) 외부 조사 + 코드 분석 — 병렬로 내외부 컨텍스트 수집:**
 ```
 /parallel-research
 ```
