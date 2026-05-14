@@ -23,6 +23,7 @@ tags:
 > # ~/.pi/agent/settings.json에 Provider/모델 설정
 > cd /path/to/project && pi                         # 바로 시작
 > ```
+> {: .prompt-info }
 
 ---
 
@@ -100,7 +101,7 @@ npm install -g @earendil-works/pi-coding-agent
 npx @robzolkos/lazypi    # 확장, 스킬, 테마 한번에
 ```
 
-> 기존 `.agents/skills/` 디렉토리를 Pi와 공유하므로 Claude Code에서 쓰던 스킬이 그대로 작동한다.
+> 기존 `.agents/skills/` 디렉토리를 Pi와 공유하므로 Claude Code에서 쓰던 스킬이 그대로 작동한다.  {: .prompt-tip }
 
 #### LazyPi가 뭔가
 
@@ -129,7 +130,7 @@ npx @robzolkos/lazypi
 | 테마 | 기본 2개 | 76개 커뮤니티 테마 |
 | MCP 연동 | 수동 설정 | 자동 구성 |
 
-> **핵심:** LazyPi는 Claude Code 사용자가 Pi로 넘어올 때 겪는 **"초기 설정 장벽"**을 사실상 제거한다. 설치 후 `settings.json`에 Provider와 모델만 지정하면 바로 Claude Code와 동등한 환경이 완성된다.
+> **핵심:** LazyPi는 Claude Code 사용자가 Pi로 넘어올 때 겪는 **"초기 설정 장벽"**을 사실상 제거한다. 설치 후 `settings.json`에 Provider와 모델만 지정하면 바로 Claude Code와 동등한 환경이 완성된다.  {: .prompt-tip }
 
 **설치 후 확인:**
 ```bash
@@ -232,7 +233,7 @@ cp ~/.claude/plans/관련-플랜들.md {프로젝트}/.archive/claude-plans/
 
 ## 결론
 
-> Claude Code는 **"설정 없이 바로 쓰는"** 도구, Pi는 **"내 맘대로 조립하는"** 도구다.
+> Claude Code는 **"설정 없이 바로 쓰는"** 도구, Pi는 **"내 맘대로 조립하는"** 도구다.  {: .prompt-tip }
 
 **Claude Code에 머물러야 할 경우:**
 - Claude 모델만으로 충분하고, 비용이 문제 없다면

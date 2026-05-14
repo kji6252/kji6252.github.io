@@ -12,7 +12,7 @@ tags:
   - Spring I/O 2026
 ---
 
-> Josh Long이 Spring I/O 2026(Barcelona)에서 **Spring Boot 4 + Spring Framework 7 + Spring Security 7**의 핵심 기능을 42분간 라이브 코딩으로 시연한 발표. 개발자가 **더 적은 코드로 더 많은 것**을 할 수 있게 된 Spring의 새로운 시대.
+> Josh Long이 Spring I/O 2026(Barcelona)에서 **Spring Boot 4 + Spring Framework 7 + Spring Security 7**의 핵심 기능을 42분간 라이브 코딩으로 시연한 발표. 개발자가 **더 적은 코드로 더 많은 것**을 할 수 있게 된 Spring의 새로운 시대.  {: .prompt-info }
 
 ---
 

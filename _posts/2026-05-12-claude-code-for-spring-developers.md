@@ -17,7 +17,8 @@ tags:
 
 > **원본 영상:** [Claude Code for Spring Developers — Thomas Schilling @ Spring I/O 2026](https://www.youtube.com/watch?v=PmW4-tcMQbc)
 >
-> **TL;DR** — Claude Code를 Spring/Kotlin 프로젝트에서 3개월간 실전 사용한 결과: 3,700 커밋, 1,700 세션, 커밋 속도 5배 증가. 핵심은 Claude 자체가 아니라 **CLAUDE.md, Skills, Hooks, Specs**로 구성된 "셋업의 복리"에 있다. 속도는 무료지만, **규율은 당신의 몫**이다.
+
+> **TL;DR** — Claude Code를 Spring/Kotlin 프로젝트에서 3개월간 실전 사용한 결과: 3,700 커밋, 1,700 세션, 커밋 속도 5배 증가. 핵심은 Claude 자체가 아니라 **CLAUDE.md, Skills, Hooks, Specs**로 구성된 "셋업의 복리"에 있다. 속도는 무료지만, **규율은 당신의 몫**이다.  {: .prompt-info }
 
 ---
 
@@ -170,7 +171,7 @@ Gradle compileKotlin compileTestKotlin
 **3. 멀티인스턴스 안전**
 인메모리 상태 금지, DB 체크 사용. 분산 합의에는 advisory lock. 이 규칙은 Claude가 코드만으로는 추론할 수 없는 **아키텍처 수준 결정**이다.
 
-> 규칙이 advisory lock을 설명하지 않는다 — `advisorylock.kt` 파일을 가리킨다. Claude가 필요할 때 파일을 읽는다. CLAUDE.md는 짧게, 지식은 정확하게.
+> 규칙이 advisory lock을 설명하지 않는다 — `advisorylock.kt` 파일을 가리킨다. Claude가 필요할 때 파일을 읽는다. CLAUDE.md는 짧게, 지식은 정확하게.  {: .prompt-tip }
 
 ### 컨텍스트 3계층
 
@@ -201,7 +202,7 @@ auto memory        → 사용자 폴더, Git 미추적 (발표자는 비활성�
 - **CLAUDE.md** — 세션 시작 시 로드, 대화가 길어지면 주의력 이탈
 - **Skills** — 이름+설명만 로드, **호출 시점에 전체 내용이 fresh injection**
 
-> CLAUDE.md는 "항상 X를 해라" 규칙, Skills는 "TDD 단계" 같은 상세 워크플로우.
+> CLAUDE.md는 "항상 X를 해라" 규칙, Skills는 "TDD 단계" 같은 상세 워크플로우.  {: .prompt-tip }
 
 ### 발표자의 4대 핵심 스킬
 
@@ -292,7 +293,7 @@ Pre-tool use 훅이 모든 tool call 전에 실행. `exit 2`를 반환하면 Cla
 
 **해결:** Detekt에 forbidden import 규칙 추가 → Jackson 3의 `JsonMapper`를 대안으로 제시 → Post-tool use 훅이 매 수정 후 즉시 감지 → Claude가 **같은 턴에서 수정**
 
-> **그 실수는 두 번 다시 일어날 수 없다.** 제약이 자동화되었으므로.
+> **그 실수는 두 번 다시 일어날 수 없다.** 제약이 자동화되었으므로.  {: .prompt-tip }
 
 ### 훅 vs 스킬 vs CLAUDE.md
 
@@ -302,7 +303,7 @@ Skills     → 호출 시 fresh, BUT 컨텍스트에서 이탈 가능
 Hooks      → 매번 실행, 강제, 무시 불가
 ```
 
-> **훅에 넣을 수 있다면 훅에 넣어라.**
+> **훅에 넣을 수 있다면 훅에 넣어라.**  {: .prompt-tip }
 
 ---
 
@@ -328,7 +329,7 @@ MCP(Model Context Protocol)로 Claude가 코드베이스 밖의 도구에 접근
 
 **With MCP:** Claude가 `reformat file` 호출, 자동 import 최적화, run configuration 재실행 → **에이전트가 IDE를 당신처럼 사용**
 
-> IDE가 에이전트의 API가 된다. 이것이 **Agent Developer Experience**다.
+> IDE가 에이전트의 API가 된다. 이것이 **Agent Developer Experience**다.  {: .prompt-tip }
 
 ### MCP Steward 프로젝트 비전
 
@@ -354,7 +355,7 @@ Use "reformat file" instead of sed for formatting.
 
 **여기서 시작해야 한다.** 설명 → 관찰 → 리다이렉트. 버그 수정, 소규모 기능에 적합. 에이전트의 사고방식을 체득하는 시간.
 
-> 자율 에이전트부터 시작하면 실패를 이해하지 못한다.
+> 자율 에이전트부터 시작하면 실패를 이해하지 못한다.  {: .prompt-warning }
 
 ### Level 2: Plan Mode
 
@@ -372,7 +373,7 @@ Use "reformat file" instead of sed for formatting.
 
 ### Level 4: Ralph — 자율 루프
 
-> Claude는 게으르다. 스킬을 스킵하고, 코너를 자르고, 계획의 단계를 누락한다.
+> Claude는 게으르다. 스킬을 스킵하고, 코너를 자르고, 계획의 단계를 누락한다.  {: .prompt-warning }
 
 **해결책:** Ralph — 단순한 **bash while 루프**.
 
@@ -415,7 +416,7 @@ Claude Code + OpenAI Codex를 같은 브랜치/프롬프트로 병렬 코드 리
 
 [handy.computer](https://handy.computer) — 오픈소스, 로컬 실행, 사용량 무제한.
 
-> 타이핑하면 게을러지지만, 말하면 사고 과정이 드러난다. Claude가 다듬어진 프롬프트가 아닌 **사고 과정**을 본다.
+> 타이핑하면 게을러지지만, 말하면 사고 과정이 드러난다. Claude가 다듬어진 프롬프트가 아닌 **사고 과정**을 본다.  {: .prompt-tip }
 
 ### Worktree — 병렬 에이전트 환경
 
@@ -454,7 +455,7 @@ Claude Code + OpenAI Codex를 같은 브랜치/프롬프트로 병렬 코드 리
 
 단축키는 없다. 하지만 **셋업이 복리**로 쌓인다:
 
-> 모든 규칙, 모든 스킬, 모든 세션 — Claude가 프로젝트에 대해 더 잘 알게 된다. AI가 똑똑해져서가 아니라, **셋업이 프로젝트를 더 많이 알게 되어서** 빨라진다.
+> 모든 규칙, 모든 스킬, 모든 세션 — Claude가 프로젝트에 대해 더 잘 알게 된다. AI가 똑똑해져서가 아니라, **셋업이 프로젝트를 더 많이 알게 되어서** 빨라진다.  {: .prompt-tip }
 
 ---
 

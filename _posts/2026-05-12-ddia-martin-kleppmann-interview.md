@@ -12,7 +12,7 @@ tags:
   - DataEngineering
 ---
 
-> **TL;DR** — *Designing Data-Intensive Applications*의 저자 Martin Kleppmann이 스타트업 실패·성공, LinkedIn 데이터 인프라 경험, 4년의 집필 과정을 돌아본다. 2판에서는 MapReduce를 과감히 삭제하고 클라우드 네이티브·벡터 인덱스·데이터프레임을 추가했다. 이후 그의 연구는 **Local-First Software**(CRDT, Automerge), **형식 검증**(TLA+, Isabelle), 그리고 **암호학적 공급망 증명**으로 확장된다. 산업 경험이 있어야 학계 연구가 빛나고, 학계의 제일원칙 사고가 산업을 한 단계 끌어올린다는 그의 메시지를 정리했다.
+> **TL;DR** — *Designing Data-Intensive Applications*의 저자 Martin Kleppmann이 스타트업 실패·성공, LinkedIn 데이터 인프라 경험, 4년의 집필 과정을 돌아본다. 2판에서는 MapReduce를 과감히 삭제하고 클라우드 네이티브·벡터 인덱스·데이터프레임을 추가했다. 이후 그의 연구는 **Local-First Software**(CRDT, Automerge), **형식 검증**(TLA+, Isabelle), 그리고 **암호학적 공급망 증명**으로 확장된다. 산업 경험이 있어야 학계 연구가 빛나고, 학계의 제일원칙 사고가 산업을 한 단계 끌어올린다는 그의 메시지를 정리했다.  {: .prompt-info }
 
 ---
 

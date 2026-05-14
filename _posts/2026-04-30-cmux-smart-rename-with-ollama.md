@@ -14,7 +14,7 @@ tags:
   - LocalLLM
 ---
 
-> 로컬 Ollama로 Claude Code 세션 내용을 요약해서 cmux 탭 이름을 자동으로 설정하는 방법
+> 로컬 Ollama로 Claude Code 세션 내용을 요약해서 cmux 탭 이름을 자동으로 설정하는 방법  {: .prompt-info }
 
 ## 배경
 
@@ -156,7 +156,7 @@ chmod +x ~/.local/bin/cmux-smart-rename.sh
 }
 ```
 
-> `bash`로 감싸면 `~` 경로 확장이 확실히 동작합니다. 절대경로 대신 `~`를 사용하면 다른 사용자와 설정 공유가 용이합니다.
+> `bash`로 감싸면 `~` 경로 확장이 확실히 동작합니다. 절대경로 대신 `~`를 사용하면 다른 사용자와 설정 공유가 용이합니다.  {: .prompt-info }
 
 ### 3. 동작 확인
 
