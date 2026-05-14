@@ -1,145 +1,162 @@
-# Jekyll + Just the Docs Configuration
+# The Site Configuration
 
-# Site settings
+# Import the theme
+theme: jekyll-theme-chirpy
+
+# The language of the webpage
+lang: ko-KR
+
+# Change to your timezone
+timezone: Asia/Seoul
+
+# jekyll-seo-tag settings
 title: 종인의 기술 블로그
-description: Jongin's Tech Blog - Java, Spring, JavaScript 개발 블로그
-# Base URL helps with GitHub Pages deployment
-# Uncomment and adjust if needed:
-# baseurl: ""
 
-# URL settings
-url: https://pallidev.github.io
+tagline: Jongin's Tech Blog
 
-# Just the Docs theme settings
-theme: just-the-docs
+description: >-
+  Java, Spring, JavaScript 개발 블로그 - Jongin's Tech Blog
 
-# Set the theme color scheme
-color_scheme: light
+# Fill in the protocol & hostname for your site
+url: "https://pallidev.github.io"
 
-# Enable or disable the site search
-search_enabled: true
+github:
+  username: pallidev
 
-# Search configuration
-search:
-  # Split pages into sections that can be searched individually
-  heading_level: 2
-  # Maximum amount of previews per search result
-  previews: 3
-  # Maximum amount of words to display before a matched word in preview
-  preview_words_before: 5
-  # Maximum amount of words to display after a matched word in preview
-  preview_words_after: 10
-  # Display relative url in search results
-  rel_url: true
-  # Enable or disable the search button
-  button: false
+social:
+  name: Jongin Kim
+  links:
+    - https://github.com/pallidev
 
-# Aux links for upper right navigation
-aux_links:
-  "GitHub":
-    - "https://github.com/pallidev"
+# Web Analytics Settings
+analytics:
+  google:
+    id: # fill in your Google Analytics ID
 
-# Makes Aux links open in a new tab
-aux_links_new_tab: true
+# Prefer color scheme setting.
+# Available options:
+#     light — Use the light color scheme
+#     dark — Use the dark color scheme
+#     (empty) — Follow the system preference with toggle
+theme_mode:
 
-# Heading anchor links appear on hover over h1-h6 tags
-heading_anchors: true
+# The avatar on sidebar
+avatar: "/images/avatar.jpg"
 
-# Footer content
-footer_content: "Copyright &copy; 2024 Jongin Kim. Distributed by an <a href=\"https://github.com/pallidev/pallidev.github.io/blob/master/LICENSE\">MIT license.</a>"
+# The URL of the site-wide social preview image used in SEO `og:image` meta tag
+social_preview_image:
 
-# Footer last edited timestamp
-last_edit_timestamp: true
-last_edit_time_format: "%Y-%m-%d %H:%M"
+# Global TOC switch for posts
+toc: true
 
-# Footer "Edit this page on GitHub" link
-gh_edit_link: true
-gh_edit_link_text: "페이지 수정하기"
-gh_edit_repository: "https://github.com/pallidev/pallidev.github.io"
-gh_edit_branch: "jekyll-migration"
-gh_edit_view_mode: "tree"
+# Comments
+comments:
+  provider:
 
-# Navigation sidebar
-nav_sort: case_insensitive
+# PWA
+pwa:
+  enabled: true
+  cache:
+    enabled: true
+    deny_paths:
 
-# Collections for posts
+paginate: 10
+
+baseurl: ""
+
+# ------------ The following options are not recommended to be modified ------------------
+
+kramdown:
+  footnote_backlink: "&#8617;&#xfe0e;"
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+      start_line: 1
+
 collections:
-  posts:
-    permalink: /:categories/:title/
+  tabs:
     output: true
+    sort_by: order
   docs:
-    permalink: /:collection/:path/
     output: true
+    permalink: /:collection/:path/
   redis_patterns:
-    permalink: /:collection/:path/
     output: true
+    permalink: /:collection/:path/
 
-# Default layout for pages
 defaults:
   - scope:
       path: ""
-      type: "pages"
+      type: posts
     values:
-      layout: "default"
+      layout: post
+      comments: true
+      toc: true
+      permalink: /posts/:title/
   - scope:
-      path: "docs"
-      type: "docs"
+      path: _drafts
     values:
-      layout: "default"
+      comments: false
   - scope:
-      path: "redis_patterns"
-      type: "redis_patterns"
+      path: ""
+      type: tabs
     values:
-      layout: "default"
+      layout: page
+      permalink: /:title/
+  - scope:
+      path: ""
+      type: docs
+    values:
+      layout: page
+  - scope:
+      path: ""
+      type: redis_patterns
+    values:
+      layout: page
 
-# Just the Docs collections configuration
-just_the_docs:
-  collections:
-    posts:
-      name: 블로그 포스트
-      child_nav_order: reversed
-    docs:
-      name: Claude & Obsidian 가이드
-    redis_patterns:
-      name: Redis Design Patterns
+sass:
+  style: compressed
 
-# Plugins
-plugins:
-  - jekyll-seo-tag
-  - jekyll-sitemap
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  profile: false
+  blanklines: false
+  ignore:
+    envs: [development]
 
-# Markdown processor
-markdown: kramdown
-kramdown:
-  syntax_highlighter_opts:
-    block:
-      line_numbers: false
-
-# Exclude from processing
 exclude:
-  - .sass-cache/
-  - .jekyll-cache/
-  - gemfiles/
-  - Gemfile
-  - Gemfile.lock
-  - node_modules/
-  - vendor/bundle/
-  - vendor/cache/
-  - vendor/gems/
-  - vendor/ruby/
+  - "*.gem"
+  - "*.gemspec"
+  - docs
+  - tools
   - README.md
   - LICENSE
-  - package.json
-  - package-lock.json
-  - yarn.lock
-  - _config.yml
+  - purgecss.js
+  - "*.config.js"
+  - "package*.json"
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - CLAUDE.md
   - scaffolds/
   - source/
   - themes/
   - .idea/
-  - .gitignore
   - docs/Claude-Obsidian-Guide/Templates/
 
-# Build settings
-timezone: Asia/Seoul
+jekyll-archives:
+  enabled: [categories, tags]
+  layouts:
+    category: category
+    tag: tag
+  permalinks:
+    tag: /tags/:name/
+    category: /categories/:name/
+
 future: true

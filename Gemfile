@@ -1,28 +1,19 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
-# Ruby 4.0 compatibility
-gem "logger"
-gem "base64"
-gem "bigdecimal"
-gem "mutex_m"
+# Chirpy theme
+gem "jekyll-theme-chirpy", "~> 7.5"
 
-# Just the Docs theme
-gem "just-the-docs", "~> 0.11"
-
-# Jekyll
-gem "jekyll", "~> 3.10"
-gem "kramdown-parser-gfm"
-
-# Jekyll plugins
-group :jekyll_plugins do
-  gem "jekyll-seo-tag"
-  gem "jekyll-sitemap"
+# For html-proofer (optional test tool)
+group :test do
+  gem "html-proofer", "~> 5.0"
 end
 
 # Windows and JRuby compatibility
-gem "tzinfo", ">= 1", "< 3"
-gem "tzinfo-data"
+platforms :windows, :jruby do
+  gem "tzinfo", ">= 1", "< 3"
+  gem "tzinfo-data"
+end
 
-# Lock `http_parser.rb` gem to `v0.6.x` on JRuby builds since newer versions of the gem
-# do not have a Java counterpart.
-gem "http_parser.rb", "~> 0.6.0", platforms: [:jruby]
+gem "wdm", "~> 0.2.0", platforms: [:windows]
