@@ -45,7 +45,8 @@ tags:
 
 ![stovepiping2](https://user-images.githubusercontent.com/6037055/43313938-67e402be-91cc-11e8-844b-38bae1501d22.png)
 
-> 같은이름의 Service,Controller,DAO를 생성해서 만드는것보단 관심사로 나누어서 설계하는게 핵심  {: .prompt-tip }
+> 같은이름의 Service,Controller,DAO를 생성해서 만드는것보단 관심사로 나누어서 설계하는게 핵심
+{: .prompt-tip }
 
 # 2\. 스마트 DAO : 대부분의 비지니스 로직을 프로그래밍 언어가 아닌 SQL에 담고 프로그래밍 언어는 이 SQL를 준비하고 실행하고 결과를 받는 작업만 수행하는데 사용
 
@@ -68,7 +69,8 @@ FROM users WHERE UID = 1;
 
 > SQL에 모든 로직을 담는건 안좋다고 말씀하셨습니다. 그래서 데이터 가공은 애플리케이션에서 하고 데이터 입출력을 SQL로 쓰는게 좋아 보임
 > 
-> SQL 추상화 기술을 추천 (ORM, Active Record, Query Builder, Table Data Gateway)  {: .prompt-tip }
+> SQL 추상화 기술을 추천 (ORM, Active Record, Query Builder, Table Data Gateway)
+{: .prompt-tip }
 
 # 3\. 뒤범벅 아키텍처 : 애플리케이션의 횡적인 설계 요소와 종적인 설계 요소가 혼합되어서 변경에 취약한 아키텍처가 만들어짐
 
@@ -102,7 +104,8 @@ FROM users WHERE UID = 1;
 
 > 클린코드 라는 책에서 나온 함수 작성법 이라고 말씀하셨습니다.
 >
-> 자바8의 람다식을 통해 함수도 추상화가 가능하시다고 말씀!  {: .prompt-info }
+> 자바8의 람다식을 통해 함수도 추상화가 가능하시다고 말씀!
+{: .prompt-info }
 
 # 5\. 하는 놈 따로, 아는 놈 따로 : OOP 언어를 사용하고 클래스를 만들지만 사실은 여전히 구조적으로 프로그래밍을 하므로 로직과 데이터가 애플리케이션 전체적으로 분리되어 있다.
 
@@ -138,7 +141,8 @@ DB의존적 애플리케이션 : 모든 상태를 DB에만 보관, 상태 조작
 > *   조합 메서드를 활용하고 DSL을 개발하라
 > *   도메인 모델을 도입하라
 > *   큰 서비스를 작은 클래스로 분해하고 위임하라
-> *   높은 응집도와 낮은 결합도를 갖도록 설계하라  {: .prompt-tip }
+> *   높은 응집도와 낮은 결합도를 갖도록 설계하라
+{: .prompt-tip }
 
 # 기타
 

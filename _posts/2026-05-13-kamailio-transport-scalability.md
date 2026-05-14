@@ -16,7 +16,8 @@ tags:
 
 > **원본 영상:** [Transport Layer Scalability – Multi Processing And Multi Threading — Daniel-Constantin Mierla @ Kamailio World 2026](https://www.youtube.com/watch?v=f0_xkXucO_U)
 
-> **TL;DR** — Kamailio는 2001년부터 multi-process 아키텍처로 SIP traffic을 처리해왔다. 최근 릴리스에서 UDP와 TLS transport layer에 대해 **multi-threading** 기반 처리가 추가되었다. UDP는 `udp_receive_mode`로 스레드 기반 수신이 가능하고, TLS는 libSSL의 thread-safety 문제(Heartbleed 이후)를 `tcp_main_threads`라는 전용 스레드 모델로 해결했다. 아직 default는 multi-process지만, 향후 multi-threading이 표준이 될 방향이다.  {: .prompt-info }
+> **TL;DR** — Kamailio는 2001년부터 multi-process 아키텍처로 SIP traffic을 처리해왔다. 최근 릴리스에서 UDP와 TLS transport layer에 대해 **multi-threading** 기반 처리가 추가되었다. UDP는 `udp_receive_mode`로 스레드 기반 수신이 가능하고, TLS는 libSSL의 thread-safety 문제(Heartbleed 이후)를 `tcp_main_threads`라는 전용 스레드 모델로 해결했다. 아직 default는 multi-process지만, 향후 multi-threading이 표준이 될 방향이다.
+{: .prompt-info }
 
 ---
 
@@ -296,7 +297,8 @@ Mierla는 개발 버전에서 더 진보된 multi-threading 작업이 진행 중
 
 현재는 `tcp_main_threads = 1`을 명시적으로 설정해야 하지만, auto-detection mode가 구상 중이다:
 
-> TLS나 WolfSSL module이 load된 경우 자동으로 thread를 생성. 명시적 설정 불필요.  {: .prompt-info }
+> TLS나 WolfSSL module이 load된 경우 자동으로 thread를 생성. 명시적 설정 불필요.
+{: .prompt-info }
 
 현재 WSS module의 경우, `tcp_main_threads`를 설정하지 않으면 **startup error**를 발생시키고 log에 설정 필요 메시지를 출력한다.
 
