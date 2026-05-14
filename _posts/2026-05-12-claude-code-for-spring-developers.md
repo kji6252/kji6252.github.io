@@ -368,7 +368,7 @@ Use "reformat file" instead of sed for formatting.
 - 반복 1: 테스트 0, 버그 8개, 스펙 없음
 - 반복 4: 테스트 37개, 설계 결정 20개, CLAUDE.md 규칙 8개 추가
 
-![Ralph: bash while 루프로 자율 실행]({{ site.baseurl }}/images/spring-io-2026/slide_23_ralph.jpg){: .shadow}
+![Level 5: The Ralph Loop]({{ site.baseurl }}/images/spring-io-2026/slide_23_ralph.jpg){: .shadow}
 
 ### Level 4: Ralph — 자율 루프
 
@@ -390,7 +390,7 @@ done < plan.md
 
 > **"낮에는 생각하고, 밤에는 Claude가 구현한다."** — Matt Pocock
 
-![Claude vs Codex: 다른 모델, 다른 맹점]({{ site.baseurl }}/images/spring-io-2026/slide_24_multi_agent.jpg){: .shadow}
+![Get a Second Opinion — Claude + Codex 병렬 리뷰]({{ site.baseurl }}/images/spring-io-2026/slide_24_multi_agent.jpg){: .shadow}
 
 ### Level 5: 멀티 에이전트 리뷰
 
@@ -425,6 +425,8 @@ Claude Code + OpenAI Codex를 같은 브랜치/프롬프트로 병렬 코드 리
 - 완료 후 한 명령어로 squash + rebase + 정리
 
 3개 에이전트가 3개 기능을 서로 충돌 없이 병렬 개발.
+
+![Three Agents, Zero Conflicts — Worktrunk]({{ site.baseurl }}/images/spring-io-2026/slide_25_worktrunk.jpg){: .shadow}
 
 ### Rebase Commit Skill
 
