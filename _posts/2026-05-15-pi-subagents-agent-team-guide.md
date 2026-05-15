@@ -14,6 +14,7 @@ mermaid: true
 ---
 
 > **TL;DR** — Pi 코딩 에이전트의 서브에이전트 기능을 설치부터 실전 활용까지 정리. scout, planner, worker, reviewer 등 8개 전문 에이전트를 자연어로 지시하고, 병렬 실행으로 코딩 생산성을 극적으로 높이는 방법.
+{: .prompt-info}
 
 ---
 
