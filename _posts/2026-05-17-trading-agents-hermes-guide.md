@@ -185,7 +185,105 @@ GLM API를 쓰면서 가장 자주 만난 문제는 **Rate Limit**. TradingAgent
 
 ---
 
-## 5. Hermes Agent 연동 — 이 글의 핵심
+## 5. CLI로 실행하기 — Interactive TUI
+
+TradingAgents에는 공식 CLI가 포함되어 있다. Python 스크립트로 실행하는 방식보다 훨씬 시각적으로 좋고, 실시간 진행 상황을 모니터링할 수 있다.
+
+### 실행 방법
+
+```bash
+cd ~/Documents/TradingAgents
+source .venv/bin/activate
+tradingagents
+```
+
+또는 소스에서 직접:
+
+```bash
+python -m cli.main
+```
+
+### 8단계 인터랙티브 설정
+
+실행하면 Rich 기반 TUI가 나타나고, 화살표/스페이스/엔터로 설정을 선택한다:
+
+<!-- tradingagents-cli-screenshot: 여기에 CLI 실행 화면 스크린샷 추가 -->
+
+| Step | 항목 | 설명 |
+|------|------|------|
+| 1 | **Ticker Symbol** | 분석할 종목 코드 (SPY, NVDA, 7203.T, 0700.HK 등) |
+| 2 | **Analysis Date** | 분석 기준일 (YYYY-MM-DD, 기본: 오늘) |
+| 3 | **Output Language** | 리포트 출력 언어 (English, Chinese, Japanese, Korean 등) |
+| 4 | **Analysts Team** | 참여할 분석가 선택 (체크박스) — Market / Sentiment / News / Fundamentals |
+| 5 | **Research Depth** | 토론 깊이 — Shallow(1) / Medium(3) / Deep(5) 라운드 |
+| 6 | **LLM Provider** | 제공자 — OpenAI, Google, Anthropic, xAI, DeepSeek, Qwen, **GLM**, MiniMax, OpenRouter, Ollama, Azure |
+| 7 | **Thinking Agents** | Quick-thinking 모델 + Deep-thinking 모델 각각 선택 |
+| 8 | **Provider 설정** | GLM: Z.AI vs BigModel 리전 / OpenAI: reasoning effort / Anthropic: effort level |
+
+### 실시간 TUI 대시보드
+
+분석이 시작되면 Rich Live 기반 대시보드가 표시된다:
+
+- **좌상:** 에이전트별 진행 상태 (pending → in_progress → completed)
+- **우상:** 실시간 메시지 + 도구 호출 로그 스트림
+- **하단:** 현재 분석 리포트 실시간 렌더링
+- **푸터:** 완료 에이전트 수, LLM 호출 횟수, 도구 호출 횟수, 토큰 사용량, 경과 시간
+
+<!-- tradingagents-dashboard-screenshot: 여기에 TUI 대시보드 실행 화면 스크린샷 추가 -->
+
+### 분석 완료 후
+
+리포트를 `results/<TICKER>/<DATE>/reports/` 에 자동 저장한다:
+
+```
+results/NVDA/2026-05-18/
+├── reports/
+│   ├── 1_analysts/
+│   │   ├── market.md
+│   │   ├── sentiment.md
+│   │   ├── news.md
+│   │   └── fundamentals.md
+│   ├── 2_research/
+│   │   ├── bull.md
+│   │   ├── bear.md
+│   │   └── manager.md
+│   ├── 3_trading/
+│   │   └── trader.md
+│   ├── 4_risk/
+│   │   ├── aggressive.md
+│   │   ├── conservative.md
+│   │   └── neutral.md
+│   ├── 5_portfolio/
+│   │   └── decision.md
+│   └── complete_report.md     # 전체 리포트 통합본
+└── message_tool.log           # 전체 메시지 + 도구 호출 로그
+```
+
+### Checkpoint 기능 — 크래시 복구
+
+분석 중간에 API 에러나 타임아웃으로 중단되면, `--checkpoint` 옵션으로 이어서 실행할 수 있다:
+
+```bash
+# 체크포인트 활성화
+tradingagents --checkpoint
+
+# 기존 체크포인트 삭제 후 새로 시작
+tradingagents --clear-checkpoints
+```
+
+### CLI vs Python 스크립트 vs Hermes 크론잡
+
+| 방식 | 장점 | 적합한 용도 |
+|------|------|-----------|
+| `tradingagents` CLI | 예쁜 TUI, 실시간 모니터링, 자동 리포트 저장 | 직접 실행해서 확인할 때 |
+| `run_analysis.py` | 인자 전달, 간단한 stdout | Hermes 크론잡 자동화 |
+| Hermes 크론잡 | 매일 자동 실행, 텔레그램 푸시 | 정기 모니터링 시스템 |
+
+나는 주로 **직접 확인할 때는 CLI**, **매일 자동 분석은 Hermes 크론잡**을 사용한다.
+
+---
+
+## 6. Hermes Agent 연동 — 이 글의 핵심
 
 여기까지는 "직접 실행해서 결과를 본다"는 단계다. 문제는 **매일 아침 이걸 직접 돌릴 수 없다**는 것. 그래서 Hermes Agent를 연동했다.
 
@@ -407,7 +505,7 @@ hermes cron remove <job_id>     # 삭제
 
 ---
 
-## 6. 성능 & 한계
+## 7. 성능 & 한계
 
 ### 논문 벤치마크 (2024 H2)
 
@@ -434,7 +532,7 @@ Sharpe Ratio 8.21은 비정상적으로 높다. 논문에서도 검증 과정을
 
 ---
 
-## 7. 결론 — 백엔드 개발자 관점에서의 평가
+## 8. 결론 — 백엔드 개발자 관점에서의 평가
 
 ### 기술적 관점
 
