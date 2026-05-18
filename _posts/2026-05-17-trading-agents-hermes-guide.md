@@ -207,7 +207,27 @@ python -m cli.main
 
 실행하면 Rich 기반 TUI가 나타나고, 화살표/스페이스/엔터로 설정을 선택한다:
 
-<!-- tradingagents-cli-screenshot: 여기에 CLI 실행 화면 스크린샷 추가 -->
+```
+┌─────────────────────────────────────────────────────────────┐
+│                  Welcome to TradingAgents                    │
+│                                                             │
+│   TradingAgents: Multi-Agents LLM Financial Trading         │
+│                    Framework - CLI                           │
+│                                                             │
+│   Workflow Steps:                                           │
+│   I. Analyst Team → II. Research Team → III. Trader         │
+│        → IV. Risk Management → V. Portfolio Management      │
+└─────────────────────────────────────────────────────────────┘
+
+? Ticker Symbol:          NVDA
+  Analysis Date:          2026-05-18
+? Output Language:        Korean (한국어)
+? Analysts Team:          ✓ Market ✓ Sentiment ✓ News ✓ Fundamentals
+? Research Depth:         Shallow
+? LLM Provider:           GLM → Z.AI (api.z.ai)
+? Quick-Thinking:         GLM-5-Turbo
+? Deep-Thinking:          GLM-5.1
+```
 
 | Step | 항목 | 설명 |
 |------|------|------|
@@ -229,7 +249,29 @@ python -m cli.main
 - **하단:** 현재 분석 리포트 실시간 렌더링
 - **푸터:** 완료 에이전트 수, LLM 호출 횟수, 도구 호출 횟수, 토큰 사용량, 경과 시간
 
-<!-- tradingagents-dashboard-screenshot: 여기에 TUI 대시보드 실행 화면 스크린샷 추가 -->
+```
+┌─── Progress ─────────────────┐┌─── Messages & Tools ───────────────┐
+│                              ││                                    │
+│  Team            Agent       ││  Time      Type    Content         │
+│  ─────────────────────────── ││  12:20:52  System  Selected ticker  │
+│  Analyst Team                 ││  12:20:52  System  Analysis date   │
+│    Market Analyst    ⟳ run   ││  12:22:06  Data    close_50_sma    │
+│    Sentiment Analyst  wait    ││  12:22:06  Data    close_200_sma   │
+│    News Analyst       wait    ││                                    │
+│    Fundamentals       wait    ││                                    │
+│  Research Team               ││                                    │
+│    Bull Researcher    wait    ││                                    │
+│    Bear Researcher    wait    ││                                    │
+│  Trading Team                ││                                    │
+│    Trader             wait    ││                                    │
+│  Risk Management             ││                                    │
+│    Aggressive        wait    ││                                    │
+├──────────────────────────────┤│                                    │
+│  Current Report              ││                                    │
+│  (실시간 렌더링...)            ││                                    │
+└──────────────────────────────┘└────────────────────────────────────┘
+  Agents: 0/12 | LLM: 2 | Tools: 9 | Tokens: 7.7k | ⏱ 01:14
+```
 
 ### 분석 완료 후
 
