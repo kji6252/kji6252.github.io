@@ -265,7 +265,7 @@ python -m cli.main
 ? Analysts Team:          ✓ Market ✓ Sentiment ✓ News ✓ Fundamentals
 ? Research Depth:         Shallow
 ? LLM Provider:           GLM → Z.AI (api.z.ai)
-? Quick-Thinking:         GLM-5-Turbo
+? Quick-Thinking:         GLM-4.5-Air
 ? Deep-Thinking:          GLM-5.1
 ```
 
