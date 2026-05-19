@@ -1,7 +1,7 @@
 ---
 title: "Production Patterns"
-parent: "Redis Design Patterns"
-nav_order: 7
+layout: page
+toc: true
 ---
 
 # Production Patterns

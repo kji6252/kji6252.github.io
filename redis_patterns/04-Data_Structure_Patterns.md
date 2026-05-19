@@ -1,7 +1,7 @@
 ---
 title: "Data Structure Patterns"
-parent: "Redis Design Patterns"
-nav_order: 4
+layout: page
+toc: true
 ---
 
 # Data Structure Patterns

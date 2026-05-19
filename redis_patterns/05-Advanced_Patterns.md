@@ -1,7 +1,7 @@
 ---
 title: "Advanced Patterns"
-parent: "Redis Design Patterns"
-nav_order: 5
+layout: page
+toc: true
 ---
 
 # Advanced Patterns

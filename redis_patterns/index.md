@@ -1,7 +1,7 @@
 ---
 title: "Redis Design Patterns"
-has_children: true
-nav_order: 1
+layout: page
+toc: true
 ---
 
 # Redis Design Patterns

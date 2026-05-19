@@ -1,7 +1,7 @@
 ---
 title: "Caching Patterns"
-parent: "Redis Design Patterns"
-nav_order: 1
+layout: page
+toc: true
 ---
 
 # Caching Patterns

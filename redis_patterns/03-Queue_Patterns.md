@@ -1,7 +1,7 @@
 ---
 title: "Queue Patterns"
-parent: "Redis Design Patterns"
-nav_order: 3
+layout: page
+toc: true
 ---
 
 # Queue Patterns

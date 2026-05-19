@@ -1,7 +1,7 @@
 ---
 title: "Distributed Locking"
-parent: "Redis Design Patterns"
-nav_order: 2
+layout: page
+toc: true
 ---
 
 # Distributed Locking Patterns

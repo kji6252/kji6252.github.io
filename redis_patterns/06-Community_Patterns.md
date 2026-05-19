@@ -1,7 +1,7 @@
 ---
 title: "Community Patterns"
-parent: "Redis Design Patterns"
-nav_order: 6
+layout: page
+toc: true
 ---
 
 # Community Patterns
