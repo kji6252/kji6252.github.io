@@ -55,15 +55,15 @@ agentmemory의 핵심은 **캡처 → 압축 → 색인 → 검색 → 주입** 
 ```mermaid
 flowchart LR
     subgraph 캡처["캡처 (PostToolUse Hook)"]
-        A[툴 사용 이벤트] --> B[SHA-256 중복 제거\n5분 윈도우]
-        B --> C[프라이버시 필터\n시크릿/API 키 제거]
+        A[툴 사용 이벤트] --> B["SHA-256 중복 제거<br/>5분 윈도우"]
+        B --> C["프라이버시 필터<br/>시크릿/API 키 제거"]
         C --> D[Raw Observation 저장]
     end
 
     subgraph 압축["압축 (LLM)"]
         D --> E[구조화된 팩트 추출]
         E --> F[개념 + 내러티브 생성]
-        F --> G[벡터 임베딩\n6 providers + local]
+        F --> G["벡터 임베딩<br/>6 providers + local"]
     end
 
     subgraph 색인["색인"]
@@ -73,8 +73,8 @@ flowchart LR
     end
 
     subgraph 검색["검색 (SessionStart Hook)"]
-        K[프로젝트 프로필 로드] --> L[하이브리드 검색\nBM25 + Vector + Graph]
-        L --> M[RRF 융합\n토큰 예산: 2000]
+        K[프로젝트 프로필 로드] --> L["하이브리드 검색<br/>BM25 + Vector + Graph"]
+        L --> M["RRF 융합<br/>토큰 예산: 2000"]
         M --> N[대화에 주입]
     end
 
@@ -126,7 +126,23 @@ agentmemory demo
 agentmemory connect claude-code
 ```
 
-이 명령은 자동으로 12개의 PostToolUse hook, 4개의 skill, MCP 서버 설정을 Claude Code에 구성한다. 연결 후에는 에이전트가 파일 읽기, 터미널 실행 등의 모든 툴 사용을 자동으로 메모리에 기록한다.
+또는 Claude Code Plugin Marketplace를 통해 설치할 수도 있다:
+
+```bash
+# Claude Code 내에서 실행
+/plugin marketplace add rohitg00/agentmemory
+/plugin install agentmemory
+```
+
+두 방식 모두 12개의 PostToolUse hook, 4개의 skill, MCP 서버 설정을 자동 구성한다.
+
+### npx로 설치 없이 실행
+
+```bash
+npx @agentmemory/agentmemory@latest
+# 주의: 버전별 캐시되므로 항상 @latest를 지정하거나
+# 캐시 초기화: rm -rf ~/.npm/_npx (macOS/Linux)
+```
 
 ### MCP 수동 설정
 
@@ -153,11 +169,14 @@ agentmemory connect claude-code
 
 ### 내부 벤치마크 (coding-agent-life-v1)
 
-| 메트릭 | 값 |
-|---|---|
-| Precision@5 | 0.578 (grep 대비 2.2배) |
-| Recall@5 | 0.967 |
-| p50 지연 시간 | 14ms |
+| 메트릭 | agentmemory | grep baseline |
+|---|---|---|
+| Precision@5 | 0.578 | 0.267 |
+| Recall@5 | 0.967 | — |
+| Top-5 hit rate | 15/15 | — |
+| p50 지연 시간 | 14ms | 0ms |
+
+agentmemory hybrid 검색은 grep 대비 **2.2× 정확도** (P@5)를 달성한다.
 
 ### 외부 벤치마크 (LongMemEval-S, ICLR 2025, 500문항)
 
