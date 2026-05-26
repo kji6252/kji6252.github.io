@@ -90,7 +90,7 @@ mindmap
 
 ![채권 주식화 정정 설명](/images/inflation-asset-allocation-strategy/frame_285.jpg){: .shadow }
 
-![2022년 국채 손실 차트](/images/inflation-asset-allocation-strategy/frame_350.jpg){: .shadow }
+![2022년 국채 손실 차트 — 주식 -18% vs 국채 -26%](/images/inflation-asset-allocation-strategy/frame_310.jpg){: .shadow }
 
 ### 회사채가 주식과 닮은 이유
 
