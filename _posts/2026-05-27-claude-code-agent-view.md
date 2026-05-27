@@ -1,8 +1,17 @@
 ---
 title: "Claude Code Agent View: 하나의 터미널에서 다중 AI 에이전트 관리하기"
+layout: post
 date: 2026-05-27 09:00:00 +0900
-categories: [AI, Development Tools]
-tags: [claude-code, agent-view, multi-agent, ai-coding, parallel-work]
+mermaid: true
+categories:
+  - ai
+  - development-tools
+tags:
+  - claude-code
+  - agent-view
+  - multi-agent
+  - ai-coding
+  - parallel-work
 description: "Claude Code Agent View로 여러 백그라운드 세션을 한 화면에서 디스패치, 모니터링, 관리하는 방법과 실전 워크플로우 예시를 정리합니다."
 pin: false
 ---
