@@ -4,6 +4,7 @@ date: 2026-07-21 09:00:00 +0900
 categories: [AI, Development Tools]
 tags: [orca, ade, agent-orchestrator, parallel-agents, claude-code, codex, git-worktree, open-source]
 description: "Stably AI의 Orca — ADE(Agent Development Environment) 카테고리의 대표 주자. 병렬 agent orchestrator 7종(Orca, Conductor, Nimbalyst, Claude Squad, Vibe Kanban, Superset, Emdash)의 기능, 장단점, 상황별 추천을 비교합니다."
+mermaid: true
 pin: false
 ---
 
@@ -200,11 +201,12 @@ Orca는 **ADE 카테고리에서 기능 완성도가 가장 높은 도구**다. 
 2. **BYO 비용** — 무료인 건 Orca 자체뿐. Claude Code 구독($20/월) + Codex 구독이 별도로 든다.
 3. **카테고리 전체가 초기 단계** — 2026년 하반기에 누가 살아남을지 결정된다. Orca가 유력하지만 확정은 아니다.
 
-> [!note] 백엔드 개발자 관점
+> **백엔드 개발자 관점**
 > Spring/Kotlin 백엔드 작업이라면 Design Mode(프론트엔드 특화)의 이점이 제한적이다.
 > 핵심 가치는 **병렬 worktree로 여러 에이전트가 동시에 서로 다른 태스크를 처리**하는 것.
 > 예: 버그 수정 + 테스트 작성 + 리팩토링을 3개 worktree에서 동시 진행.
 > 이 패턴 자체는 Claude Squad(무료, tmux)로도 가능하므로, Orca의 크로스플랫폼 + 모바일이 꼭 필요한지가 선택 기준이 된다.
+{: .prompt-tip}
 
 ---
 
