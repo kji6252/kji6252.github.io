@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Redis 캐시 의존성 제거 — 코드 이해 설명서</title>
+<style>
+  :root {
+    --bg: #fafafa; --surface: #ffffff; --ink: #1a1a1a; --muted: #5f6368;
+    --line: #e3e3e3; --accent: #2563eb; --redis: #d4380d; --caffeine: #389e0d;
+    --remove-bg: #fff1f0; --keep-bg: #f6ffed; --code-bg: #f6f8fa;
+    --callout: #eef4ff; --callout-border: #2563eb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#0d1117; --surface:#161b22; --ink:#e6edf3; --muted:#9da7b3;
+      --line:#30363d; --accent:#58a6ff; --redis:#ff7b54; --caffeine:#7ee787;
+      --remove-bg:#3a1414; --keep-bg:#0f2417; --code-bg:#161b22;
+      --callout:#162238; --callout-border:#58a6ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", Roboto, sans-serif;
+    line-height: 1.7; font-size: 16px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 40px 24px 120px; }
+  h1 { font-size: 30px; line-height: 1.3; margin: 0 0 8px; }
+  h2 { font-size: 24px; margin: 56px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+  h3 { font-size: 19px; margin: 32px 0 12px; }
+  h4 { font-size: 16px; margin: 20px 0 8px; }
+  p, li { color: var(--ink); }
+  .subtitle { color: var(--muted); margin: 0 0 8px; font-size: 14px; }
+  .meta { color: var(--muted); font-size: 13px; margin-bottom: 32px; }
+  a { color: var(--accent); }
+  code {
+    font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    background: var(--code-bg); padding: 1px 6px; border-radius: 4px; font-size: 14px;
+  }
+  pre {
+    background: var(--code-bg); padding: 16px; border-radius: 8px; overflow-x: auto;
+    border: 1px solid var(--line); white-space: pre-wrap; word-break: break-word;
+  }
+  pre code { background: none; padding: 0; font-size: 13px; }
+  .toc {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 20px 24px; margin: 24px 0 40px;
+  }
+  .toc ol { margin: 0; padding-left: 22px; }
+  .toc a { text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .callout {
+    background: var(--callout); border-left: 4px solid var(--callout-border);
+    padding: 14px 18px; border-radius: 6px; margin: 20px 0;
+  }
+  .callout strong { color: var(--callout-border); }
+  .pill {
+    display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 10px;
+    border-radius: 12px; margin-left: 8px; vertical-align: middle;
+  }
+  .pill-remove { background: var(--remove-bg); color: var(--redis); }
+  .pill-keep { background: var(--keep-bg); color: var(--caffeine); }
+  /* diagram boxes */
+  .diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; margin: 20px 0; }
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; justify-content: center; }
+  .node { padding: 10px 14px; border-radius: 8px; font-size: 13px; text-align: center; min-width: 80px; border: 1px solid var(--line); background: var(--bg); }
+  .node-cache-r { background: var(--remove-bg); border-color: var(--redis); color: var(--redis); }
+  .node-cache-c { background: var(--keep-bg); border-color: var(--caffeine); color: var(--caffeine); }
+  .arrow { color: var(--muted); font-size: 18px; }
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .twocol { grid-template-columns: 1fr; } .flow { flex-direction: column; } .arrow { transform: rotate(90deg); } }
+  .legend { font-size: 13px; color: var(--muted); margin-top: 12px; text-align: center; }
+  /* quiz */
+  .quiz-q { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px 24px; margin: 20px 0; }
+  .quiz-q h4 { margin-top: 0; }
+  .opt {
+    display: block; width: 100%; text-align: left; padding: 12px 16px; margin: 8px 0;
+    border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink);
+    cursor: pointer; font-size: 15px; font-family: inherit; transition: all 0.12s;
+  }
+  .opt:hover:not(.locked) { border-color: var(--accent); }
+  .opt.correct { background: var(--keep-bg); border-color: var(--caffeine); color: var(--caffeine); font-weight: 600; }
+  .opt.wrong { background: var(--remove-bg); border-color: var(--redis); color: var(--redis); }
+  .opt.locked { cursor: default; }
+  .feedback { margin-top: 12px; padding: 10px 14px; border-radius: 6px; font-size: 14px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.ok { background: var(--keep-bg); color: var(--caffeine); }
+  .feedback.no { background: var(--remove-bg); color: var(--redis); }
+  .file-ref { font-family: "SF Mono", Menlo, monospace; font-size: 12px; color: var(--muted); background: var(--code-bg); padding: 2px 6px; border-radius: 4px; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+  th, td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; }
+  th { background: var(--code-bg); }
+  hr { border: none; border-top: 1px solid var(--line); margin: 40px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="subtitle">실전 사례 · 멀티모듈 Spring Boot 서비스</p>
+  <h1>Redis 의존성 제거 — 코드 이해 설명서</h1>
+  <p class="meta">
+    19개 파일 · <code>+2 / −129</code> 변경<br />
+    헥사고날 아키텍처 기반 회원 매핑 서비스
+  </p>
+
+  <div class="toc">
+    <strong>목차</strong>
+    <ol>
+      <li><a href="#background">Background — 이 시스템은 원래 어떻게 돌아가나</a></li>
+      <li><a href="#intuition">Intuition — 핵심 직관 한 줄</a></li>
+      <li><a href="#code">Code — 변경을 4그룹으로 읽기</a></li>
+      <li><a href="#quiz">Quiz — 이해도 확인 (5문항)</a></li>
+    </ol>
+  </div>
+
+  <!-- ===================== BACKGROUND ===================== -->
+  <h2 id="background">1. Background — 이 시스템은 원래 어떻게 돌아가나</h2>
+
+  <h3>헥사고날 아키텍처와 <code>cache-adapter</code></h3>
+  <p>
+    이 서비스는 포트-어댑터(헥사고날) 구조를 따른다. 비즈니스 로직은 <code>application</code> / <code>domain</code> 에 두고,
+    외부 기술(MySQL, Redis, Kafka, Feign 클라이언트)은 <code>adapter/*</code> 모듈이 감싼다.
+    캐시도 예외가 아니다 — <strong>캐시 설정 전체가 <code>adapter/cache-adapter</code> 한 모듈에 격리</strong>되어 있고,
+    엔드포인트 모듈(<code>mapper-api</code>, <code>profile-api</code>)은 <code>@EnableCacheAdapter</code>로 이를 가져다 쓴다.
+  </p>
+  <p>
+    이 구조가 이번 PR에서 결정적이다. <em>"Redis를 뺀다"</em>는 말이 곧 <em>"cache-adapter 하나를 고치면 전파된다"</em>는 뜻이기 때문이다.
+  </p>
+
+  <h3>Spring Cache 추상화와 "두 개의 CacheManager"</h3>
+  <p>
+    Spring은 <code>@Cacheable</code>, <code>@CacheEvict</code> 같은 어노테이션으로 캐시를 추상화한다.
+    실제 저장소(Redis, Caffeine, Ehcache…)는 <strong>CacheManager</strong>라는 인터페이스 뒤에 숨겨진다.
+    하나의 앱에 CacheManager가 여러 개일 수도 있는데, 그땐 <code>@Primary</code>가 붙은 것이 "기본값"이 된다.
+  </p>
+  <p>
+    제거 전 <code>cache-adapter</code>의 <code>CacheConfig</code>는 <strong>CacheManager를 두 개</strong> 만들고 있었다:
+  </p>
+
+  <div class="diagram">
+    <div class="flow">
+      <div class="node node-cache-c">caffeineCacheManager<br/><small>@Primary · 로컬(JVM 메모리)</small></div>
+      <div style="width:100%;text-align:center;color:var(--muted);font-size:13px;">└─ 같은 앱 안에 공존 ─┘</div>
+      <div class="node node-cache-r">redisCacheManager<br/><small>분산 (관리형 Redis)</small></div>
+    </div>
+    <p class="legend">
+      <span class="pill pill-keep">유지</span> Caffeine ·
+      <span class="pill pill-remove">제거 대상</span> Redis
+    </p>
+  </div>
+
+  <p>그리고 캐시를 쓰는 코드는 어노테이션 하나로 둘 중 하나를 골라 썼다:</p>
+  <pre><code>@Cacheable(value = ["authorizeJwt"], key = "#saId", sync = true)
+//  ↑ cacheManager 를 안 적었다 → @Primary 인 caffeineCacheManager 로 간다 (로컬)
+
+@Cacheable(value = ["userWithSubscriptionGroupV2"], key = "#userId", cacheManager = "redisCacheManager")
+//  ↑ cacheManager 를 명시했다 → redisCacheManager 로 간다 (분산)</code></pre>
+
+  <div class="callout">
+    <strong>이 PR 전체를 관통하는 관찰:</strong>
+    <code>@Cacheable</code>이 어디로 가는지는 <em>"cacheManager를 명시했는가?"</em> 하나로 갈린다.
+    명시한 것만 Redis에 묶여 있었고, 명시하지 않은 것은 이미 Caffeine(로컬)으로 돌고 있었다.
+  </div>
+
+  <h3>왜 Redis를 아예 빼야 했나</h3>
+  <p>
+    운영 중인 관리형 Redis 인프라에 <strong>곧 호환성 깨기(breaking change) 변경</strong>이 예정되어 있었다.
+    팀은 그 변경에 맞춰 가는 대신, 더 근본적으로 <em>"Redis에 접속하는 서비스를 전부 제거"</em>하기로 했다.
+    이 서비스도 마찬가지다.
+  </p>
+  <p>
+    다행히 이 서비스에서 Redis는 cache-adapter 하나를 통해서만 쓰이고 있었고 — 그것도 <strong>TTL이 2초~1분으로 매우 짧은</strong> 캐시 몇 개뿐이었다.
+    그래서 "분산 캐시를 포기하고 로컬 캐시만 남긴 채 Redis를 완전히 떼어낸다"는 결정이 가능했다.
+  </p>
+
+  <!-- ===================== INTUITION ===================== -->
+  <h2 id="intuition">2. Intuition — 핵심 직관 한 줄</h2>
+
+  <p class="callout" style="font-size:18px;">
+    <strong>"Redis는 빼되, 로컬 캐시(Caffeine)는 그대로 산다."</strong><br />
+    깔끔하게 떼어낼 수 있었던 이유는, 애초에 두 CacheManager가 분리되어 있었기 때문이다.
+  </p>
+
+  <h3>장난감 예시 — 같은 요청, 두 갈래</h3>
+  <p>
+    사용자가 <code>userId=42</code>로 "가입된 구독 그룹"을 물어본다고 치자. 이 조회를 서비스 두 개가 각자 처리한다고 상상하자:
+  </p>
+
+  <div class="diagram">
+    <div class="twocol">
+      <div>
+        <p style="margin:0 0 8px;"><strong>A. 토큰 조회</strong> <span class="pill pill-keep">Caffeine (유지)</span></p>
+        <div class="flow">
+          <div class="node">요청</div><span class="arrow">→</span>
+          <div class="node node-cache-c">Caffeine</div><span class="arrow">→</span>
+          <div class="node">응답</div>
+        </div>
+        <p class="legend">cacheManager 미명시 → @Primary</p>
+      </div>
+      <div>
+        <p style="margin:0 0 8px;"><strong>B. 구독그룹 조회</strong> <span class="pill pill-remove">Redis (제거)</span></p>
+        <div class="flow">
+          <div class="node">요청</div><span class="arrow">→</span>
+          <div class="node node-cache-r">Redis</div><span class="arrow">→</span>
+          <div class="node">응답</div>
+        </div>
+        <p class="legend">cacheManager="redisCacheManager"</p>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    이 PR이 하는 일은, <strong>B 그림의 Redis 박스를 통째로 지우는 것</strong>이다.
+    그런데 Redis 박스를 지우면 B의 <code>@Cacheable</code>은 가리킬 대상을 잃는다.
+    그래서 B는 <em>어노테이션째</em> 제거한다(캐싱을 포기하고 매번 DB/외부 API로 간다).
+    반면 A는 Redis와 무관했으므로 — <strong>A는 손대지 않는다</strong>.
+  </p>
+
+  <p>
+    그리고 "Redis 박스"의 실체가 곧 <code>redisCacheManager()</code> Bean이다. 이 Bean을 만드는 <code>CacheConfig</code> 코드와
+    <code>spring-boot-starter-data-redis</code> 의존성, Redis 접속 정보(<code>spring.data.redis.*</code>)까지 한 묶음으로 처리하면 끝난다.
+  </p>
+
+  <!-- ===================== CODE ===================== -->
+  <h2 id="code">3. Code — 변경을 4그룹으로 읽기</h2>
+
+  <p>19개 파일은 사실 4개의 개념적 그룹으로 나뉜다. 알파벳순이 아니라, <em>이해하는 순서</em>대로 읽자.</p>
+
+  <h3>그룹 1 · cache-adapter에서 Redis "엔진"을 뽑아낸다</h3>
+  <p>이 그룹이 PR의 핵심이다. Redis라는 저장소 엔진을 담당하던 코드와 의존성을 제거한다.</p>
+
+  <table>
+    <tr><th>파일</th><th>변경</th></tr>
+    <tr><td><span class="file-ref">adapter/cache-adapter/build.gradle.kts</span></td><td><code>spring-boot-starter-data-redis</code> 의존성 1줄 제거. <code>spring-boot-starter-cache</code>·<code>caffeine</code>은 <strong>유지</strong>.</td></tr>
+    <tr><td><span class="file-ref">....../CacheConfig.kt</span></td><td><code>redisCacheManager()</code> Bean + private 헬퍼 2개(<code>buildCacheManager</code>, <code>customObjectMapper</code>) 제거 → 파일 <strong>48줄 감소</strong>. Redis import 9종 전부 삭제.</td></tr>
+    <tr><td><span class="file-ref">....../CacheProperties.kt</span></td><td><code>redisCaches: Map&lt;String, Duration&gt;</code> 필드 제거. <code>localCaches</code>만 남김.</td></tr>
+    <tr><td><span class="file-ref">application-cache-adapter.yml</span></td><td><code>spring.data.redis.*</code> 섹션과 <code>app.cache.redisCaches</code> 항목 6종 제거.</td></tr>
+  </table>
+
+  <p>결과적으로 <code>CacheConfig</code>는 Caffeine만 남는 깔끔한 한 개 Bean이 된다:</p>
+  <pre><code>@Configuration
+@EnableCaching
+@EnableConfigurationProperties(CacheProperties::class)
+class CacheConfig(private val cacheProperties: CacheProperties) {
+
+  @Primary                   // 이제 유일한 CacheManager. @Primary 표시는 그대로 두었다.
+  @Bean
+  fun caffeineCacheManager(): CaffeineCacheManager? {
+    val cm = CaffeineCacheManager()
+    for ((key, value) in cacheProperties.localCaches.entries) {
+      cm.registerCustomCache(key, Caffeine.from(value).build())
+    }
+    return cm
+  }
+}</code></pre>
+  <div class="callout">
+    <strong>왜 <code>@Primary</code>를 남겼을까?</strong> 더는 경쟁 CacheManager가 없으니 사실 의미는 없다.
+    하지만 "기본 캐시 매니저 = Caffeine"이라는 의도를 명시적으로 남겨, 향후 다른 매니저가 추가돼도 기본이 바뀌지 않게 한다.
+  </div>
+
+  <h3>그룹 2 · Redis로 가던 <code>@Cacheable</code> / <code>@CacheEvict</code>를 어노테이션째 뺀다</h3>
+  <p>
+    <code>redisCacheManager</code> Bean이 사라졌으니, 그 이름을 명시적으로 가리키던 어노테이션들은 컴파일조차 안 된다.
+    (Spring이 시작될 때 "cacheManager 'redisCacheManager'를 찾을 수 없다"며 폭주한다.)
+    그래서 <strong>비즈니스 로직(메서드 본문)은 그대로 두고 어노테이션만 제거</strong>한다.
+  </p>
+
+  <table>
+    <tr><th>파일</th><th>제거된 어노테이션</th><th>원래 TTL</th></tr>
+    <tr><td><span class="file-ref">...v2/FeignNmimsV2Client.kt</span></td><td><code>@CacheConfig</code>(class) + <code>@Cacheable</code> 1 + <code>@CacheEvict</code> 3 (nmimsProfiles)</td><td>2s</td></tr>
+    <tr><td><span class="file-ref">....../GetUserWithSubscriptionGroupService.kt</span></td><td><code>@Cacheable</code> 3 (BySaid / ByUserId / ByProfileId)</td><td>5s</td></tr>
+    <tr><td><span class="file-ref">....../GetUserWithSubscriptionGroupV2Service.kt</span></td><td><code>@Cacheable</code> 1 (userWithSubscriptionGroupV2)</td><td>1m</td></tr>
+    <tr><td><span class="file-ref">....../SubscriptionGroupV2Service.kt</span></td><td><code>@CacheEvict</code> 2 (join / delete)</td><td>—</td></tr>
+  </table>
+
+  <p>
+    주의: <strong>캐싱을 "로컬로 바꾼" 게 아니라 "포기한" 것</strong>이다. TTL이 2초~1분이면 사실상 burst 트래픽 완충용이었고,
+    매번 조회해도 영향이 제한적이라는 판단이다. (이게 "Caffeine으로 이관"이 아니라 "제거"를 택한 이유.)
+  </p>
+
+  <h3>그룹 3 · 8개 모듈 yml에서 <code>management.health.redis</code> 치운다</h3>
+  <p>
+    각 모듈 <code>application.yml</code>에 있던 아래 설정을 뺀다. <strong>의존성 자체가 없어졌으므로 이 설정도 의미 없는 데드 코드</strong>가 되기 때문이다.
+  </p>
+  <pre><code>management:
+  health:
+    db:
+      enabled: false
+    redis:        # ← 이 두 줄 제거 (db는 유지)
+      enabled: false</code></pre>
+  <p>
+    대상: <code>mapper-api</code>, <code>profile-api</code>, <code>stream-inner-member</code>, <code>stream-change-member-user</code>,
+    <code>stream-retry-das-connect</code>, <code>stream-member-to-ukids</code>, <code>stream-ukids-to-member</code>, <code>stream-outer-member</code>.
+  </p>
+
+  <h3>그룹 4 · 테스트용 Redis 컨테이너를 뺀다</h3>
+  <p>
+    <code>TestApiApplication.kt</code> / <code>TestProfileApiApplication.kt</code> (src/test) 에서
+    Testcontainers로 띄우던 <code>redisContainer()</code> Bean을 제거한다. 더는 Redis에 접속하는 코드가 없으니
+    컨테이너를 띄울 이유가 없다. PostgreSQL/Kafka 컨테이너는 그대로 둔다.
+  </p>
+
+  <hr />
+
+  <h3>유지한 것들 (이번 PR에서 손대지 않은 것)</h3>
+  <p>
+    <code>cacheManager</code>를 명시하지 않은 <code>@Cacheable</code>은 <strong>전부 Caffeine 로컬 캐시</strong>로 계속 동작한다.
+    즉 아래는 Redis 제거와 무관하게 살아있다:
+  </p>
+  <ul>
+    <li><code>ApimTokenAdapter</code> · <code>NmimsTokenAdapter</code> · <code>GetGuestService</code></li>
+    <li><code>ProductVasMappingPersistenceAdapter</code> · <code>SubscriptionGroupPersistenceAdapter</code> · <code>SubscriptionPlanPersistenceAdapter</code></li>
+  </ul>
+  <p>이게 "Redis만 쏙 빼고 캐싱은 건드리지 않는다"는 직관이 코드에서 성립하는 이유다.</p>
+
+  <!-- ===================== QUIZ ===================== -->
+  <h2 id="quiz">4. Quiz — 이해도 확인</h2>
+  <p>퀴즈를 통과하기 전까지 PR 리뷰/머지를 권하지 않는다(Erick Litt의 speed regulator). 정답을 클릭하면 바로 피드백이 나온다.</p>
+
+  <div class="quiz-q" data-correct="A">
+    <h4>Q1. <code>@Cacheable</code>에 <code>cacheManager</code>를 명시하지 않으면, Spring은 어느 CacheManager를 사용할까?</h4>
+    <button class="opt">redisCacheManager — Redis가 기본이니까</button>
+    <button class="opt" data-key="A">@Primary로 지정된 caffeineCacheManager</button>
+    <button class="opt">아무것도 없으면 캐싱하지 않고 무시한다</button>
+    <button class="opt">매번 새 ConcurrentMapCacheManager를 만든다</button>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="quiz-q" data-correct="B">
+    <h4>Q2. 이 PR이 <code>redisCacheManager</code>를 쓰던 <code>@Cacheable</code>을 Caffeine으로 바꾸지 않고 <strong>아예 제거</strong>한 이유는?</h4>
+    <button class="opt" data-key="B">redisCacheManager Bean이 제거돼 어노테이션이 참조할 대상이 사라졌고, TTL이 짧아 캐싱 포기 영향이 제한적이었기 때문</button>
+    <button class="opt">Caffeine은 동시성이 안 좋아서 Redis 캐시를 옮길 수 없었기 때문</button>
+    <button class="opt"><code>@Cacheable</code>이 Kotlin 1.9에서 deprecated 됐기 때문</button>
+    <button class="opt">로컬 캐시는 다중 인스턴스에서 무조건 stale 하므로 쓰면 안 돼서</button>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="quiz-q" data-correct="C">
+    <h4>Q3. Caffeine 로컬 캐시가 이 PR에서 영향 없이 유지될 수 있었던 결정적 이유는?</h4>
+    <button class="opt"><code>@EnableCaching</code>이 있으면 Redis 없이도 자동 생성되므로</button>
+    <button class="opt">Caffeine이 별도 프로세스로 떠 있어서</button>
+    <button class="opt" data-key="C"><code>spring-boot-starter-cache</code> + <code>caffeine</code> 의존성이 남아있고, caffeineCacheManager가 <code>@Primary</code>라 @Cacheable(미명시)이 계속 동작하므로</button>
+    <button class="opt">Redis Bean을 제거하면 Spring이 Caffeine으로 자동 전환하므로</button>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="quiz-q" data-correct="B">
+    <h4>Q4. 기존 Redis 캐시의 TTL이 <strong>2초~1분</strong>으로 짧았다는 점이, "제거" 결정에 어떤 역할을 했나?</h4>
+    <button class="opt">TTL이 짧으면 데이터 정합성 위험이 커서 제거가 필수였다</button>
+    <button class="opt" data-key="B">짧은 TTL = 사실상 burst 트래픽 완충 목적이었으니, 제거 시 DB/외부 API 호출 증가가 제한적이라 로컬 이관 대신 제거를 택할 근거가 됐다</button>
+    <button class="opt">TTL은 제거 여부와 무관하다 — 오직 의존성 개수만 본다</button>
+    <button class="opt">TTL이 짧을수록 캐시 히트율이 낮아 제거 리스크가 높으므로 보류했어야 한다</button>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="quiz-q" data-correct="A">
+    <h4>Q5. 8개 모듈 <code>application.yml</code>에서 <code>management.health.redis.enabled: false</code>를 제거한 이유는?</h4>
+    <button class="opt" data-key="A">Redis 의존성이 사라져 Actuator가 Redis health indicator를 더는 등록하지 않으므로, 그 설정은 의미 없는 데드 코드가 됐기 때문</button>
+    <button class="opt">Redis health check를 켜서 연결 상태를 모니터링하려고</button>
+    <button class="opt">Actuator 자체를 제거하려고</button>
+    <button class="opt"><code>management.health.db</code>와 충돌해서</button>
+    <div class="feedback"></div>
+  </div>
+
+  <hr />
+  <p style="color:var(--muted);font-size:13px;">
+    참고: 원본 아이디어 — Geoffrey Litt,
+    <a href="https://gist.github.com/geoffreylitt/a29df1b5f9865506e8952488eac3d524" target="_blank">explain-diff gist</a> /
+    <a href="https://www.geoffreylitt.com/2026/07/02/understanding-is-the-new-bottleneck" target="_blank">Understanding is the new bottleneck</a>
+  </p>
+</div>
+
+<script>
+  document.querySelectorAll('.quiz-q').forEach(block => {
+    const correct = block.dataset.correct;
+    const opts = block.querySelectorAll('.opt');
+    const feedback = block.querySelector('.feedback');
+    opts.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (block.classList.contains('locked')) return;
+        const chosen = opt.dataset.key;
+        const isRight = chosen === correct;
+        opts.forEach(o => {
+          o.classList.add('locked');
+          if (o.dataset.key === correct) o.classList.add('correct');
+        });
+        if (!isRight) opt.classList.add('wrong');
+        feedback.className = 'feedback show ' + (isRight ? 'ok' : 'no');
+        const correctText = block.querySelector('.opt.correct').textContent.trim();
+        feedback.innerHTML = isRight
+          ? '✅ 정답입니다. ' + explain(correct)
+          : '❌ 아닙니다. 정답은 <strong>' + correctText + '</strong>. ' + explain(correct);
+        block.classList.add('locked');
+      });
+    });
+  });
+  function explain(key) {
+    const map = {
+      A: '<code>@Primary</code> CacheManager가 기본 라우팅 대상이다. 명시하지 않은 <code>@Cacheable</code>은 모두 여기로 간다 — 그래서 Caffeine이 살아남았다.',
+      B: 'Bean이 사라지면 어노테이션은 무효. 그리고 TTL이 짧으면 캐싱 포기의 비용도 작다. 두 조건이 만나 "이관"이 아니라 "제거"가 된다.',
+      C: '의존성이 남아있어야 Bean 생성이 가능하고, <code>@Primary</code>여야 명시 없는 <code>@Cacheable</code>이 연결된다. 둘 다 성립해서 유지됐다.',
+    };
+    return map[key] || '';
+  }
+</script>
+</body>
+</html>
