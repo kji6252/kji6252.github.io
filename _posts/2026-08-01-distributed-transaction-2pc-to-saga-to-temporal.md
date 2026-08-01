@@ -80,23 +80,78 @@ fun registerMember(member: Member) {
 }
 ```
 
-### 한계: Phase 2 실패 시 되돌릴 수 없다
+### 한계: Phase 2 실패 — "되돌릴 수 없다"는 것의 진짜 의미
+
+> "Atomikos가 재시도하니까 결국 DB B에도 COMMIT 들어가는 거 아닌가?"
+>
+> 맞다. **재시도가 성공하면** 결국 양쪽 DB가 일치한다. 문제는 **재시도가 성공하기 전까지**
+> 무슨 일이 벌어지는가다.
+
+**실제 운영에서 겪은 시나리오** — 새벽 트래픽 피크 시간, DB B가 30초간 응답 지연:
 
 ```
-Phase 1 — Prepare
-  DB A: XA START / INSERT profile (prepare) ✅
-  DB B: XA START / INSERT contact (prepare) ✅
-Phase 2 — Commit
-  DB A: XA COMMIT ✅  ← 이미 커밋됨
-  DB B: XA COMMIT ❌  ← 실패!
-                      → DB A를 롤백할 수 없음
-                      → Atomikos가 DB B에 COMMIT을 무한 재시도 (블로킹)
+T+0s    Phase 2 Commit 시작
+T+0.1s  DB A: XA COMMIT ✅  — profile 영구 저장됨 (이제 롤백 불가)
+T+0.1s  DB B: XA COMMIT ❌  — 타임아웃 실패
+T+0.1s  ────────────────────────────────────────
+        여기서 선택지는 단 하나: "DB B에 COMMIT을 다시 밀어넣기"
+        DB A에서 방금 저장한 데이터를 취소(ROLLBACK)하는 건 불가능하다.
+T+5s    Atomikos 1차 재시도 → 실패 (DB B 여전히 지연)
+T+30s   DB B 정상 복구
+T+30s   Atomikos 재시도 성공 → DB B COMMIT ✅
+        ────────────────────────────────────────
+        그런데 그 30초 동안:
+        - DB A의 해당 row가 "글로벌 TX 미완료" 상태로 잠김
+        - 같은 회원에 대한 모든 후속 요청이 대기 (락 경합)
+        - 사용자는 회원가입 응답을 30초간 기다림 → 타임아웃 → 재시도 → 악순환
 ```
 
-이게 실제 운영에서 체감한 가장 치명적인 한계다. **강한 일관성(CP)**[^1]을 보장하지만,
-Phase 2에서 한쪽이 이미 커밋된 후 다른 쪽이 실패하면 **어떻게 할 수 없다.**
+이게 **블로킹**의 실체다. 재시도가 성공하는 동안 해당 데이터가 잠겨 있어서
+**서비스 전체가 느려지거나 멈춘다.**
 
-[^1]: CP = Consistency + Partition tolerance. 네트워크 분할(장애) 시에도 **데이터 정합성을 우선**한다. 반대로 AP는 가용성을 우선하여 일시적 불일치를 허용한다.
+**더 끔찍한 시나리오 — 코디네이터(Atomikos) 자체가 죽으면?**
+
+```
+DB A: XA COMMIT ✅
+DB B: XA COMMIT ❌
+Atomikos 서버: 재시도 중 OOM/Kill → 다운 💀
+  → 누가 재시도? → Atomikos가 살아나서 로그를 읽고 재개해야 함
+  → Atomikos 복구 전까지 DB A와 DB B가 불일치 상태로 방치
+  → 최악의 경우: 수동으로 데이터를 보정해야 함
+```
+
+이게 **코디네이터 SPOF (Single Point of Failure)** 이다. Atomikos가 없으면
+트랜잭션을 완료할 수 있는 주체가 아무도 없다.
+
+**극단적 시나리오 — DB B가 영구 장애면?**
+
+DB B의 디스크 고장이나 데이터센터 장애로 재시도가 **영원히** 실패하면?
+DB A에서 방금 저장한 데이터를 취소할 방법이 없다. **운영자가 수동으로 데이터를 보정**해야 한다.
+
+### 왜 Saga가 다른가 — 같은 장애 상황에서의 비교
+
+```
+같은 상황: profile 저장 성공, contact 저장 실패
+
+2PC:
+  DB A COMMIT ✅ → DB B COMMIT ❌
+  → DB A를 롤백 못 함 → DB B에 COMMIT 재시도 (블로킹)
+  → 재시도 성공까지 잠금 유지 → 서비스 지연
+
+Saga:
+  profile INSERT (로컬 TX 커밋) ✅ → contact INSERT 실패 ❌
+  → 보상: profile DELETE (별개의 로컬 TX) — 0.1초 만에 완료
+  → 잠금 없음 → 즉시 다음 요청 처리
+  → contact 서버가 살아돌아오든 말든 상관없음 (내쪽은 이미 정리됨)
+```
+
+**핵심 차이**: 2PC의 재시도는 **"상대방이 살아있어야 성공"**한다 (DB B에 밀어넣기).
+Saga의 보상은 **"내 쪽만으로 가능"**하다 (DB A에서 DELETE).
+밀어넣기는 상대방에 의존하지만, 되돌리기는 자기 자신만으로 끝난다.
+
+이것이 **강한 일관성(CP)**[^1]을 포기하고 **최종 일관성(AP)**을 선택한 대가이자 이유다.
+
+[^1]: CP = Consistency + Partition tolerance. 네트워크 분설(장애) 시에도 **데이터 정합성을 우선**한다. 반대로 AP는 가용성을 우선하여 일시적 불일치를 허용한다.
 
 ---
 
