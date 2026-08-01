@@ -105,6 +105,24 @@ end
 3. 복제본이 마스터로 승격
 4. 클라이언트 B가 동일한 락 획득 (복제본은 A의 락을 모름)
 
+```mermaid
+sequenceDiagram
+    autonumber
+    participant A as 클라이언트 A
+    participant M as 마스터
+    participant R as 복제본 → 새 마스터
+    participant B as 클라이언트 B
+
+    A->>M: SET lock NX PX 30000 ✅ 락 획득
+    Note over M: ⚡ 마스터 장애 발생!<br/>(복제 지연 중)
+    M--xR: 락 데이터 복제 ❌ 누락
+    Note over R: 복제본이 새 마스터로 승격<br/>A의 락을 모름
+    B->>R: SET lock NX PX 30000 ✅ 락 획득
+    Note over A,B: 🚨 A와 B가 동시에 락 보유!<br/>상호 배제 깨짐
+```
+
+> **핵심 문제**: 마스터-복제본 비동기 복제는 데이터 정합성을 보장하지 않습니다. 복제가 완료되기 전 마스터가 죽으면, 승격된 복제본은 이전 락 상태를 모릅니다.
+
 ### Redlock 해결책
 
 N개의 독립적인 Redis 마스터(일반적으로 5개)를 사용합니다. 락은 과반수(N/2 + 1) 이상의 인스턴스에서 획득되어야 합니다.
@@ -125,6 +143,33 @@ graph LR
     Client --> R4
     Client --> R5
 ```
+
+5개의 **독립된** Redis 마스터에 락 획득을 시도하고, 과반수(3/5) 이상에서 성공하면 락을 획득한 것으로 간주합니다. 하나가 장애 나도 나머지로 진실을 알 수 있습니다.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as 클라이언트
+    participant R1 as Redis 1
+    participant R2 as Redis 2
+    participant R3 as Redis 3
+    participant R4 as Redis 4
+    participant R5 as Redis 5
+
+    Note over C: ⏱ T1: 시작 시간 기록
+    par 모든 인스턴스에 동시 요청
+        C->>R1: SET lock NX PX 30000 ✅
+        C->>R2: SET lock NX PX 30000 ✅
+        C->>R3: SET lock NX PX 30000 ✅
+        C->>R4: SET lock NX PX 30000 ❌ 실패
+        C->>R5: SET lock NX PX 30000 ✅
+    end
+    Note over C: ⏱ T2: 종료 시간 기록
+    Note over C: 과반수 획득 (4/5) ✅<br/>경과 시간 = T2 - T1<br/>유효시간 = TTL - 경과 시간
+    Note over C: 🎉 락 획득 성공!
+```
+
+> R4가 실패했지만 과반수(3개 이상) 획득했으므로 락은 성공입니다. 실제 유효 시간은 네트워크 지연(경과 시간)을 차감한 값입니다.
 
 ### 락 획득 알고리즘
 
@@ -175,11 +220,53 @@ end
 5. 클라이언트 A가 재개되어 여전히 락을 보유한다고 착각
 6. 두 클라이언트가 공유 리소스에서 동시 작업
 
+```mermaid
+sequenceDiagram
+    autonumber
+    participant A as 클라이언트 A
+    participant L as 분산 락
+    participant B as 클라이언트 B
+    participant DB as 공유 스토리지
+
+    A->>L: 락 획득 ✅
+    Note over A: 😴 GC 일시중지 (Stop-The-World)<br/>또는 긴 컨텍스트 스위치
+    Note over L: ⏰ TTL 만료 → 자동 해제
+    B->>L: 락 획득 ✅
+    Note over A: 😮 GC 종료, 재개됨<br/>여전히 락을 가졌다고 착각
+    A->>DB: 데이터 쓰기 (착각 상태)
+    B->>DB: 데이터 쓰기 (정당한 소유자)
+    Note over DB: 🚨 두 클라이언트 동시 쓰기!<br/>데이터 충돌 발생
+```
+
+> **왜 위험한가?** 락 만료는 클라이언트가 모르는 사이 일어납니다. A는 자신이 여전히 락을 가지고 있다고 믿고 쓰기를 수행하지만, 실제로는 B가 정당한 소유자입니다. 이 문제는 Redlock뿐 아니라 **TTL 기반 모든 분산 락**의 근본적 한계입니다.
+
 #### 펜싱 토큰 해결책
 
 1. 락 획득 시 단조 증가 토큰도 함께 획득
 2. 공유 리소스 액세스 시 토큰 포함
 3. 리소스는 가장 높은 토큰보다 오래된 토큰의 작업 거부
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant A as 클라이언트 A (토큰=1)
+    participant L as 분산 락
+    participant B as 클라이언트 B (토큰=2)
+    participant DB as 공유 스토리지
+
+    A->>L: 락 획득 ✅ (토큰=1)
+    Note over A: 😴 GC 일시중지
+    Note over L: ⏰ TTL 만료, 자동 해제
+    B->>L: 락 획득 ✅ (토큰=2)
+    B->>DB: 쓰기 요청 (토큰=2) ✅ 승인
+    Note over DB: 마지막 토큰 = 2 기록
+    Note over A: 😮 재개됨 (구식 토큰=1)
+    A->>DB: 쓰기 요청 (토큰=1) ❌ 거부
+    Note over DB: 토큰 1 < 2 → 구식 요청
+    Note over A,B: ✅ 상호 배제 유지됨
+```
+
+> **펜싱 토큰이 작동하려면** 공유 스토리지(DB 등)가 토큰을 검사할 수 있어야 합니다. Redis만으로는 불가능하고, 쓰기 대상 시스템이 협조해야 합니다. Martin Kleppmann이 이 문제를 명확히 지적한 바 있습니다.
 
 ### 사용 시기
 
