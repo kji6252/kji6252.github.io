@@ -2,6 +2,7 @@
 title: "Queue Patterns"
 layout: page
 toc: true
+mermaid: true
 ---
 
 # Queue Patterns

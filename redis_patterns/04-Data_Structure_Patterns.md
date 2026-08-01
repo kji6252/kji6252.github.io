@@ -2,6 +2,7 @@
 title: "Data Structure Patterns"
 layout: page
 toc: true
+mermaid: true
 ---
 
 # Data Structure Patterns

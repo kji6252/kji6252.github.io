@@ -2,6 +2,7 @@
 title: "Caching Patterns"
 layout: page
 toc: true
+mermaid: true
 ---
 
 # Caching Patterns

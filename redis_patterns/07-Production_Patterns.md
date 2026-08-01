@@ -2,6 +2,7 @@
 title: "Production Patterns"
 layout: page
 toc: true
+mermaid: true
 ---
 
 # Production Patterns

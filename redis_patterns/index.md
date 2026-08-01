@@ -2,6 +2,7 @@
 title: "Redis Design Patterns"
 layout: page
 toc: true
+mermaid: true
 ---
 
 # Redis Design Patterns

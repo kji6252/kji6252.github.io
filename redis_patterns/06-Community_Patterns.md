@@ -2,6 +2,7 @@
 title: "Community Patterns"
 layout: page
 toc: true
+mermaid: true
 ---
 
 # Community Patterns

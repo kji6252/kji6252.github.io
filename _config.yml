@@ -117,6 +117,7 @@ defaults:
       type: redis_patterns
     values:
       layout: page
+      mermaid: true
 
 sass:
   style: compressed

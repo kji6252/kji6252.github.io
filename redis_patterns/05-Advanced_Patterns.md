@@ -2,6 +2,7 @@
 title: "Advanced Patterns"
 layout: page
 toc: true
+mermaid: true
 ---
 
 # Advanced Patterns

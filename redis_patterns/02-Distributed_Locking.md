@@ -2,6 +2,7 @@
 title: "Distributed Locking"
 layout: page
 toc: true
+mermaid: true
 ---
 
 # Distributed Locking Patterns
