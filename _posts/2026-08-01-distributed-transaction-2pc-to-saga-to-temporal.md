@@ -80,6 +80,22 @@ fun registerMember(member: Member) {
 }
 ```
 
+```mermaid
+sequenceDiagram
+    participant App as App (@Transactional)
+    participant DBA as DB A (profile)
+    participant DBB as DB B (contact)
+    participant TM as Atomikos (TM)
+    Note over App,TM: Phase 1 — Prepare
+    App->>DBA: XA START / INSERT (prepare)
+    App->>DBB: XA START / INSERT (prepare)
+    Note over App,TM: Phase 2 — Commit
+    TM->>DBA: XA COMMIT ✅
+    TM->>DBB: XA COMMIT ❌ (장애)
+    TM->>DBB: 재시도... (블로킹)
+    Note over DBA: row 잠금 유지 → 서비스 지연
+```
+
 ### 한계: Phase 2 실패 — "되돌릴 수 없다"는 것의 진짜 의미
 
 > "Atomikos가 재시도하니까 결국 DB B에도 COMMIT 들어가는 거 아닌가?"
@@ -151,7 +167,7 @@ Saga의 보상은 **"내 쪽만으로 가능"**하다 (DB A에서 DELETE).
 
 이것이 **강한 일관성(CP)**[^1]을 포기하고 **최종 일관성(AP)**을 선택한 대가이자 이유다.
 
-[^1]: CP = Consistency + Partition tolerance. 네트워크 분설(장애) 시에도 **데이터 정합성을 우선**한다. 반대로 AP는 가용성을 우선하여 일시적 불일치를 허용한다.
+[^1]: CP = Consistency + Partition tolerance. 네트워크 분할(장애) 시에도 **데이터 정합성을 우선**한다. 반대로 AP는 가용성을 우선하여 일시적 불일치를 허용한다.
 
 ---
 
@@ -162,12 +178,19 @@ Saga의 보상은 **"내 쪽만으로 가능"**하다 (DB A에서 DELETE).
 분산 트랜잭션 대신 **각 단계를 독립된 로컬 트랜잭션**으로 실행하고,
 실패 시 **보상 트랜잭션(compensating transaction)**으로 되돌린다.
 
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
+    participant DBA as DB A (profile)
+    participant DBB as DB B (contact)
+    O->>DBA: Step 1: profile INSERT (로컬 TX) ✅
+    O->>DBB: Step 2: contact INSERT (로컬 TX) ❌
+    Note over O: 보상 트랜잭션 실행
+    O->>DBA: 보상: profile DELETE ✅
+    Note over O: 0.1초 만에 정리 완료 — 잠금 없음
 ```
-Step 1: profile INSERT (로컬 TX) → profileId
-Step 2: contact INSERT (로컬 TX) → ❌ 실패
-  ↓
-보상: profile DELETE (Step 1 되돌림)
-  ↓
+
+```
 최종 일관성 (AP) — 일시적 중간 상태(profile만 있는 구간)를 감수
 ```
 
@@ -245,6 +268,10 @@ val profileId = saga({ profileSvc.create(name) }) { id -> profileSvc.compensateD
 | **타임아웃** | ❌ | ✅ |
 | **Web UI 모니터링** | ❌ | ✅ |
 | **서버 필요** | ❌ | ✅ (별도 플랫폼) |
+
+> **모니터링이란?** Temporal Web UI에서 Workflow 실행 현황, 각 Activity의 소요 시간,
+> 실패 원인, 보상 이력을 **브라우저에서 실시간으로 확인**할 수 있는 기능이다.
+> SagaEngine/Arrow-KT는 이런 가시성이 전혀 없다 — 문제가 생겨도 로그를 뒤져야 한다.
 
 ### Workflow vs Activity
 
