@@ -12,6 +12,7 @@ tags:
   - kotlin
   - spring-boot
   - coroutine
+mermaid: true
 ---
 
 회원 시스템 무중단 마이그레이션에서 **두 개의 DB에 걸친 쓰기를 원자적으로** 처리해야 했다.
