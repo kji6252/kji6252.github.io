@@ -136,4 +136,19 @@
   {% endif %}
 
   {% include metadata-hook.html %}
+
+  <!-- Legacy PWA service worker cleanup (remove after ~1 month) -->
+  <script>
+  (function() {
+    if (!('serviceWorker' in navigator)) return;
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      if (registrations.length === 0) return;
+      registrations.forEach(function(reg) { reg.unregister(); });
+      if (window.caches) {
+        caches.keys().then(function(keys) { keys.forEach(function(k) { caches.delete(k); }); });
+      }
+      window.location.reload();
+    });
+  })();
+  </script>
 </head>
