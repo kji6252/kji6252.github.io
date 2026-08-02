@@ -277,9 +277,8 @@ curl -X POST http://localhost:8082/members/parallel \
 
 ![Temporal Web UI — 보상 Activity 이력](/images/distributed-tx-temporal-saga/03-compensated-detail.png)
 
-> **모니터링이란?** Temporal Web UI에서 Workflow 실행 현황, 각 Activity의 소요 시간,
-> 실패 원인, 보상 이력을 브라우저에서 실시간으로 확인하는 기능이다.
-> SagaEngine/Arrow-KT는 이런 가시성이 전혀 없다 — 문제가 생겨도 로그를 뒤져야 한다.
+> SagaEngine/Arrow-KT는 이런 가시성이 전혀 없다 — 어디서 실패했는지, 어떤 보상이
+> 실행됐는지 알려면 서버 로그를 직접 뒤져야 한다. Temporal은 브라우저에서 한눈에 본다.
 
 > **PostgreSQL 영속화**: `docker compose down` 후 `up`해도 모든 실행 이력이 유지된다.
 > 메모리 기반 개발 서버와의 핵심 차이점이다.
